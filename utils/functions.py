@@ -4,8 +4,8 @@ import os
 import redis
 from flask import Flask
 
-from App.user_views import user_blueprint
-from App.models import db
+from webapp.user_views import user_blueprint
+from webapp.models import db
 
 def create_app():
     # 定义系统路径的变量
@@ -22,7 +22,7 @@ def create_app():
     # 注册蓝图
     app.register_blueprint(blueprint=user_blueprint,url_prefix='/user')
     # 配置mongo数据库
-
+    
     # 配置session密钥
     app.config['SECRET_KEY'] = 'secret_key'
     # 设置链接的redis数据库，默认链接到本地6379

@@ -1,10 +1,7 @@
 #coding:utf-8
 from flask import Flask
-app = Flask(__name__)
-
-@app.route("/")
-def index():
-    return "hello flask"
+from . import user_blueprint
+#from ..utils.ch_login import *
 
 @user_blueprint.route('/create_db/')
 def ceate_db():
@@ -16,16 +13,16 @@ def drop_db():
     """删除数据库"""
     db.drop_all()
     return '删除成功'
-
+@user_blueprint.route('/',methods=['GET'])
 @user_blueprint.route('/home/',methods=['GET'])
-@is_login
+#@is_login
 def home():
     """首页"""
     if request.method == 'GET':
         return render_template('index.html')
 
 @user_blueprint.route('/head/',methods=['GET'])
-@is_login
+#@is_login
 def head():
     """页头"""
     if request.method == 'GET':
@@ -127,18 +124,18 @@ def logout():
 
 
 @user_blueprint.route('/article/',methods=['GET'])
-@is_login
+#@is_login
 def article_list():
     pass
 
 @user_blueprint.route('/article',methods=['POST'])
-@is_login
+#@is_login
 def add_article():
     pass
 
 
 @user_blueprint.route('/changepwd',methods=['GET','POST'])
-@is_login
+#@is_login
 def change_password():
     if request.method == 'GET':
         username = session.get('username')
@@ -176,7 +173,7 @@ def change_password():
             return redirect(url_for('user.change_pass_success'))
 
 @user_blueprint.route('/changepwdsu/',methods=['GET'])
-@is_login
+#@is_login
 def change_pass_success():
     """密码修改成功后"""
     if request.method == 'GET':
