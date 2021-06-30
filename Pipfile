@@ -12,6 +12,7 @@ flask-mail = "*"
 flask-ckeditor = "*"
 wtforms = "*"
 flask-moment = "*"
+numpy = "*"
 
 [dev-packages]
 
