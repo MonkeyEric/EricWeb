@@ -1,95 +1,138 @@
 # coding:utf-8
 
 
-from sqlalchemy import Column,String,create_engine,INTEGER,DateTime
+from sqlalchemy import *
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.exy.delarative import declarative_base
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
+from sqlalchemy_utils.types.choice import ChoiceType
 #  创建对象的基类
 Base = declarative_base()
 types_choices = (
                 (0,'可访问'),
                 (1,'可授权'),
                 )
+                
+class TestUser(Base):
+    __tablename__ = 'testUser'
+    user_id = Column("user_id",INTEGER,primary_key=True,nullable=False,autoincrement=True)
+    login_name = Column('login_name',type_=String(64),nullable=False)
+    passowrd = Column('password',type_=String(64),nullable=False)
+    username = Column('username',type_=String(64),nullable=False)
+    mobile = Column('mobile',type_=String(64))
+    email = Column('email',type_=String(64))
+    gen_time = Column('gen_time',DateTime)
+    login_time = Column('login_time',DateTime)
+    last_login_time = Column(DateTime,server_default=func.now())
+    count = Column('count',INTEGER,nullable=False)
 # 定义对象，与元数据相对应
-class User(Base):
+class User(Base): #ok
     # 表的名字
     __tablename__ = 'user'
 
     # 表的结构
     user_id = Column("user_id",INTEGER,primary_key=True,nullable=False,autoincrement=True)
-    org_id = Column('org_id',INTEGER,nullable=False,ForeignKey("org.org_id"))
-    login_name = Column('login_name',String,nullable=False)
-    passowrd = Column('password',String,nullable=False)
-    username = Column('username',type_=String(length=32),nullbale=False)
-    mobile = Column('mobile',String)
-    email = Column('email',String)
-    gen_time = Column('gen_time',)
+    org_id = Column(INTEGER,ForeignKey("org.org_id"),nullable=False)
+    login_name = Column('login_name',type_=String(64),nullable=False)
+    passowrd = Column('password',type_=String(64),nullable=False)
+    username = Column('username',type_=String(64),nullable=False)
+    mobile = Column('mobile',type_=String(64))
+    email = Column('email',type_=String(64))
+    gen_time = Column('gen_time',DateTime)
     login_time = Column('login_time',DateTime)
-    last_login_time = Column('last_login_time',server_default=func.now())
+    last_login_time = Column(DateTime,server_default=func.now())
     count = Column('count',INTEGER,nullable=False)
+
+class Right(Base):#ok
+    __tablename__ = 'right'
+    right_id = Column(INTEGER,nullable=False,primary_key=True)
+    parent_tr_id = Column(INTEGER,nullable=False)
+    right_name = Column(type_=String(64),nullable=False)
+    description = Column(type_=String(64))
     
-class Log(Base):
+class Role(Base): #ok
+    __tablename__ = 'role'
+    role_id = Column(INTEGER,nullable=False,primary_key=True)
+    parent_tr_id = Column(INTEGER,nullable=False)
+    role_name = Column(type_=String(64),nullable=False)
+    gen_time = Column(DateTime,nullable=False)
+    description = Column(type_=String(64))
+    
+class Log(Base): #ok
     __tablename__ = 'log'
 
     log_id = Column(INTEGER,nullable=False,primary_key=True,autoincrement=True)
-    op_type = Column('op_type',INTEGER,nullable=False)
-    content = Column('content',type_=String(length=64),nullable=False)
-    user_id = Column(nullable=False,ForeignKey('user.user_id'))
+    op_type = Column(INTEGER,nullable=False)
+    content = Column(type_=String(64),nullable=False)
+    user_id = Column(ForeignKey('user.user_id'),nullable=False)
     gen_time = Column(DateTime,nullable=False)
 
 
-class Org(Base):
+class Org(Base): #ok
     __tablename__ = 'org'
     org_id = Column(INTEGER,nullable=False,primary_key=True)
     parent_to_id = Column(INTEGER,nullable=False)
-    org_name = Column(type_=String(length=64),nullable=False)
+    org_name = Column(type_=String(64),nullable=False)
     gen_time = Column(DateTime,server_default=func.now())
-    description = Column(type_=String(length=64)
+    description = Column(type_=String(64))
 
-class UserGroup(Base):
+class UserGroup(Base):#ok
     __tablename__ = 'userGroup'
     ugroup_id = Column(INTEGER,nullable=False,primary_key=True)
-    user_id = Column(INTEGER,nullable=False,ForeignKey('user.user_id'))
-    group_id = Column(INTEGER,nullable=False,ForeignKey('group.group_id'))
+    user_id = Column(INTEGER,ForeignKey('user.user_id'),nullable=False)
+    group_id = Column(INTEGER,ForeignKey('group.group_id'),nullable=False)
 
-class Group(Base):
+class Group(Base): #ok
     __tablename__ = 'group'
     group_id = Column(INTEGER,nullable=False,primary_key=True)
-    group_name = Column(type_=String(length=64),nullable=False)
-    parent_tg_id = Column(INTEGER,nullable=False,nullable=False)
+    group_name = Column(type_=String(64),nullable=False)
+    parent_tg_id = Column(INTEGER,nullable=False)
     gen_time = Column(DateTime,server_default=func.now())
-    description = Column(type_=String(length=64))
+    description = Column(type_=String(64))
 
-class UserRole(Base):
+class UserRole(Base):#ok
     __tablename__ = 'userRole'
     urole_id = Column(INTEGER,nullable=False,primary_key=True)
-    user_id = Column(INTEGER,nullable=False,ForeignKey('user.user_id'))
-    role_id = Column(INTEGER,nullable=False,ForeignKey('role.role_id'))
+    user_id = Column(INTEGER,ForeignKey('user.user_id'),nullable=False)
+    role_id = Column(INTEGER,ForeignKey('role.role_id'),nullable=False)
 
 class UserRight(Base):
     __tablename__ = 'userRight'
+    global types_choices
     uright_id = Column(INTEGER,nullable=False,primary_key=True)
-    user_id = Column(INTEGER,nullable=False,ForeignKey('user.user_id'))
-    right_id = Column(INTEGER,nullable=False,ForeignKey('role.role_id'))    
-    right_type = Column(nullable=False,ChoiceType(types_choices,Integer()))
+    user_id = Column(ForeignKey('user.user_id'),nullable=False)
+    right_id = Column(ForeignKey('right.right_id'),nullable=False)    
+    right_type = Column(ChoiceType(types_choices),nullable=False)
 
 
 class GroupRight(Base):
+    __tablename__ = 'groupRight'
+    global types_choices
     gright_id = Column(INTEGER,nullable=False,primary_key=True)
-    group_id = Column(INTEGER,nullable=False,ForeignKey('group.group_id'))
-    right_id = Column(INTEGER,nullable=False,ForeignKey('right.right_id'))
-    right_type = Column(nullable=False,ChoiceType(types_choices,Integer()))
+    group_id = Column(INTEGER,ForeignKey('group.group_id'),nullable=False)
+    right_id = Column(INTEGER,ForeignKey('right.right_id'),nullable=False)
+    right_type = Column(ChoiceType(types_choices),nullable=False)
+
+class GroupRole(Base):
+    __tablename__ = 'groupRole'
+    grole_id = Column(INTEGER,nullable=False,primary_key=True)
+    group_id = Column(INTEGER,ForeignKey('group.group_id'),nullable=False)
+    role_id = Column(INTEGER,ForeignKey('role.role_id'),nullable=False)
+    
 
 class RoleRight(Base):
     __tablename__ = 'roleRight'
+    global types_choices
     role_right_id = Column(INTEGER,nullable=False,primary_key=True)
-    role_id = Column(nullable=False,ForeignKey('role.role_id'))
-    right_id = Column(nulable=False,ForeignKey('right.right_id'))
-    rught_tye
+    role_id = Column(ForeignKey('role.role_id'),nullable=False)
+    right_id = Column(ForeignKey('right.right_id'),nullable=False)
+    right_type = Column(ChoiceType(types_choices),nullable=False)
+    
+
+    
 # 初始化数据库链接:
 engine = create_engine('mysql+mysqlconnector://root:Zjq;;123456@localhost:3306/my_web')
-
+Base.metadata.create_all(engine) #创建表结构
 # 创建DBsession类型
 DBsession = sessionmaker(bind=engine)
 
@@ -97,10 +140,12 @@ DBsession = sessionmaker(bind=engine)
 session = DBsession()
 
 # 创建User对象
-new_user = User()
+new_user = TestUser(user_id=512314, login_name='1649107451@qq.com',passowrd='1234556',
+               username = 'Eric', mobile='1233465668',email='12310249@qq.com',gen_time=func.now(),login_time=func.now(),
+               last_login_time = func.now(),count=12)
 
 # 添加到session
-session.add()
+session.add(new_user)
 
 # 提交即保存到数据库
 session.commit()
