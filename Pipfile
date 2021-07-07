@@ -13,6 +13,9 @@ flask-ckeditor = "*"
 wtforms = "*"
 flask-moment = "*"
 numpy = "*"
+"sqlalchemy.utils" = "*"
+mysql-connector = "*"
+flask-login = "*"
 
 [dev-packages]
 
