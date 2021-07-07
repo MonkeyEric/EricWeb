@@ -16,29 +16,29 @@
 
     <title>个人网站 | 主页</title>
 
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/font-awesome/css/font-awesome.css" rel="stylesheet">
 
     <!-- Toastr style -->
-    <link href="css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <link href="../static/css/plugins/toastr/toastr.min.css" rel="stylesheet">
 
     <!-- Gritter -->
-    <link href="js/plugins/gritter/jquery.gritter.css" rel="stylesheet">
+    <link href="../static/js/plugins/gritter/jquery.gritter.css" rel="stylesheet">
 
-    <link href="css/animate.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+    <link href="../static/css/animate.css" rel="stylesheet">
+    <link href="../static/css/style.css" rel="stylesheet">
 
 </head>
 
 <body>
     <div id="wrapper">
-
+<!--        左导航栏-->
         <nav class="navbar-default navbar-static-side" role="navigation">
             <div class="sidebar-collapse">
                 <ul class="nav metismenu" id="side-menu">
                     <li class="nav-header">
                         <div class="dropdown profile-element">
-                            <img alt="image" class="rounded-circle" src="img/profile_small.jpg" />
+                            <img alt="image" class="rounded-circle" src="../static/img/profile_small.jpg" />
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="block m-t-xs font-bold">王宇</span>
                                 <span class="text-muted text-xs block">管理员 <b class="caret"></b></span>
@@ -64,13 +64,13 @@
                     </li>
 
                     <li>
-                        <a href="blog.html">
+                        <a href="">
                             <i class="fa fa-book"></i>
                             <span class="nav-label">个人博客</span>
                             <span class="fa arrow"></span>
                         </a>
                         <ul class="nav nav-second-level">
-                            <li><a href="blog.html">python</a></li>
+                            <li><a href="{{ url_for('blog.master') }}">python</a></li>
                             <li><a href="code_editor.html">写博客</a></li>
                             <li><a href="#">Mongo</a></li>
                             <li><a href="dashboard_2.html">mysql</a></li>
@@ -140,71 +140,17 @@
             </div>
         </nav>
 
-        <div id="page-wrapper" class="gray-bg dashbard-1">
-
+        <div id="page-wrapper" class="gray-bg">
+            <!--页眉-->
             <div class="row border-bottom">
                 <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
                     <div class="navbar-header">
                         <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-                  
                     </div>
                     
                     <ul class="nav navbar-top-links navbar-right">
                         <li style="padding: 20px">
                             <span class="m-r-sm text-muted welcome-message">欢迎来到猫咪博客</span>
-                        </li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-                                <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-messages dropdown-menu-right">
-                                <li>
-                                    <div class="dropdown-messages-box">
-                                        <a class="dropdown-item float-left" href="profile.html">
-                                            <img alt="image" class="rounded-circle" src="img/a7.jpg">
-                                        </a>
-                                        <div class="media-body">
-                                            <small class="float-right">46 小时前</small>
-                                            <strong>小明</strong> 评论了 <strong>小红</strong>. <br>
-                                            <small class="text-muted">2017.10.06 7:58</small>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="dropdown-divider"></li>
-                                <li>
-                                    <div class="dropdown-messages-box">
-                                        <a class="dropdown-item float-left" href="profile.html">
-                                            <img alt="image" class="rounded-circle" src="img/a4.jpg">
-                                        </a>
-                                        <div class="media-body ">
-                                            <small class="float-right text-navy">5 小时前</small>
-                                            <strong>小红</strong> 打电话给了 <strong>小黑</strong>. <br>
-                                            <small class="text-muted">2017.10.06 7:58</small>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="dropdown-divider"></li>
-                                <li>
-                                    <div class="dropdown-messages-box">
-                                        <a class="dropdown-item float-left" href="profile.html">
-                                            <img alt="image" class="rounded-circle" src="img/profile.jpg">
-                                        </a>
-                                        <div class="media-body ">
-                                            <small class="float-right">23 小时前</small>
-                                            <strong>小黑</strong> 点赞了 <strong>小红</strong>. <br>
-                                            <small class="text-muted">2017.10.06 7:58</small>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="dropdown-divider"></li>
-                                <li>
-                                    <div class="text-center link-block">
-                                        <a href="mailbox.html" class="dropdown-item">
-                                            <i class="fa fa-envelope"></i> <strong>阅读所有消息</strong>
-                                        </a>
-                                    </div>
-                                </li>
-                            </ul>
                         </li>
                         <li class="dropdown">
                             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
@@ -255,15 +201,11 @@
                                 <i class="fa fa-sign-out"></i> 注销
                             </a>
                         </li>
-                        <li>
-                            <a class="right-sidebar-toggle">
-                                <i class="fa fa-tasks"></i>
-                            </a>
-                        </li>
                     </ul>
-
                 </nav>
             </div>
+
+<!--            base的主内容-->
             <div class="row  border-bottom white-bg dashboard-header">
             <div class="col-lg-3">
                 <div class="widget style1 navy-bg">
@@ -319,9 +261,6 @@
             </div>
 
             </div>
-
-
-
             <div class="row  border-bottom white-bg dashboard-header">
 
                 <div class="col-md-3">
@@ -361,27 +300,44 @@
                     </ul>
                 </div>
                 <div class="col-md-6">
-                    <div class="flot-chart dashboard-chart">
-                        <div class="flot-chart-content" id="flot-dashboard-chart"></div>
-                    </div>
-                    <div class="row text-left">
-                        <div class="col">
-                            <div class=" m-l-md">
-                                <span class="h5 font-bold m-t block">406,100</span>
-                                <small class="text-muted m-b block">总访问量</small>
+                    <h2>服务器信息</h2>
+                    <small>更新时间：2021年2月29日</small>
+                            <div class="ibox-content">
+                                <div>
+                                    <div>
+                                        <span>储存</span>
+                                        <small class="float-right">10/200 GB</small>
+                                    </div>
+                                    <div class="progress progress-small">
+                                        <div style="width: 60%;" class="progress-bar"></div>
+                                    </div>
+
+                                    <div>
+                                        <span>带宽</span>
+                                        <small class="float-right">20 GB</small>
+                                    </div>
+                                    <div class="progress progress-small">
+                                        <div style="width: 50%;" class="progress-bar"></div>
+                                    </div>
+
+                                    <div>
+                                        <span>活动</span>
+                                        <small class="float-right">73%</small>
+                                    </div>
+                                    <div class="progress progress-small">
+                                        <div style="width: 40%;" class="progress-bar"></div>
+                                    </div>
+
+                                    <div>
+                                        <span>FTP</span>
+                                        <small class="float-right">400 GB</small>
+                                    </div>
+                                    <div class="progress progress-small">
+                                        <div style="width: 20%;" class="progress-bar progress-bar-danger"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col">
-                            <span class="h5 font-bold m-t block">150,401</span>
-                            <small class="text-muted m-b block">年访问量</small>
-                        </div>
-                        <div class="col">
-                            <span class="h5 font-bold m-t block">16,822</span>
-                            <small class="text-muted m-b block">月访问量</small>
-                        </div>
-
-                    </div>
-                </div>
                 <div class="col-md-3">
                     <div class="statistic-box">
                         <h4>
@@ -615,6 +571,7 @@
 
             </div>
             </div>
+<!--            页脚-->
             <div class="footer">
                 <div class="float-right">
                     <strong>2.9.2 inspinia</strong>
@@ -623,499 +580,52 @@
                     <strong>Copyright</strong> inspinia 2.9.2 &copy; 2014-2018
                 </div>
             </div>
-        </div>
-        <div class="small-chat-box fadeInRight animated">
-
-            <div class="heading" draggable="true">
-                <small class="chat-date float-right">
-                    2017.12.12
-                </small>
-                与 小王 聊天中
-            </div>
-
-            <div class="content">
-
-                <div class="left">
-                    <div class="author-name">
-                        小王 <small class="chat-date">
-                            10:02 am
-                        </small>
-                    </div>
-                    <div class="chat-message active">
-                        在吗？
-                    </div>
-
-                </div>
-                <div class="right">
-                    <div class="author-name">
-                        游客
-                        <small class="chat-date">
-                            11:24
-                        </small>
-                    </div>
-                    <div class="chat-message">
-                        我不在！
-                    </div>
-                </div>
-                <div class="left">
-                    <div class="author-name">
-                        小王
-                        <small class="chat-date">
-                            08:45
-                        </small>
-                    </div>
-                    <div class="chat-message active">
-                        不在还可以说话
-                    </div>
-                </div>
-                <div class="right">
-                    <div class="author-name">
-                        游客
-                        <small class="chat-date">
-                            11:24
-                        </small>
-                    </div>
-                    <div class="chat-message">
-                        我是游客，所以我不在！
-                    </div>
-                </div>
-                <div class="left">
-                    <div class="author-name">
-                        小王
-                        <small class="chat-date">
-                            08:45
-                        </small>
-                    </div>
-                    <div class="chat-message active">
-                        好吧
-                    </div>
-                </div>
-
-
-            </div>
-            <div class="form-chat">
-                <div class="input-group input-group-sm">
-                    <input type="text" class="form-control">
-                    <span class="input-group-btn">
-                        <button class="btn btn-primary" type="button">
-                            发送
-                        </button>
-                    </span>
-                </div>
-            </div>
 
         </div>
-        <div id="small-chat">
 
-            <span class="badge badge-warning float-right">5</span>
-            <a class="open-small-chat" href="">
-                <i class="fa fa-comments"></i>
+<!--        聊天工具-->
 
-            </a>
-        </div>
-        <div id="right-sidebar" class="animated">
-            <div class="sidebar-container">
-
-                <ul class="nav nav-tabs navs-3">
-                    <li>
-                        <a class="nav-link active" data-toggle="tab" href="#tab-1"> 记录 </a>
-                    </li>
-                    <li>
-                        <a class="nav-link" data-toggle="tab" href="#tab-2"> 项目 </a>
-                    </li>
-                    <li>
-                        <a class="nav-link" data-toggle="tab" href="#tab-3"> <i class="fa fa-gear"></i> </a>
-                    </li>
-                </ul>
-
-                <div class="tab-content">
-
-
-                    <div id="tab-1" class="tab-pane active">
-
-                        <div class="sidebar-title">
-                            <h3> <i class="fa fa-comments-o"></i> 最新记录</h3>
-                            <small><i class="fa fa-tim"></i> 你有10条新消息。</small>
-                        </div>
-
-                        <div>
-
-                            <div class="sidebar-message">
-                                <a href="#">
-                                    <div class="float-left text-center">
-                                        <img alt="image" class="rounded-circle message-avatar" src="img/a1.jpg">
-
-                                        <div class="m-t-xs">
-                                            <i class="fa fa-star text-warning"></i>
-                                            <i class="fa fa-star text-warning"></i>
-                                        </div>
-                                    </div>
-                                    <div class="media-body">
-                                        人生就像钟表，可以回到起点，却已不是昨天！
-                                        <br>
-                                        <small class="text-muted">今天 4:21</small>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="sidebar-message">
-                                <a href="#">
-                                    <div class="float-left text-center">
-                                        <img alt="image" class="rounded-circle message-avatar" src="img/a2.jpg">
-                                    </div>
-                                    <div class="media-body">
-                                        人生就像一本书，出生是封面，归去是封底，内容要靠自己填。
-                                        <br>
-                                        <small class="text-muted">昨天 2:45</small>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="sidebar-message">
-                                <a href="#">
-                                    <div class="float-left text-center">
-                                        <img alt="image" class="rounded-circle message-avatar" src="img/a3.jpg">
-
-                                        <div class="m-t-xs">
-                                            <i class="fa fa-star text-warning"></i>
-                                            <i class="fa fa-star text-warning"></i>
-                                            <i class="fa fa-star text-warning"></i>
-                                        </div>
-                                    </div>
-                                    <div class="media-body">
-                                        人生就像是一盘沙子，你永远也无法全盘抓起，但也不会一无所获。
-                                        <br>
-                                        <small class="text-muted">昨天 1:10</small>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="sidebar-message">
-                                <a href="#">
-                                    <div class="float-left text-center">
-                                        <img alt="image" class="rounded-circle message-avatar" src="img/a4.jpg">
-                                    </div>
-
-                                    <div class="media-body">
-                                        人生就像候车月台，有人上车，也有人下车，来来往往，你谁也抓不住！
-                                        <br>
-                                        <small class="text-muted">星期一 8:37</small>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="sidebar-message">
-                                <a href="#">
-                                    <div class="float-left text-center">
-                                        <img alt="image" class="rounded-circle message-avatar" src="img/a8.jpg">
-                                    </div>
-                                    <div class="media-body">
-                                        人生就像卫生纸，没事的时候尽量少扯！
-                                        <br>
-                                        <small class="text-muted">今天 4:21</small>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="sidebar-message">
-                                <a href="#">
-                                    <div class="float-left text-center">
-                                        <img alt="image" class="rounded-circle message-avatar" src="img/a7.jpg">
-                                    </div>
-                                    <div class="media-body">
-                                        人生就像一只钟摆，永远在渴望的痛苦和满足的厌倦之间摆动！
-                                        <br>
-                                        <small class="text-muted">昨天 2:45</small>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="sidebar-message">
-                                <a href="#">
-                                    <div class="float-left text-center">
-                                        <img alt="image" class="rounded-circle message-avatar" src="img/a3.jpg">
-
-                                        <div class="m-t-xs">
-                                            <i class="fa fa-star text-warning"></i>
-                                            <i class="fa fa-star text-warning"></i>
-                                            <i class="fa fa-star text-warning"></i>
-                                        </div>
-                                    </div>
-                                    <div class="media-body">
-                                        人生就像是一片海洋，里面的许多的奥秘要让我们去探究。
-                                        <br>
-                                        <small class="text-muted">昨天 1:10</small>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="sidebar-message">
-                                <a href="#">
-                                    <div class="float-left text-center">
-                                        <img alt="image" class="rounded-circle message-avatar" src="img/a4.jpg">
-                                    </div>
-                                    <div class="media-body">
-                                        人生就像一个空荡荡的巨大的坑，我们把时间丢进去，丢完了就完了！
-                                        <br>
-                                        <small class="text-muted">星期一 8:37</small>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div id="tab-2" class="tab-pane">
-
-                        <div class="sidebar-title">
-                            <h3> <i class="fa fa-cube"></i> 最新项目</h3>
-                            <small><i class="fa fa-tim"></i> 你有14个项目。 10没有完成</small>
-                        </div>
-
-                        <ul class="sidebar-list">
-                            <li>
-                                <a href="#">
-                                    <div class="small float-right m-t-xs">9小时前</div>
-                                    <h4>新时尚</h4>
-                                    人生如一杯茶，不会苦一辈子，但要苦一阵子。
-                                    <div class="small">完成度: 22%</div>
-                                    <div class="progress progress-mini">
-                                        <div style="width: 22%;" class="progress-bar progress-bar-warning"></div>
-                                    </div>
-                                    <div class="small text-muted m-t-xs">时间: 2017.12.12 4:00</div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <div class="small float-right m-t-xs">9小时前</div>
-                                    <h4>新游戏 </h4>
-                                    人生如一杯茶，不会苦一辈子，但要苦一阵子。
-                                    <div class="small">完成度: 48%</div>
-                                    <div class="progress progress-mini">
-                                        <div style="width: 48%;" class="progress-bar"></div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <div class="small float-right m-t-xs">9小时前</div>
-                                    <h4>新房产</h4>
-                                    人生如一杯茶，不会苦一辈子，但要苦一阵子。
-                                    <div class="small">完成度: 14%</div>
-                                    <div class="progress progress-mini">
-                                        <div style="width: 14%;" class="progress-bar progress-bar-info"></div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <span class="label label-primary float-right">NEW</span>
-                                    <h4>新世界</h4>
-                                    人生如一杯茶，不会苦一辈子，但要苦一阵子。
-                                    <div class="small">完成度: 22%</div>
-                                    <div class="small text-muted m-t-xs">时间: 2017.12.12 4:00</div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <div class="small float-right m-t-xs">9小时前</div>
-                                    <h4>新密码</h4>
-                                    人生如一杯茶，不会苦一辈子，但要苦一阵子。
-                                    <div class="small">完成度: 22%</div>
-                                    <div class="progress progress-mini">
-                                        <div style="width: 22%;" class="progress-bar progress-bar-warning"></div>
-                                    </div>
-                                    <div class="small text-muted m-t-xs">时间: 2017.12.12 4:00</div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <div class="small float-right m-t-xs">9小时前</div>
-                                    <h4>新数据 </h4>
-                                    人生如一杯茶，不会苦一辈子，但要苦一阵子。
-                                    <div class="small">完成度: 48%</div>
-                                    <div class="progress progress-mini">
-                                        <div style="width: 48%;" class="progress-bar"></div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <div class="small float-right m-t-xs">9小时前</div>
-                                    <h4>新会议</h4>
-                                    人生如一杯茶，不会苦一辈子，但要苦一阵子。
-                                    <div class="small">完成度: 14%</div>
-                                    <div class="progress progress-mini">
-                                        <div style="width: 14%;" class="progress-bar progress-bar-info"></div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <span class="label label-primary float-right">NEW</span>
-                                    <h4>新业务</h4>
-                                    <!--<div class="small float-right m-t-xs">9小时前</div>-->
-                                    人生如一杯茶，不会苦一辈子，但要苦一阵子。
-                                    <div class="small">完成度: 22%</div>
-                                    <div class="small text-muted m-t-xs">时间: 2017.12.12 4:00</div>
-                                </a>
-                            </li>
-
-                        </ul>
-
-                    </div>
-
-                    <div id="tab-3" class="tab-pane">
-
-                        <div class="sidebar-title">
-                            <h3><i class="fa fa-gears"></i> 设置</h3>
-                            <small><i class="fa fa-tim"></i> 你有13个项目，10个没有完成</small>
-                        </div>
-
-                        <div class="setings-item">
-                            <span>
-                                显示通知
-                            </span>
-                            <div class="switch">
-                                <div class="onoffswitch">
-                                    <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="example">
-                                    <label class="onoffswitch-label" for="example">
-                                        <span class="onoffswitch-inner"></span>
-                                        <span class="onoffswitch-switch"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="setings-item">
-                            <span>
-                                即时聊天
-                            </span>
-                            <div class="switch">
-                                <div class="onoffswitch">
-                                    <input type="checkbox" name="collapsemenu" checked class="onoffswitch-checkbox" id="example2">
-                                    <label class="onoffswitch-label" for="example2">
-                                        <span class="onoffswitch-inner"></span>
-                                        <span class="onoffswitch-switch"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="setings-item">
-                            <span>
-                                历史记录
-                            </span>
-                            <div class="switch">
-                                <div class="onoffswitch">
-                                    <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="example3">
-                                    <label class="onoffswitch-label" for="example3">
-                                        <span class="onoffswitch-inner"></span>
-                                        <span class="onoffswitch-switch"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="setings-item">
-                            <span>
-                                显示图表
-                            </span>
-                            <div class="switch">
-                                <div class="onoffswitch">
-                                    <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="example4">
-                                    <label class="onoffswitch-label" for="example4">
-                                        <span class="onoffswitch-inner"></span>
-                                        <span class="onoffswitch-switch"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="setings-item">
-                            <span>
-                                离线用户
-                            </span>
-                            <div class="switch">
-                                <div class="onoffswitch">
-                                    <input type="checkbox" checked name="collapsemenu" class="onoffswitch-checkbox" id="example5">
-                                    <label class="onoffswitch-label" for="example5">
-                                        <span class="onoffswitch-inner"></span>
-                                        <span class="onoffswitch-switch"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="setings-item">
-                            <span>
-                                网站搜索
-                            </span>
-                            <div class="switch">
-                                <div class="onoffswitch">
-                                    <input type="checkbox" checked name="collapsemenu" class="onoffswitch-checkbox" id="example6">
-                                    <label class="onoffswitch-label" for="example6">
-                                        <span class="onoffswitch-inner"></span>
-                                        <span class="onoffswitch-switch"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="setings-item">
-                            <span>
-                                每天更新
-                            </span>
-                            <div class="switch">
-                                <div class="onoffswitch">
-                                    <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="example7">
-                                    <label class="onoffswitch-label" for="example7">
-                                        <span class="onoffswitch-inner"></span>
-                                        <span class="onoffswitch-switch"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="sidebar-content">
-                            <h4>设置</h4>
-                            <div class="small">
-                                设置描述设置描述设置描述设置描述设置描述设置描述设置描述设置描述设置描述设置描述设置描述设置描述设置描述
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Mainly scripts -->
-    <script src="js/jquery-3.1.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.js"></script>
-    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="../static/js/jquery-3.1.1.min.js"></script>
+    <script src="../static/js/popper.min.js"></script>
+    <script src="../static/js/bootstrap.js"></script>
+    <script src="../static/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="../static/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
     <!-- Flot -->
-    <script src="js/plugins/flot/jquery.flot.js"></script>
-    <script src="js/plugins/flot/jquery.flot.tooltip.min.js"></script>
-    <script src="js/plugins/flot/jquery.flot.spline.js"></script>
-    <script src="js/plugins/flot/jquery.flot.resize.js"></script>
-    <script src="js/plugins/flot/jquery.flot.pie.js"></script>
+    <script src="../static/js/plugins/flot/jquery.flot.js"></script>
+    <script src="../static/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+    <script src="../static/js/plugins/flot/jquery.flot.spline.js"></script>
+    <script src="../static/js/plugins/flot/jquery.flot.resize.js"></script>
+    <script src="../static/js/plugins/flot/jquery.flot.pie.js"></script>
 
     <!-- Peity -->
-    <script src="js/plugins/peity/jquery.peity.min.js"></script>
-    <script src="js/demo/peity-demo.js"></script>
+    <script src="../static/js/plugins/peity/jquery.peity.min.js"></script>
+    <script src="../static/js/demo/peity-demo.js"></script>
 
     <!-- Custom and plugin javascript -->
-    <script src="js/inspinia.js"></script>
-    <script src="js/plugins/pace/pace.min.js"></script>
+    <script src="../static/js/inspinia.js"></script>
+    <script src="../static/js/plugins/pace/pace.min.js"></script>
 
     <!-- jQuery UI -->
-    <script src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../static/js/plugins/jquery-ui/jquery-ui.min.js"></script>
 
     <!-- GITTER -->
-    <script src="js/plugins/gritter/jquery.gritter.min.js"></script>
+    <script src="../static/js/plugins/gritter/jquery.gritter.min.js"></script>
 
     <!-- Sparkline -->
-    <script src="js/plugins/sparkline/jquery.sparkline.min.js"></script>
+    <script src="../static/js/plugins/sparkline/jquery.sparkline.min.js"></script>
 
     <!-- Sparkline demo data  -->
-    <script src="js/demo/sparkline-demo.js"></script>
+    <script src="../static/js/demo/sparkline-demo.js"></script>
 
     <!-- ChartJS-->
-    <script src="js/plugins/chartJs/Chart.min.js"></script>
+    <script src="../static/js/plugins/chartJs/Chart.min.js"></script>
 
     <!-- Toastr -->
-    <script src="js/plugins/toastr/toastr.min.js"></script>
+    <script src="../static/js/plugins/toastr/toastr.min.js"></script>
 
 
     <script>

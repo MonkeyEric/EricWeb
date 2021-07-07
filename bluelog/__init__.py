@@ -1,6 +1,7 @@
 import os
 from bluelog.blueprints.auth import auth_bp
 from bluelog.blueprints.admin import admin_bp
+from bluelog.blueprints.blog import blog_bp
 from flask import Flask
 
 from bluelog.utils.extensions import bootstrap, db, ckeditor, mail, moment
@@ -23,14 +24,15 @@ def create_app(config_name=None):
 
     return app
 
+
 def register_logging(app):
     pass
 
 
 def register_blueprints(app):
-    #app.register_blueprint(blog_bp)
     app.register_blueprint(admin_bp,url_prefix='/')
     app.register_blueprint(auth_bp, url_prefix='/auth')
+    app.register_blueprint(blog_bp, url_prefix='/blog')
 
 
 def register_extensions(app):
