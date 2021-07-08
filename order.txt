@@ -1,0 +1,2 @@
+gunicorn 启动命令
+gunicorn -b 127.0.0.1:5001  bluelog:app -c  gunicorn_conf.py --limit-request-line 0
