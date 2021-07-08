@@ -16,6 +16,7 @@ numpy = "*"
 "sqlalchemy.utils" = "*"
 mysql-connector = "*"
 flask-login = "*"
+gunicorn = "*"
 
 [dev-packages]
 
