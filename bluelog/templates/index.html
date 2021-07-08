@@ -1,339 +1,165 @@
 ﻿{% extends "base.html" %}
 {% block title%}首页{% endblock%}
 {% block wrapper%}
-<!--        左导航栏-->
-<nav class="navbar-default navbar-static-side" role="navigation">
-    <div class="sidebar-collapse">
-        <ul class="nav metismenu" id="side-menu">
-            <li class="nav-header">
-                <div class="dropdown profile-element">
-                    <img alt="image" class="rounded-circle" src="{{url_for('static',filename='img/profile_small.jpg')}}" />
-                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                        <span class="block m-t-xs font-bold">王宇</span>
-                        <span class="text-muted text-xs block">管理员 <b class="caret"></b></span>
-                    </a>
-                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                        <li><a class="dropdown-item" href="profile.html">个人信息</a></li>
-                        <li><a class="dropdown-item" href="contacts.html">好友</a></li>
-                        <li><a class="dropdown-item" href="mailbox.html">信箱</a></li>
-                        <li class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="login.html">登出</a></li>
-                    </ul>
-                </div>
-                <div class="logo-element">
-                    IN+
-                </div>
-            </li>
-            <li class="active">
-                <a href="index.html">
-                    <i class="fa fa-desktop"></i>
-                    <span class="nav-label">首页</span>
-                    <span class="float-right label label-primary">特别</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="blog.html">
-                    <i class="fa fa-book"></i>
-                    <span class="nav-label">个人博客</span>
-                    <span class="fa arrow"></span>
-                </a>
-                <ul class="nav nav-second-level">
-                    <li><a href="blog.html">python</a></li>
-                    <li><a href="code_editor.html">写博客</a></li>
-                    <li><a href="#">Mongo</a></li>
-                    <li><a href="dashboard_2.html">mysql</a></li>
-                    <li><a href="forum_main.html">大神博客链接</a></li>
-
-                </ul>
-            </li>
-            <li>
-                <a href="#">
-                    <i class="fa fa-bar-chart-o"></i>
-                    <span class="nav-label">收支分析</span>
-                    <span class="fa arrow"></span>
-                </a>
-                <ul class="nav nav-second-level collapse">
-                    <li><a href="graph_chartjs.html">可视化</a></li>
-                    <li><a href="table_data_tables.html">数据展示</a></li>
-                    <li><a href="form_file_upload.html">数据录入</a></li>
-                </ul>
-            </li>
-
-            <li>
-                <a href="calendar.html">
-                    <i class="fa fa-calendar"></i>
-                    <span class="nav-label">日历</span>
-                </a>
-            </li>
-
-            <li>
-                <a target="_blank" href="landing.html"><i class="fa fa-star"></i> <span class="nav-label">猫咪专属</span> <span class="label label-warning float-right">新</span></a>
-                <ul class="nav nav-second-level collapse">
-                    <li><a href="timeline.html">时间线</a></li>
-                    <li><a href="basic_gallery.html">相册</a></li>
-                    <li><a href="video.html">视频</a></li>
-                    <li><a href="graph_morris.html">其他</a></li>
-                </ul>
-            </li>
-
-            <li>
-                <a href="package.html">
-                    <i class="fa fa-github"></i>
-                    <span class="nav-label">Github地址</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="profile_2.html">
-                    <i class="fa fa-info"></i>
-                    <span class="nav-label">关于博主</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="mailbox.html">
-                    <i class="fa fa-envelope"></i>
-                    <span class="nav-label">邮件 </span>
-                    <span class="label label-warning float-right">16/24</span>
-                </a>
-
-                <ul class="nav nav-second-level collapse">
-                    <li><a href="mailbox.html">收件箱</a></li>
-                    <li><a href="mail_detail.html">邮件内容</a></li>
-                    <li><a href="mail_compose.html">撰写邮件</a></li>
-                    <li><a href="email_template.html">邮件模板</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-</nav>
 <div id="page-wrapper" class="gray-bg">
-    <!--页眉-->
-    <div class="row border-bottom">
-        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
-                <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-            </div>
-
-            <ul class="nav navbar-top-links navbar-right">
-                <li style="padding: 20px">
-                    <span class="m-r-sm text-muted welcome-message">欢迎来到猫咪博客</span>
-                </li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-                        <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-alerts">
-                        <li>
-                            <a href="mailbox.html" class="dropdown-item">
-                                <div>
-                                    <i class="fa fa-envelope fa-fw"></i> 你有16条消息
-                                    <span class="float-right text-muted small">4 分钟前</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="dropdown-divider"></li>
-                        <li>
-                            <a href="profile.html" class="dropdown-item">
-                                <div>
-                                    <i class="fa fa-twitter fa-fw"></i> 3 个新的关注者
-                                    <span class="float-right text-muted small">12 分钟前</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="dropdown-divider"></li>
-                        <li>
-                            <a href="grid_options.html" class="dropdown-item">
-                                <div>
-                                    <i class="fa fa-upload fa-fw"></i> 重启服务器
-                                    <span class="float-right text-muted small">4 分钟前</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="dropdown-divider"></li>
-                        <li>
-                            <div class="text-center link-block">
-                                <a href="notifications.html" class="dropdown-item">
-                                    <strong>查看所有信息</strong>
-                                    <i class="fa fa-angle-right"></i>
-                                </a>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-
-
-                <li>
-                    <a href="login.html">
-                        <i class="fa fa-sign-out"></i> 注销
-                    </a>
-                </li>
-                <li>
-                    <a class="right-sidebar-toggle">
-                        <i class="fa fa-tasks"></i>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-<!--            base的主内容-->
-    <div class="row  border-bottom white-bg dashboard-header">
-        <div class="col-lg-3">
-            <div class="widget style1 navy-bg">
-                <div class="row">
-                    <div class="col-4">
-                        <i class="fa fa-cloud fa-5x"></i>
-                    </div>
-                    <div class="col-8 text-right">
-                        <span> 今日天气 </span>
-                        <h2 class="font-bold">26'C</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="widget style1 lazur-bg">
-                <div class="row">
-                    <div class="col-4">
-                        <i class="fa fa-envelope-o fa-5x"></i>
-                    </div>
-                    <div class="col-8 text-right">
-                        <span> 新消息 </span>
-                        <h2 class="font-bold">260</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="widget style1 yellow-bg">
-                <div class="row">
-                    <div class="col-4">
-                        <i class="fa fa-heart fa-5x"></i>
-                    </div>
-                    <div class="col-8 text-right">
-                        <span> 新专辑 </span>
-                        <h2 class="font-bold">12</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="widget style1 navy-bg">
-                <div class="row">
-                    <div class="col-4">
-                        <i class="fa fa-user fa-5x"></i>
-                    </div>
-                    <div class="col-8 text-right">
-                        <span> 访问用户 </span>
-                        <h2 class="font-bold">216</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <h2>最新文章</h2>
-            <small>您有42条消息和6条通知。</small>
-            <ul class="list-group clear-list m-t">
-                <li class="list-group-item fist-item">
-                    <span class="float-right">
-                        09:00
-                    </span>
-                    <span class="label label-success">1</span> 文章1：什么是Python？
-                </li>
-                <li class="list-group-item">
-                    <span class="float-right">
-                        10:16
-                    </span>
-                    <span class="label label-info">2</span> 文章2：什么是Mongo？
-                </li>
-                <li class="list-group-item">
-                    <span class="float-right">
-                        08:22
-                    </span>
-                    <span class="label label-primary">3</span> 文章3：什么是Mysql？
-                </li>
-                <li class="list-group-item">
-                    <span class="float-right">
-                        11:06
-                    </span>
-                    <span class="label label-default">4</span> 文章4：什么是HTML？
-                </li>
-                <li class="list-group-item">
-                    <span class="float-right">
-                        12:00
-                    </span>
-                    <span class="label label-primary">5</span> 文章5：什么是CSS？
-                </li>
-            </ul>
-        </div>
-        <div class="col-md-6">
-            <h2>服务器信息</h2>
-            <small>更新时间：2021年2月29日</small>
-                    <div class="ibox-content">
-                        <div>
-                            <div>
-                                <span>储存</span>
-                                <small class="float-right">10/200 GB</small>
-                            </div>
-                            <div class="progress progress-small">
-                                <div style="width: 60%;" class="progress-bar"></div>
-                            </div>
-
-                            <div>
-                                <span>带宽</span>
-                                <small class="float-right">20 GB</small>
-                            </div>
-                            <div class="progress progress-small">
-                                <div style="width: 50%;" class="progress-bar"></div>
-                            </div>
-
-                            <div>
-                                <span>活动</span>
-                                <small class="float-right">73%</small>
-                            </div>
-                            <div class="progress progress-small">
-                                <div style="width: 40%;" class="progress-bar"></div>
-                            </div>
-
-                            <div>
-                                <span>FTP</span>
-                                <small class="float-right">400 GB</small>
-                            </div>
-                            <div class="progress progress-small">
-                                <div style="width: 20%;" class="progress-bar progress-bar-danger"></div>
-                            </div>
+    <!--            base的主内容-->
+    {{ self.pheader() }}
+        <div class="row  border-bottom white-bg dashboard-header">
+            <div class="col-lg-3">
+                <div class="widget style1 navy-bg">
+                    <div class="row">
+                        <div class="col-4">
+                            <i class="fa fa-cloud fa-5x"></i>
+                        </div>
+                        <div class="col-8 text-right">
+                            <span> 今日天气 </span>
+                            <h2 class="font-bold">26'C</h2>
                         </div>
                     </div>
                 </div>
-        <div class="col-md-3">
-            <div class="statistic-box">
-                <h4>
-                    计划项目进度
-                </h4>
-                <p>
-                    你有两个项目没有完成任务。
-                </p>
-                <div class="row text-center">
-
-                    <div class="col-lg-6">
-                        <canvas id="doughnutChart2" width="80" height="80" style="margin: 18px auto 0"></canvas>
-                        <h5>访问来源地</h5>
-                    </div>
-                    <div class="col-lg-6">
-                        <canvas id="doughnutChart" width="80" height="80" style="margin: 18px auto 0"></canvas>
-                        <h5></h5>
+            </div>
+            <div class="col-lg-3">
+                <div class="widget style1 lazur-bg">
+                    <div class="row">
+                        <div class="col-4">
+                            <i class="fa fa-envelope-o fa-5x"></i>
+                        </div>
+                        <div class="col-8 text-right">
+                            <span> 新消息 </span>
+                            <h2 class="font-bold">260</h2>
+                        </div>
                     </div>
                 </div>
-                <div class="m-t">
-                    <small>项目未完成描述信息。</small>
+            </div>
+            <div class="col-lg-3">
+                <div class="widget style1 yellow-bg">
+                    <div class="row">
+                        <div class="col-4">
+                            <i class="fa fa-heart fa-5x"></i>
+                        </div>
+                        <div class="col-8 text-right">
+                            <span> 新专辑 </span>
+                            <h2 class="font-bold">12</h2>
+                        </div>
+                    </div>
                 </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="widget style1 navy-bg">
+                    <div class="row">
+                        <div class="col-4">
+                            <i class="fa fa-user fa-5x"></i>
+                        </div>
+                        <div class="col-8 text-right">
+                            <span> 访问用户 </span>
+                            <h2 class="font-bold">216</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <div class="col-md-3">
+                <h2>最新文章</h2>
+                <small>您有42条消息和6条通知。</small>
+                <ul class="list-group clear-list m-t">
+                    <li class="list-group-item fist-item">
+                        <span class="float-right">
+                            09:00
+                        </span>
+                        <span class="label label-success">1</span> 文章1：什么是Python？
+                    </li>
+                    <li class="list-group-item">
+                        <span class="float-right">
+                            10:16
+                        </span>
+                        <span class="label label-info">2</span> 文章2：什么是Mongo？
+                    </li>
+                    <li class="list-group-item">
+                        <span class="float-right">
+                            08:22
+                        </span>
+                        <span class="label label-primary">3</span> 文章3：什么是Mysql？
+                    </li>
+                    <li class="list-group-item">
+                        <span class="float-right">
+                            11:06
+                        </span>
+                        <span class="label label-default">4</span> 文章4：什么是HTML？
+                    </li>
+                    <li class="list-group-item">
+                        <span class="float-right">
+                            12:00
+                        </span>
+                        <span class="label label-primary">5</span> 文章5：什么是CSS？
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h2>服务器信息</h2>
+                <small>更新时间：2021年2月29日</small>
+                        <div class="ibox-content">
+                            <div>
+                                <div>
+                                    <span>储存</span>
+                                    <small class="float-right">10/200 GB</small>
+                                </div>
+                                <div class="progress progress-small">
+                                    <div style="width: 60%;" class="progress-bar"></div>
+                                </div>
+
+                                <div>
+                                    <span>带宽</span>
+                                    <small class="float-right">20 GB</small>
+                                </div>
+                                <div class="progress progress-small">
+                                    <div style="width: 50%;" class="progress-bar"></div>
+                                </div>
+
+                                <div>
+                                    <span>活动</span>
+                                    <small class="float-right">73%</small>
+                                </div>
+                                <div class="progress progress-small">
+                                    <div style="width: 40%;" class="progress-bar"></div>
+                                </div>
+
+                                <div>
+                                    <span>FTP</span>
+                                    <small class="float-right">400 GB</small>
+                                </div>
+                                <div class="progress progress-small">
+                                    <div style="width: 20%;" class="progress-bar progress-bar-danger"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            <div class="col-md-3">
+                <div class="statistic-box">
+                    <h4>
+                        计划项目进度
+                    </h4>
+                    <p>
+                        你有两个项目没有完成任务。
+                    </p>
+                    <div class="row text-center">
+
+                        <div class="col-lg-6">
+                            <canvas id="doughnutChart2" width="80" height="80" style="margin: 18px auto 0"></canvas>
+                            <h5>访问来源地</h5>
+                        </div>
+                        <div class="col-lg-6">
+                            <canvas id="doughnutChart" width="80" height="80" style="margin: 18px auto 0"></canvas>
+                            <h5></h5>
+                        </div>
+                    </div>
+                    <div class="m-t">
+                        <small>项目未完成描述信息。</small>
+                    </div>
+
+                </div>
             </div>
         </div>
-    </div>
-    <div class="wrapper wrapper-content">
+        <div class="wrapper wrapper-content">
         <div class="row">
         <div class="col-lg-4">
             <div class="ibox">
@@ -548,5 +374,4 @@
 
 </div>
 </div>
-<!--        聊天工具-->
-{% endblock%}
+ {% endblock%}

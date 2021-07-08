@@ -5,6 +5,7 @@ admin_bp = Blueprint('admin', __name__, template_folder='templates')
 
 
 @admin_bp.route('/', methods=['GET'])
+@admin_bp.route('/index', methods=['GET'])
 def index():
     return render_template('index.html')
 
