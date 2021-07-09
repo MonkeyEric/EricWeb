@@ -52,4 +52,4 @@ def contacts():
 
 @admin_bp.route('/test', methods=['GET'])
 def test():
-    return render_template('video.html')
+    return render_template('favourite.html')
