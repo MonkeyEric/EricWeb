@@ -43,3 +43,13 @@ def gallery():
 @admin_bp.route('/video', methods=['GET'])
 def video():
     return render_template('video.html')
+
+
+@admin_bp.route('/contacts', methods=['GET'])
+def contacts():
+    return render_template('contacts.html')
+
+
+@admin_bp.route('/test', methods=['GET'])
+def test():
+    return render_template('video.html')

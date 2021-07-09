@@ -1,21 +1,11 @@
 {% extends "base.html" %}
-{% block title%}日历{% endblock%}
-
-{% block head%}
-
-    <link href="{{url_for('static',filename='css/plugins/fullcalendar/fullcalendar.css')}}" rel="stylesheet">
-    <link href="{{url_for('static',filename='css/plugins/fullcalendar/fullcalendar.print.css')}}" rel='stylesheet' media='print'>
-{% endblock%}
-<!--    <link href="css/animate.css" rel="stylesheet">-->
-<!--    <link href="css/style.css" rel="stylesheet">-->
-
-</head>
-
-<body>
-
+{% block title %}日历{% endblock %}
+{% block head %}
+<link href="{{url_for('static',filename='css/plugins/fullcalendar/fullcalendar.css')}}" rel="stylesheet">
+<link href="{{url_for('static',filename='css/plugins/fullcalendar/fullcalendar.print.css')}}" rel='stylesheet' media='print'>
+{% endblock %}
 {% block wrapper%}
 <div id="page-wrapper" class="gray-bg">
-    <!--            base的主内容-->
     {{ self.pheader() }}
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-8">
@@ -34,91 +24,87 @@
         </div>
     </div>
     <div class="wrapper wrapper-content">
-    <div class="row animated fadeInDown">
-        <div class="col-lg-3">
-            <div class="ibox ">
-                <div class="ibox-title">
-                    <h5>可拖动事件</h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-wrench"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li><a href="#" class="dropdown-item">选项 1</a>
-                            </li>
-                            <li><a href="#" class="dropdown-item">选项 2</a>
-                            </li>
-                        </ul>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
+        <div class="row animated fadeInDown">
+            <div class="col-lg-3">
+                <div class="ibox ">
+                    <div class="ibox-title">
+                        <h5>可拖动事件</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#" class="dropdown-item">选项 1</a>
+                                </li>
+                                <li><a href="#" class="dropdown-item">选项 2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div id='external-events'>
+                            <p>拖动事件并进入日历</p>
+                            <div class='external-event navy-bg'>生日</div>
+                            <div class='external-event navy-bg'>吃饭</div>
+                            <div class='external-event navy-bg'>购物</div>
+                            <div class='external-event navy-bg'>女友</div>
+                            <div class='external-event navy-bg'>鲜花</div>
+                            <p class="m-t">
+                                <input type='checkbox' id='drop-remove' class="i-checks" checked /> <label for='drop-remove'>拖动后删除事件</label>
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <div class="ibox-content">
-                    <div id='external-events'>
-                        <p>拖动事件并进入日历</p>
-                        <div class='external-event navy-bg'>生日</div>
-                        <div class='external-event navy-bg'>吃饭</div>
-                        <div class='external-event navy-bg'>购物</div>
-                        <div class='external-event navy-bg'>女友</div>
-                        <div class='external-event navy-bg'>鲜花</div>
-                        <p class="m-t">
-                            <input type='checkbox' id='drop-remove' class="i-checks" checked /> <label for='drop-remove'>拖动后删除事件</label>
+                <div class="ibox ">
+                    <div class="ibox-content">
+                        <h2>FullCalendar</h2> 是一个jQuery插件，提供了一个全尺寸的拖放日历，如下所示。它使用AJAX每个月即可获取事件，并且可以轻松地配置为使用您自己的Feed格式（Google日历提供了一个扩展名）。
+                        <p>
+                            <a href="http://arshaw.com/fullcalendar/" target="_blank">FullCalendar documentation</a>
                         </p>
                     </div>
                 </div>
             </div>
-            <div class="ibox ">
-                <div class="ibox-content">
-                    <h2>FullCalendar</h2> 是一个jQuery插件，提供了一个全尺寸的拖放日历，如下所示。它使用AJAX每个月即可获取事件，并且可以轻松地配置为使用您自己的Feed格式（Google日历提供了一个扩展名）。
-                    <p>
-                        <a href="http://arshaw.com/fullcalendar/" target="_blank">FullCalendar documentation</a>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-9">
-            <div class="ibox ">
-                <div class="ibox-title">
-                    <h5>日历表 </h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-wrench"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li><a href="#" class="dropdown-item">选项 1</a>
-                            </li>
-                            <li><a href="#" class="dropdown-item">选项 2</a>
-                            </li>
-                        </ul>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
+            <div class="col-lg-9">
+                <div class="ibox ">
+                    <div class="ibox-title">
+                        <h5>日历表 </h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#" class="dropdown-item">选项 1</a>
+                                </li>
+                                <li><a href="#" class="dropdown-item">选项 2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div class="ibox-content">
-                    <div id="calendar"></div>
+                    <div class="ibox-content">
+                        <div id="calendar"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    {{ self.footer() }}
+
 </div>
-</div>
-<!-- iCheck -->
+{% endblock%}
 
-<script src="{{url_for('static',filename='js/plugins/iCheck/icheck.min.js')}}"></script>
-
-<!-- Full Calendar -->
-<script src="{{url_for('static',filename='js/plugins/fullcalendar/fullcalendar.min.js')}}"></script>
-
-<!-- Mainly scripts -->
-<script src="{{url_for('static',filename='js/plugins/fullcalendar/moment.min.js')}}"></script>
+{%block script%}
 <script>
 
     $(document).ready(function() {
@@ -224,8 +210,6 @@
     });
 
 </script>
- {% endblock%}
+{% endblock %}
 
-</body>
 
-</html>

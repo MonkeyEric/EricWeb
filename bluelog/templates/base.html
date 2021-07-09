@@ -6,7 +6,7 @@
 -->
 
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 
 <head>
 
@@ -14,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>{% block title %}{% endblock %} | 主页</title>
+    <title>{% block title %}{% endblock %} | 猫大侠Blog</title>
 
     <link href="{{url_for('static',filename='css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{url_for('static',filename='font-awesome/css/font-awesome.css')}}" rel="stylesheet">
@@ -216,6 +216,16 @@
             </nav>
         </div>
             {%endblock%}
+            {%block footer%}
+            <div class="footer">
+                <div class="float-right">
+                    10GB of <strong>250GB</strong> Free.
+                </div>
+                <div>
+                            <strong>Copyright</strong> inspinia 2.9.2 &copy; 2017-2018
+                </div>
+            </div>
+            {% endblock%}
 
         </div>
         {% endblock%}
@@ -223,7 +233,7 @@
 
     <!-- Mainly scripts -->
     <script src="{{url_for('static',filename='js/jquery-3.1.1.min.js')}}"></script>
-
+    <script src="{{url_for('static',filename='js/plugins/fullcalendar/moment.min.js')}}"></script>
 
     <script src="{{url_for('static',filename='js/popper.min.js')}}"></script>
     <script src="{{url_for('static',filename='js/bootstrap.js')}}"></script>
@@ -264,118 +274,13 @@
     <script src="{{url_for('static',filename='js/plugins/toastr/toastr.min.js')}}"></script>
 
     <script src="{{url_for('static',filename='js/plugins/blueimp/jquery.blueimp-gallery.min.js')}}"></script>
-    <script>
-        $(document).ready(function () {
-            setTimeout(function () {
-                toastr.options = {
-                    closeButton: true,
-                    progressBar: true,
-                    showMethod: 'slideDown',
-                    timeOut: 4000
-                };
-                toastr.success('inspinia 2.9.2管理者', '欢迎您王宇');
+    <!-- iCheck -->
+    <script src="{{url_for('static',filename='js/plugins/iCheck/icheck.min.js')}}"></script>
 
-            }, 1300);
-
-
-            var data1 = [
-                [0, 4], [1, 8], [2, 5], [3, 10], [4, 4], [5, 16], [6, 5], [7, 11], [8, 6], [9, 11], [10, 30], [11, 10], [12, 13], [13, 4], [14, 3], [15, 3], [16, 6]
-            ];
-            var data2 = [
-                [0, 1], [1, 0], [2, 2], [3, 0], [4, 1], [5, 3], [6, 1], [7, 5], [8, 2], [9, 3], [10, 2], [11, 1], [12, 0], [13, 2], [14, 8], [15, 0], [16, 0]
-            ];
-            $("#flot-dashboard-chart").length && $.plot($("#flot-dashboard-chart"), [
-                data1, data2
-            ],
-                {
-                    series: {
-                        lines: {
-                            show: false,
-                            fill: true
-                        },
-                        splines: {
-                            show: true,
-                            tension: 0.4,
-                            lineWidth: 1,
-                            fill: 0.4
-                        },
-                        points: {
-                            radius: 0,
-                            show: true
-                        },
-                        shadowSize: 2
-                    },
-                    grid: {
-                        hoverable: true,
-                        clickable: true,
-                        tickColor: "#d5d5d5",
-                        borderWidth: 1,
-                        color: '#d5d5d5'
-                    },
-                    colors: ["#1ab394", "#1C84C6"],
-                    xaxis: {
-                    },
-                    yaxis: {
-                        ticks: 4
-                    },
-                    tooltip: false
-                }
-            );
-
-            var doughnutData = {
-                labels: ["App", "Software", "Laptop"],
-                datasets: [{
-                    data: [300, 50, 100],
-                    backgroundColor: ["#a3e1d4", "#dedede", "#9CC3DA"]
-                }]
-            };
-
-
-            var doughnutOptions = {
-                responsive: false,
-                legend: {
-                    display: false
-                }
-            };
-
-
-            var ctx4 = document.getElementById("doughnutChart").getContext("2d");
-            new Chart(ctx4, { type: 'doughnut', data: doughnutData, options: doughnutOptions });
-
-            var doughnutData = {
-                labels: ["App", "Software", "Laptop"],
-                datasets: [{
-                    data: [70, 27, 85],
-                    backgroundColor: ["#a3e1d4", "#dedede", "#9CC3DA"]
-                }]
-            };
-
-
-            var doughnutOptions = {
-                responsive: false,
-                legend: {
-                    display: false
-                }
-            };
-
-
-            var ctx4 = document.getElementById("doughnutChart2").getContext("2d");
-            new Chart(ctx4, { type: 'doughnut', data: doughnutData, options: doughnutOptions });
-
-        });
-    </script>
-    <script>
-        (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-            (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date(); a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-        ga('create', 'UA-4625583-2', 'webapplayers.com');
-        ga('send', 'pageview');
-
-    </script>
+    <!-- Full Calendar -->
+    <script src="{{url_for('static',filename='js/plugins/fullcalendar/fullcalendar.min.js')}}"></script>
+{%block script%}
+{% endblock %}
     <!--同步官网模板开始-->
     <div class="theme-config">
         <div class="theme-config-box">
