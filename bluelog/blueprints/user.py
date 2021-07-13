@@ -2,11 +2,10 @@
 from flask import Blueprint, render_template, flash
 from flask_login import current_user
 
-# from blog.forms import LoginForm
-# from bluelog.models import Admin
-# from bluelog.utils import redirect_back
+from bluelog.utils.emails import send_mail,send_subscribe_mail
+from flask import redirect, url_for
 
-auth_bp = Blueprint('auth', __name__, template_folder='templates')
+user_bp = Blueprint('user', __name__, template_folder='templates')
 
 
 # @auth_bp.route('/login',methods=['GET','POST'])
@@ -29,6 +28,10 @@ auth_bp = Blueprint('auth', __name__, template_folder='templates')
 #   return render_template('auth/login.html')
 
 
-@auth_bp.route('/index')
-def index():
-    return render_template('index.html')
+@user_bp.route('/subscribe')
+def subscribe():
+    email = '1649107451@qq.com'
+    flash('welcome on board')
+    # send_mail('Subscribe Success', email, 'Hello,Thank you for subscribing Flask Weekly!')
+    send_subscribe_mail('Subscribe Success', email, name='艾瑞克')
+    return redirect(url_for('admin.index'))

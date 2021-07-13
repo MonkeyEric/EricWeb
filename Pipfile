@@ -17,6 +17,7 @@ numpy = "*"
 mysql-connector = "*"
 flask-login = "*"
 gunicorn = "*"
+faker = "*"
 
 [dev-packages]
 
