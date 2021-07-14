@@ -1,6 +1,7 @@
 import os
 
 import click
+from bluelog.modules.blog import Admin, Category
 
 from bluelog.blueprints.user import user_bp
 from bluelog.blueprints.admin import admin_bp
@@ -67,7 +68,11 @@ def register_shell_context(app):
 
 
 def register_template_context(app):
-    pass
+    @app.context_processor
+    def make_template_context():
+        admin = Admin.query.first()
+        categories = Category.query.order_by(Category.name).all()
+        return dict(admin=admin,categories=categories)
 
 
 def register_errors(app):

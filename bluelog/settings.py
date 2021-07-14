@@ -3,6 +3,7 @@ import os
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 print(basedir)
 
+
 class BaseConfig(object):
     SECRET_KEY = os.getenv('SECRET_KEY','secret string')
 
@@ -22,7 +23,8 @@ class BaseConfig(object):
 
 
 class DevelopmentConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = 'mysql:///'+os.path.join(basedir, 'data-dev.db')
+    # SQLALCHEMY_DATABASE_URI = 'mysql:///'+os.path.join(basedir, 'data-dev.db')
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:root001@localhost/develop'
 
 
 class TestingConfig(BaseConfig):
