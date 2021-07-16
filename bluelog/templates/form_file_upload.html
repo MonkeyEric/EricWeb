@@ -1,8 +1,8 @@
 ﻿{% extends "base.html" %}
 {% block title %}上传文件{% endblock %}
 {% block head %}
-    <link href="{{url_for('static',filename='css/plugins/dropzone/basic.css')}}" rel="stylesheet">
-    <link href="{{url_for('static',filename='css/plugins/dropzone/dropzone.css')}}" rel="stylesheet">
+<!--    <link href="{{url_for('static',filename='css/plugins/dropzone/basic.css')}}" rel="stylesheet">-->
+<!--    <link href="{{url_for('static',filename='css/plugins/dropzone/dropzone.css')}}" rel="stylesheet">-->
     <link href="{{url_for('static',filename='css/plugins/jasny/jasny-bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{url_for('static',filename='css/plugins/codemirror/codemirror.css')}}" rel="stylesheet">
 {% endblock %}
@@ -14,7 +14,7 @@
                     <h2>上传文件</h2>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="index.html">主页</a>
+                            <a href="{{url_for('admin.index')}}">主页</a>
                         </li>
                         <li class="breadcrumb-item">
                             <a>表单</a>
@@ -28,149 +28,36 @@
             </div>
             <div class="wrapper wrapper-content animated fadeIn">
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5>文件输入示例</h5>
-                        </div>
-                        <div class="ibox-content">
-                            Jasny的文件输入功能允许您基于Bootstrap样式创建一个视觉吸引人的文件或图像输入小部件。附加的dropzone.js库可以让您拖动文件上传选项。
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-8">
                     <div class="ibox ">
                         <div class="ibox-title">
                             <h5>输入组示例</h5>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-wrench"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user">
-                                    <li><a href="#" class="dropdown-item">选项 1</a>
-                                    </li>
-                                    <li><a href="#" class="dropdown-item">选项 2</a>
-                                    </li>
-                                </ul>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
                         </div>
                         <div class="ibox-content">
+                            <form method="get">
+                                    <div class="form-group row">
+                                        <label class="col-lg-2 col-form-label">数据类型</label>
+                                        <div class="col-lg-6">
+                                            <select class="form-control m-b" name="account">
+                                                <option >收支表</option>
+                                                <option>博客</option>
+                                                <option>其他</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="custom-file">
+                                        <input id="logo" type="file" class="custom-file-input">
+                                        <label for="logo" class="custom-file-label">选择文件...</label>
 
-                            <div class="custom-file">
-                                <input id="logo" type="file" class="custom-file-input">
-                                <label for="logo" class="custom-file-label">选择文件...</label>
-                            </div>
-
-
-                            <p class="m-t-sm">
-                                以上示例的HTML标记代码:
-                            </p>
-<textarea id="code1">
-&lt;div class="custom-file"&gt;
-    &lt;input id="logo" type="file" class="custom-file-input"&gt;
-    &lt;label for="logo" class="custom-file-label">Choose file...&lt;/label&gt;
-&lt;/div&gt; </textarea>
-
-                            <p class="m-t-sm">
-                                Javascript code for abowe example:
-                            </p>
-<textarea id="code4">
-$('.custom-file-input').on('change', function() {
-   let fileName = $(this).val().split('\\').pop();
-   $(this).next('.custom-file-label').addClass("selected").html(fileName);
-}); </textarea>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5>按钮示例</h5>
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-wrench"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user">
-                                    <li><a href="#" class="dropdown-item">选项 1</a>
-                                    </li>
-                                    <li><a href="#" class="dropdown-item">选项 2</a>
-                                    </li>
-                                </ul>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="ibox-content">
-                            <div class="fileinput fileinput-new" data-provides="fileinput">
-                                <span class="btn btn-default btn-file"><span class="fileinput-new">选择文件</span><span class="fileinput-exists">Change</span><input type="file" name="..."></span>
-                                <span class="fileinput-filename"></span>
-                                <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
-                            </div>
-                            <p>
-                                以上示例的HTML标记代码：
-                            </p>
-<textarea id="code2">
-&lt;div class="fileinput fileinput-new" data-provides="fileinput"&gt;
-    &lt;span class="btn btn-default btn-file"&gt;&lt;span class="fileinput-new"&gt;Select file&lt;/span&gt;
-    &lt;span class="fileinput-exists"&gt;Change&lt;/span&gt;&lt;input type="file" name="..."/&gt;&lt;/span&gt;
-    &lt;span class="fileinput-filename"&gt;&lt;/span&gt;
-    &lt;a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;&lt;/a&gt;
-&lt;/div&gt; </textarea>
-                        </div>
-                    </div>
-                </div>
-                </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="ibox">
-                        <div class="ibox-title">
-                            <h5>Dropzone.js</h5>
-                        </div>
-                        <div class="ibox-content">
-
-                            <p>
-                                <strong>Dropzone.js</strong> 是一个轻量级的JavaScript库，将HTML元素转换为dropzone。这意味着用户可以将文件拖放到其上，并且该文件通过AJAX上传到服务器。
-                            </p>
-
-                            <form action="#" class="dropzone" id="dropzoneForm">
-                                <div class="fallback">
-                                    <input name="file" type="file" multiple />
-                                </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="col-lg-8">
+                                            <button class="btn btn-sm btn-primary col-lg-4" type="submit"><strong>保存</strong></button>
+                                    </div>
                             </form>
-
-                            <p class="m-t-xs">
-                                abowe的HTML标记代码示例：
-                            </p>
-<textarea id="code3">
-&lt;form action="#" class="dropzone" id="dropzoneForm"&gt;
-    &lt;div class="fallback"&gt;
-        &lt;input name="file" type="file" multiple /&gt;
-    &lt;/div&gt;
-&lt;/form&gt; </textarea>
-                            <p class="m-t-xs">您可以找到所有可用的选项和完整的文档: <a href="http://www.dropzonejs.com/#configuration-options">http://www.dropzonejs.com/#configuration-options</a> </p>
                         </div>
                     </div>
                 </div>
-            </div>
-
-
-
-
-
-
             </div>
             {{self.footer()}}
 
@@ -181,7 +68,7 @@ $('.custom-file-input').on('change', function() {
     <script src="{{url_for('static',filename='js/plugins/jasny/jasny-bootstrap.min.js')}}"></script>
 
     <!-- DROPZONE -->
-    <script src="{{url_for('static',filename='js/plugins/dropzone/dropzone.js')}}"></script>
+<!--    <script src="{{url_for('static',filename='js/plugins/dropzone/dropzone.js')}}"></script>-->
 
     <!-- CodeMirror -->
     <script src="{{url_for('static',filename='js/plugins/codemirror/codemirror.js')}}"></script>
@@ -189,35 +76,7 @@ $('.custom-file-input').on('change', function() {
 
 
     <script>
-        Dropzone.options.dropzoneForm = {
-            paramName: "file", // The name that will be used to transfer the file
-            maxFilesize: 2, // MB
-            dictDefaultMessage: "<strong>在这里删除文件或点击上传。</strong></br>这只是一个演示的dropzone上传窗口，所选文件实际上没有上传。"
-        };
-
         $(document).ready(function(){
-
-            var editor_one = CodeMirror.fromTextArea(document.getElementById("code1"), {
-                lineNumbers: true,
-                matchBrackets: true
-            });
-
-            var editor_two = CodeMirror.fromTextArea(document.getElementById("code2"), {
-                lineNumbers: true,
-                matchBrackets: true
-            });
-
-            var editor_two = CodeMirror.fromTextArea(document.getElementById("code3"), {
-                lineNumbers: true,
-                matchBrackets: true
-            });
-
-            var editor_two = CodeMirror.fromTextArea(document.getElementById("code4"), {
-                lineNumbers: true,
-                matchBrackets: true
-            });
-
-
             $('.custom-file-input').on('change', function() {
                 let fileName = $(this).val().split('\\').pop();
                 $(this).next('.custom-file-label').addClass("selected").html(fileName);

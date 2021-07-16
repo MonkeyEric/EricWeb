@@ -1,3 +1,3 @@
-FLASK_APP=bluelog
+FLASK_APP=wsgi.py
 FLASK_ENV=development
 

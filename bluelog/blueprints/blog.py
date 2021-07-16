@@ -22,4 +22,4 @@ def github():
 
 @blog_bp.route('/code_editor', methods=['GET'])
 def code_editor():
-    return render_template('code_editor.html')
+    return render_template('form_markdown.html')

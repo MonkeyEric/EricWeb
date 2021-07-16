@@ -31,7 +31,6 @@ def create_app(config_name=None):
         # 默认标题
         MAIL_DEFAULT_SENDER=('Eric', os.getenv('MAIL_USERNAME'))
     )
-
     register_logging(app)  # 注册日志处理器
     register_extensions(app)  # 注册扩展（扩展初始化）
     register_blueprints(app)  # 注册蓝本
