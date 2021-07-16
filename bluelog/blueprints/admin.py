@@ -5,6 +5,7 @@ admin_bp = Blueprint('admin', __name__, template_folder='templates')
 
 
 @admin_bp.route('/', methods=['GET'])
+@admin_bp.route('/index', methods=['GET'])
 def index():
     return render_template('index.html')
 
@@ -42,3 +43,13 @@ def gallery():
 @admin_bp.route('/video', methods=['GET'])
 def video():
     return render_template('video.html')
+
+
+@admin_bp.route('/contacts', methods=['GET'])
+def contacts():
+    return render_template('contacts.html')
+
+
+@admin_bp.route('/test', methods=['GET'])
+def test():
+    return render_template('blog.html')
