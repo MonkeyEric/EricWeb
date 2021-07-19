@@ -1,20 +1,6 @@
-﻿<!DOCTYPE html>
-<html>
-
-<head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>inspinia 2.9.2 | 500错误</title>
-
-    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../static/font-awesome/css/font-awesome.css" rel="stylesheet">
-
-    <link href="../static/css/animate.css" rel="stylesheet">
-    <link href="../static/css/style.css" rel="stylesheet">
-
-</head>
+﻿{% extends "base.html" %}
+{% block title %}500错误{% endblock %}
+{%block body%}
 
 <body class="gray-bg">
 
@@ -28,12 +14,11 @@
             您可以返回主页面: <br/><a href="{{url_for('admin.index')}}}" class="btn btn-primary m-t">Dashboard</a>
         </div>
     </div>
-
+{{self.footer()}}
     <!-- Mainly scripts -->
     <script src="../static/js/jquery-3.1.1.min.js"></script>
     <script src="../static/js/popper.min.js"></script>
     <script src="../static/js/bootstrap.js"></script>
 
 </body>
-
-</html>
+{% endblock %}

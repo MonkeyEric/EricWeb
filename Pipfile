@@ -18,6 +18,7 @@ mysql-connector = "*"
 flask-login = "*"
 gunicorn = "*"
 faker = "*"
+flask-wtf = "*"
 
 [dev-packages]
 

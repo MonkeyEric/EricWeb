@@ -50,29 +50,9 @@ def contacts():
     return render_template('contacts.html')
 
 
-@admin_bp.route('/test', methods=['GET'])
-def test():
-    return render_template('blog.html')
-
-
 @admin_bp.route('/favourite', methods=['GET'])
 def favourite():
     return render_template('favourite.html')
-
-
-@admin_bp.route('/update_pwd', methods=['GET'])
-def update_pwd():
-    return render_template('register.html')
-
-
-@admin_bp.route('/login', methods=['GET'])
-def login():
-    return render_template('login.html')
-
-
-@admin_bp.route('/logout', methods=['GET'])
-def logout():
-    return redirect(url_for('admin.login'))
 
 
 @admin_bp.route('/profile', methods=['GET'])
@@ -83,11 +63,6 @@ def profile():
 @admin_bp.route('/mailbox', methods=['GET'])
 def mailbox():
     return render_template('mailbox.html')
-
-
-@admin_bp.route('/contact', methods=['GET'])
-def contact():
-    return render_template('contacts.html')
 
 
 @admin_bp.route('/package', methods=['GET'])
