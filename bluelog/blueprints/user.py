@@ -13,9 +13,10 @@ user_bp = Blueprint('user', __name__, template_folder='templates')
 
 @user_bp.route('/login',methods=['GET','POST'])
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('blog.index'))
-    if request.method =='POST':
+    if request.method == 'POST':
+        if current_user.is_authenticated:
+            return redirect(url_for('blog.index'))
+
         form = LoginForm()
         if form.validate_on_submit():
             username = form.username.data

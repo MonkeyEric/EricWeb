@@ -25,8 +25,8 @@ class BaseConfig(object):
 class DevelopmentConfig(BaseConfig):
     # SQLALCHEMY_DATABASE_URI = 'mysql:///'+os.path.join(basedir, 'data-dev.db')
     DEBUG=True
-    #SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:root001@192.168.40.52/develop'
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:Zjq;;123456@localhost/develop'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:root001@192.168.40.52/develop'
+    #SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:Zjq;;123456@localhost/develop'
 
 
 
