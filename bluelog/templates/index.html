@@ -375,7 +375,11 @@
                     showMethod: 'slideDown',
                     timeOut: 4000
                 };
-                toastr.success('inspinia 2.9.2管理者', '欢迎您王宇');
+                var name = '，'+'{{username}}'
+                if (!name){
+                    name=''
+                }
+                toastr.success('猫大侠Blog用户 ≧◉◡◉≦ ', '欢迎您'+name);
 
             }, 1300);
 

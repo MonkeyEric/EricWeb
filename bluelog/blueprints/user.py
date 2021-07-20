@@ -1,9 +1,9 @@
 # coding:utf-8
 from flask import Blueprint, render_template, flash
-from flask_login import current_user,login_user,login_required,logout_user
+from flask_login import current_user, login_user, login_required, logout_user
 from bluelog.modules.blog import Admin
 
-from bluelog.utils.emails import send_mail,send_subscribe_mail
+from bluelog.utils.emails import send_mail, send_subscribe_mail
 from bluelog.utils.forms import LoginForm
 from bluelog.utils.utils import redirect_back
 from flask import redirect, url_for, request
@@ -11,7 +11,7 @@ from flask import redirect, url_for, request
 user_bp = Blueprint('user', __name__, template_folder='templates')
 
 
-@user_bp.route('/login',methods=['GET','POST'])
+@user_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         if current_user.is_authenticated:
@@ -27,12 +27,12 @@ def login():
             if admin:
                 if username == admin.username and admin.validate_password(password):
                     login_user(admin, remember)
-                    flash('Welcome back,','Eric')
+                    flash('Welcome back,', 'Eric')
                     return redirect_back()
                 flash('Invalid username or password.', 'warning')
             else:
                 flash('No account.', 'warning')
-        return render_template('login.html',form=form)
+        return render_template('login.html', form=form)
     elif request.method == 'GET':
         return render_template('login.html')
 
@@ -41,7 +41,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash('Logout success','info')
+    flash('Logout success', 'info')
     return redirect_back()
 
 
