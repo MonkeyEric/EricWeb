@@ -7,6 +7,8 @@ from bluelog.blueprints.user import user_bp
 from bluelog.blueprints.admin import admin_bp
 from bluelog.blueprints.blog import blog_bp
 from flask import Flask, render_template
+from flask_github import GitHub
+
 
 from bluelog.utils.extensions import bootstrap, db, ckeditor, mail, moment
 from bluelog.settings import config
@@ -14,12 +16,14 @@ from bluelog.settings import config
 from dotenv import find_dotenv, load_dotenv
 
 load_dotenv(find_dotenv(), override=True)
+github = GitHub()
 
 
 def create_app(config_name=None):
     if config_name is None:
         config_name = os.getenv('FLASK_CONFIG', 'development')
     app = Flask('bluelog')
+    github.init_app(app)
     app.config.from_object(config[config_name])
     app.config.update(
         MAIL_SERVER=os.getenv('MAIL_SERVER'),

@@ -33,7 +33,7 @@
     {%block head%}
     {% endblock %}
 </head>
-
+{%block body%}
 <body>
 
     <div id="wrapper">
@@ -49,10 +49,10 @@
                     </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
                         <li><a class="dropdown-item" href="{{url_for('admin.profile')}}">个人信息</a></li>
-                        <li><a class="dropdown-item" href="{{url_for('admin.contact')}}">好友</a></li>
+                        <li><a class="dropdown-item" href="{{url_for('user.contact')}}">好友</a></li>
                         <li><a class="dropdown-item" href="{{url_for('admin.mailbox')}}">信箱</a></li>
                         <li class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{{url_for('admin.logout')}}">登出</a></li>
+                        <li><a class="dropdown-item" href="{{url_for('user.logout')}}">登出</a></li>
                     </ul>
                 </div>
                 <div class="logo-element">
@@ -224,14 +224,14 @@
                         </a>
                         <ul class="dropdown-menu dropdown-alerts">
                             <li>
-                                <a href="{{url_for('admin.update_pwd')}}" class="dropdown-item">
+                                <a href="{{url_for('user.update_pwd')}}" class="dropdown-item">
                                     <div>
                                         <i class="fa fa-key fa-fw"></i> 修改密码
                                     </div>
                                 </a>
                             </li>
                             <li>
-                                <a href="{{url_for('admin.logout')}}" class="dropdown-item">
+                                <a href="{{url_for('user.logout')}}" class="dropdown-item">
                                     <div>
                                         <i class="fa fa-sign-out fa-fw"></i> 注销
                                     </div>
@@ -680,4 +680,5 @@
     </script>
     <!--同步官网模板结束-->
 </body>
+{% endblock %}
 </html>

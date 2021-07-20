@@ -1,5 +1,5 @@
 [[source]]
-url = "https://pypi.org/simple"
+url = "https://mirrors.aliyun.com/pypi/simple"
 verify_ssl = true
 name = "pypi"
 
@@ -18,6 +18,8 @@ mysql-connector = "*"
 flask-login = "*"
 gunicorn = "*"
 faker = "*"
+flask-wtf = "*"
+github-flask = "*"
 
 [dev-packages]
 
