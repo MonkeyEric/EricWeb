@@ -16,14 +16,19 @@
             </div>
             <div class="col-md-6">
                 <div class="ibox-content">
-                    <form class="m-t" role="form" action="{{url_for('user.login')}}", method="post">
+                    <form class="m-t" role="form" action="{{url_for('user.login')}}" method="post">
+                        {{form.csrf_token}}
                         <div class="form-group">
-                            <input type="email" class="form-control" placeholder="用户名" required="">
+<!--                            <input type="email" class="form-control" placeholder="用户名" required="">-->
+                            <input type="text" class="form-control" placeholder="用户名" required="" name="username">
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control" placeholder="密码" required="">
+                            <input type="password" class="form-control" placeholder="密码" required="" name="password">
                         </div>
-                        <button type="submit" class="btn btn-primary block full-width m-b">登录</button>
+                        <div>
+                            <label> <input type="checkbox" class="i-checks" name="remember"> 记住密码 </label>
+                        </div>
+                        <input type="submit" class="btn btn-primary block full-width m-b" name="submit">登录</input>
 
                         <a href="{{url_for('user.forget_password')}}">
                             <small>忘记密码?</small>
@@ -31,14 +36,14 @@
                         <a class="float-right" href="{{url_for('user.register')}}">
                             <small>注册猫大侠账号</small>
                         </a>
-                        <p class="text-muted text-center">
+
+                    </form>
+                    <p class="text-muted text-center">
                             <small>第三方登录</small>
                         </p>
-
-                        <a class="btn  btn-sm btn-white btn-block btn-social btn-github" href="login.html" >
+                    <a class="btn  btn-sm btn-white btn-block btn-social btn-github" href="{{url_for('user.github_login')}}" >
                             <span class="fa fa-github"></span> GitHub登录
                         </a>
-                    </form>
                     <p class="m-t">
                     </p>
                 </div>

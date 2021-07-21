@@ -1,11 +1,12 @@
 # coding:utf-8
 import os
+
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 print(basedir)
 
 
 class BaseConfig(object):
-    SECRET_KEY = os.getenv('SECRET_KEY','secret string')
+    SECRET_KEY = os.getenv('SECRET_KEY', 'secret string')
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
@@ -14,7 +15,7 @@ class BaseConfig(object):
     MAIL_USE_SSL = True
     MAIL_USERNAME = os.getenv('MAIL_USERNAME')
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
-    MAIL_DEFAULT_SENDER = ('EricWeb Admin',MAIL_USERNAME)
+    MAIL_DEFAULT_SENDER = ('EricWeb Admin', MAIL_USERNAME)
 
     ERICWEB_EMAIL = os.getenv('BLUELOG_EMAIL')
     BLUELOG_POST_PER_PAGE = 10
@@ -24,10 +25,8 @@ class BaseConfig(object):
 
 class DevelopmentConfig(BaseConfig):
     # SQLALCHEMY_DATABASE_URI = 'mysql:///'+os.path.join(basedir, 'data-dev.db')
-    DEBUG=True
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:root001@192.168.40.52/develop'
-    #SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:Zjq;;123456@localhost/develop'
-
+    DEBUG = True
+    SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
 
 
 class TestingConfig(BaseConfig):
@@ -41,8 +40,7 @@ class ProductionConfig(BaseConfig):
 
 
 config = {
-        'development':DevelopmentConfig,
-        'testing':TestingConfig,
-        'production':ProductionConfig
-        }
-
+    'development': DevelopmentConfig,
+    'testing': TestingConfig,
+    'production': ProductionConfig
+}

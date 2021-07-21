@@ -6,26 +6,26 @@ from bluelog.modules.blog import Admin, Category
 from bluelog.blueprints.user import user_bp
 from bluelog.blueprints.admin import admin_bp
 from bluelog.blueprints.blog import blog_bp
+from bluelog.blueprints.user_github import github_bp
 from flask import Flask, render_template
-from flask_github import GitHub
 
 
-from bluelog.utils.extensions import bootstrap, db, ckeditor, mail, moment
+from bluelog.utils.extensions import bootstrap, db, ckeditor, mail, moment, github, login_manager, csrf
 from bluelog.settings import config
 
 from dotenv import find_dotenv, load_dotenv
 
 load_dotenv(find_dotenv(), override=True)
-github = GitHub()
 
 
 def create_app(config_name=None):
     if config_name is None:
         config_name = os.getenv('FLASK_CONFIG', 'development')
     app = Flask('bluelog')
-    github.init_app(app)
     app.config.from_object(config[config_name])
     app.config.update(
+        GITHUB_CLIENT_ID=os.getenv('GITHUB_CLIENT_ID'),
+        GITHUB_CLIENT_SECRET=os.getenv('GITHUB_CLIENT_SECRET'),
         MAIL_SERVER=os.getenv('MAIL_SERVER'),
         MAIL_PORT=465,
         MAIL_USE_TLS=False,
@@ -35,6 +35,7 @@ def create_app(config_name=None):
         # 默认标题
         MAIL_DEFAULT_SENDER=('Eric', os.getenv('MAIL_USERNAME'))
     )
+
     register_logging(app)  # 注册日志处理器
     register_extensions(app)  # 注册扩展（扩展初始化）
     register_blueprints(app)  # 注册蓝本
@@ -54,14 +55,18 @@ def register_blueprints(app):
     app.register_blueprint(admin_bp, url_prefix='/')
     app.register_blueprint(user_bp, url_prefix='/user')
     app.register_blueprint(blog_bp, url_prefix='/blog')
+    app.register_blueprint(github_bp, url_prefix='/github')
 
 
 def register_extensions(app):
+    github.init_app(app)
     bootstrap.init_app(app)
     db.init_app(app)
     moment.init_app(app)
     ckeditor.init_app(app)
     mail.init_app(app)
+    login_manager.init_app(app)
+    csrf.init_app(app)
 
 
 def register_shell_context(app):
@@ -107,3 +112,13 @@ def register_commands(app):
         fake_comments(comment)
 
         click.echo('Done.')
+
+    # 命令函数
+    @app.cli.command()
+    @click.option('--drop', is_flag=True, help='Create after drop.')
+    def initdb(drop):
+        """Initialize the database."""
+        if drop:
+            db.drop_all()
+        db.create_all()
+        click.echo('Initialized database.')
