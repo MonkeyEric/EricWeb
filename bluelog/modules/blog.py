@@ -17,11 +17,29 @@ class Admin(db.Model):
     about = db.Column(db.Text)
     a_create_time = db.Column(db.DateTime, default=datetime.now)
 
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def is_authenticated(self):
+        return True
+
+    def get_id(self):
+        return self.id
+
+    # Required for administrative interface
+    def __unicode__(self):
+        return self.username
+
     def set_password(self,password):
         self.password_hash = generate_password_hash(password)
 
     def validate_password(self,password):
         return check_password_hash(self.password_hash,password)
+
+
 
 
 class Category(db.Model):

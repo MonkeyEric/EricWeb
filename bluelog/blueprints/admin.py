@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, redirect, url_for, g, session
 from flask_login import login_required
 from bluelog.utils.extensions import github
 
-from bluelog.modules.user_github import User
+from bluelog.modules.user_github import GithubUser
 admin_bp = Blueprint('admin', __name__, template_folder='templates')
 
 
@@ -11,11 +11,12 @@ admin_bp = Blueprint('admin', __name__, template_folder='templates')
 def before_request():
     g.user = None
     if 'user_id' in session:
-        g.user = User.query.get(session['user_id'])
+        g.user = GithubUser.query.get(session['user_id'])
 
 
 @admin_bp.route('/', methods=['GET'])
 @admin_bp.route('/index', methods=['GET'])
+# @login_required
 def index():
     if g.user:
         is_login = True

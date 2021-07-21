@@ -7,6 +7,7 @@ from flask_ckeditor import CKEditor
 from flask_moment import Moment
 from flask_github import GitHub
 from flask_login import LoginManager
+from flask_wtf.csrf import CSRFProtect
 
 bootstrap = Bootstrap()
 db = SQLAlchemy()
@@ -15,13 +16,19 @@ ckeditor = CKEditor()
 mail = Mail()
 github = GitHub()
 login_manager = LoginManager()
+csrf = CSRFProtect()
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    from bluelog.modules.user_github import User
-    user = User.query.get(int(user_id))
-    return user
+    from bluelog.modules.user_github import GithubUser
+    from bluelog.modules.blog import Admin
+    user = Admin.query.get(int(user_id))
+    g_user = GithubUser.query.get(int(user_id))
+    if g_user:
+        return g_user
+    else:
+        return user
 
 
 login_manager.login_view = 'user.login'

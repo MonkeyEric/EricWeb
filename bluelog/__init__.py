@@ -10,7 +10,7 @@ from bluelog.blueprints.user_github import github_bp
 from flask import Flask, render_template
 
 
-from bluelog.utils.extensions import bootstrap, db, ckeditor, mail, moment, github, login_manager
+from bluelog.utils.extensions import bootstrap, db, ckeditor, mail, moment, github, login_manager, csrf
 from bluelog.settings import config
 
 from dotenv import find_dotenv, load_dotenv
@@ -66,6 +66,7 @@ def register_extensions(app):
     ckeditor.init_app(app)
     mail.init_app(app)
     login_manager.init_app(app)
+    csrf.init_app(app)
 
 
 def register_shell_context(app):
