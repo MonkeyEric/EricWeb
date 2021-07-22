@@ -2,12 +2,13 @@ import os
 
 import click
 from bluelog.modules.blog import Admin, Category
+from bluelog.modules.user_github import GithubUser
 
 from bluelog.blueprints.user import user_bp
 from bluelog.blueprints.admin import admin_bp
 from bluelog.blueprints.blog import blog_bp
 from bluelog.blueprints.user_github import github_bp
-from flask import Flask, render_template
+from flask import Flask, render_template, session, g
 
 
 from bluelog.utils.extensions import bootstrap, db, ckeditor, mail, moment, github, login_manager, csrf
@@ -43,7 +44,7 @@ def create_app(config_name=None):
     register_errors(app)  # 注册错误处理函数
     register_shell_context(app)  # 注册shell上下文处理函数
     register_template_context(app)  # 注册模板上下文处理函数
-
+    register_user_info_(app)
     return app
 
 
@@ -73,6 +74,32 @@ def register_shell_context(app):
     @app.shell_context_processor
     def make_shell_context():
         return dict(db=db)
+
+
+def register_user_info_(app):
+    @app.context_processor
+    def user_foo():
+        is_login = False
+        avatar = ''
+        username = '访客用户'
+        url = ''
+        role = '非用户访问'
+        if g.get('user'):
+            if g.db == 'github_user':
+                is_login = True
+                response = github.get('user')
+                avatar = response['avatar_url']
+                username = response['name']
+                url = response['html_url']
+                role = '管理员'
+            if g.db == 'admin':
+                is_login = True
+                user = g.user
+                username = user.name
+                role = '一级管理员'
+        user_info = dict(is_login=is_login, avatar=avatar, username=username, role=role)
+        print('username_____', username)
+        return dict(user_info=user_info)
 
 
 def register_template_context(app):

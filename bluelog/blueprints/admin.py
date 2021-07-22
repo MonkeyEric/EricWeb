@@ -1,33 +1,33 @@
 # coding:utf-8
 from flask import Blueprint, render_template, redirect, url_for, g, session
-from flask_login import login_required
+from flask_login import login_required, current_user
 from bluelog.utils.extensions import github
 
 from bluelog.modules.user_github import GithubUser
+from bluelog.modules.blog import Admin
 admin_bp = Blueprint('admin', __name__, template_folder='templates')
 
 
 @admin_bp.before_request
 def before_request():
     g.user = None
+    g.db = None
     if 'user_id' in session:
         g.user = GithubUser.query.get(session['user_id'])
+        g.db = 'github_user'
+    if current_user.is_authenticated:
+        print(current_user)
+        if not g.user:
+            g.user = Admin.query.get(current_user.id)
+            g.db = 'admin'
+    print(g.user)
 
 
 @admin_bp.route('/', methods=['GET'])
 @admin_bp.route('/index', methods=['GET'])
 # @login_required
 def index():
-    if g.user:
-        is_login = True
-        response = github.get('user')
-        avatar = response['avatar_url']
-        username = response['name']
-        url = response['html_url']
-
-        return render_template('index.html', is_login=is_login, avatar=avatar, username=username, url=url)
-    is_login = False
-    return render_template('index.html', is_login=is_login, username='访客用户')
+    return render_template('index.html')
 
 
 @admin_bp.route('/chart', methods=['GET'])

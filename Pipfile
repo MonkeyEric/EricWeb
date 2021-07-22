@@ -20,6 +20,8 @@ gunicorn = "*"
 faker = "*"
 flask-wtf = "*"
 github-flask = "*"
+sqlalchemy-utils = "*"
+python-dateutil = "*"
 
 [dev-packages]
 
