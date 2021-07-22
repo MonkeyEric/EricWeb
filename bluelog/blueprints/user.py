@@ -111,7 +111,7 @@ def subscribe(email):
     print(origin_pwd)
     if admin:
         # send_mail('Subscribe Success', email, 'Hello,Thank you for subscribing Flask Weekly!')
-        # send_subscribe_mail('发送邮件', email, name=admin.name, origin_pwd=origin_pwd)
+        send_subscribe_mail('发送邮件', email, name=admin.name, origin_pwd=origin_pwd)
         return redirect(url_for('admin.index'))
     else:
         return redirect(url_for('user.forget_password'))
