@@ -1,11 +1,19 @@
 # coding:utf-8
-from flask import Blueprint, render_template, redirect, url_for, g, session
+from flask import Blueprint, render_template, redirect, url_for, g, session, send_from_directory, request
 from flask_login import login_required, current_user
-from bluelog.utils.extensions import github
+from werkzeug.utils import secure_filename
+from werkzeug.datastructures import CombinedMultiDict
 
 from bluelog.modules.user_github import GithubUser
 from bluelog.modules.blog import Admin
+from bluelog.utils.forms import IncomeExpenseForm
+from bluelog.utils.csv_tools import read_csv
+from bluelog import config
+import os, time
+
 admin_bp = Blueprint('admin', __name__, template_folder='templates')
+
+ALLOWED_EXTENSIONS = set(['csv'])
 
 
 @admin_bp.before_request
@@ -40,9 +48,23 @@ def table_data():
     return render_template('table_data_tables.html')
 
 
-@admin_bp.route('/upload', methods=['GET'])
+@admin_bp.route('/upload', methods=['GET', 'POST'], strict_slashes=False)
 def upload():
-    return render_template('form_file_upload.html')
+    form = IncomeExpenseForm(CombinedMultiDict([request.form, request.files]))
+    if form.validate():
+        csv_file = form.csv_file.data
+        data_json = read_csv(csv_file)
+        print(data_json)
+    return render_template('form_file_upload.html', form=form)
+
+
+
+
+
+@admin_bp.route('/download/<string:filetype>', methods=['GET'])
+def download(filetype):
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    return send_from_directory(current_dir, filetype, as_attachment=True)
 
 
 @admin_bp.route('/calendar', methods=['GET'])

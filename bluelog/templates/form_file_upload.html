@@ -25,42 +25,85 @@
                     </ol>
                 </div>
 
+
             </div>
             <div class="wrapper wrapper-content animated fadeIn">
             <div class="row">
                 <div class="col-lg-8">
                     <div class="ibox ">
                         <div class="ibox-title">
-                            <h5>输入组示例</h5>
+                            <h3>输入组示例</h3>
                         </div>
                         <div class="ibox-content">
-                            <form method="get">
+                            <form method="post" action="{{url_for('admin.upload')}}">
+                                {{form.csrf_token}}
                                     <div class="form-group row">
                                         <label class="col-lg-2 col-form-label">数据类型</label>
                                         <div class="col-lg-6">
                                             <select class="form-control m-b" name="account">
-                                                <option >收支表</option>
-                                                <option>博客</option>
+                                                <option name="alipay">收支表-支付宝</option>
+                                                <option name="wechat">收支表-微信</option>
                                                 <option>其他</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="custom-file">
-                                        <input id="logo" type="file" class="custom-file-input">
+                                        <input id="logo" type="file" class="custom-file-input" name="csv_file">
                                         <label for="logo" class="custom-file-label">选择文件...</label>
 
                                     </div>
                                     <div class="hr-line-dashed"></div>
-                                    <div class="col-lg-8">
-                                            <button class="btn btn-sm btn-primary col-lg-4" type="submit"><strong>保存</strong></button>
+                                    <div class="col-lg-5"></div>
+                                    <div class="col-lg-3">
+
+                                            <input class="btn btn-sm btn-primary col-lg-4" type="submit" name="submit">
                                     </div>
                             </form>
                         </div>
                     </div>
                 </div>
+
+                <div class="col-lg-2">
+                    <div class="ibox ">
+                        <div class="ibox-title">
+                            <h3>模板下载</h3>
+                        </div>
+                        <div class="ibox-content">
+                            <ul class="list-group clear-list m-t">
+                                <li class="list-group-item fist-item">
+
+                                <h4><a href="{{url_for('admin.download',filetype='wechat.csv')}}" >微信模板</a></h4>
+                                </li>
+                                <li class="list-group-item fist-item">
+
+                                <h4><a href="{{url_for('admin.download',filetype='alipay.csv')}}" >支付宝模板</a></h4>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="ibox ">
+                        <div class="ibox-title">
+                            <h3>个人记账方法</h3>
+                            <h5>收支表：必须是以.csv结尾的，具体模板要求，请下载模板查看<br>关于个人消费记录，可按照此方法来进行操作：</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-down"></i>
+                                    点击这里
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content" style="display: none">
+                            <figure>
+                                 <iframe width="1000" height="460" src="//player.bilibili.com/player.html?aid=456228385&bvid=BV145411Y7Bj&cid=208565018&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+                            </figure>
+                        </div>
+                    </div>
+                </div>
+            </div>
             </div>
             {{self.footer()}}
-
         </div>
 {% endblock %}
 {%block script%}
