@@ -1,8 +1,8 @@
 # coding:utf-8
-from flask_wtf import FlaskForm
+from flask_wtf import FlaskForm, Form
 from wtforms import StringField, SubmitField, TextField, ValidationError, HiddenField, BooleanField, PasswordField, \
     DateTimeField, FileField
-from wtforms.validators import DataRequired, Length
+from wtforms.validators import DataRequired, Length, InputRequired
 from flask_wtf.file import FileAllowed, FileRequired
 
 
@@ -24,7 +24,8 @@ class SettingForm(FlaskForm):
 
 
 class IncomeExpenseForm(FlaskForm):
-    file = FileField(validators=[FileRequired(), FileAllowed(['csv'])])
+    file_csv = FileField(validators=[FileRequired('文件必传'), FileAllowed(['csv'], message='文件格式错误')])
+    desc = StringField(validators=[DataRequired()])
     submit = SubmitField()
 
 

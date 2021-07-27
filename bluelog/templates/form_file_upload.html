@@ -35,21 +35,23 @@
                             <h3>输入组示例</h3>
                         </div>
                         <div class="ibox-content">
-                            <form method="post" action="{{url_for('admin.upload')}}">
+                            <form method="post" action="{{url_for('admin.upload')}}" enctype="multipart/form-data">
                                 {{form.csrf_token}}
                                     <div class="form-group row">
                                         <label class="col-lg-2 col-form-label">数据类型</label>
                                         <div class="col-lg-6">
-                                            <select class="form-control m-b" name="account">
-                                                <option name="alipay">收支表-支付宝</option>
-                                                <option name="wechat">收支表-微信</option>
+                                            <input class="form-control m-b" id="type" type="text" list="typelist" placeholder="请选择" name="desc">
+                                            <datalist  id="typelist">
+                                                <option>收支表-支付宝</option>
+                                                <option>收支表-微信</option>
                                                 <option>其他</option>
-                                            </select>
+                                            </datalist>
                                         </div>
                                     </div>
                                     <div class="custom-file">
-                                        <input id="logo" type="file" class="custom-file-input" name="csv_file">
-                                        <label for="logo" class="custom-file-label">选择文件...</label>
+<!--                                        {{form.file_csv}}-->
+                                        <input id="file" type="file" class="custom-file-input" name="file_csv">
+                                        <label for="file" class="custom-file-label">选择文件...</label>
 
                                     </div>
                                     <div class="hr-line-dashed"></div>

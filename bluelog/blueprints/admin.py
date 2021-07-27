@@ -1,5 +1,5 @@
 # coding:utf-8
-from flask import Blueprint, render_template, redirect, url_for, g, session, send_from_directory, request
+from flask import Blueprint, render_template, redirect, url_for, g, session, send_from_directory, request, current_app
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import CombinedMultiDict
@@ -7,13 +7,11 @@ from werkzeug.datastructures import CombinedMultiDict
 from bluelog.modules.user_github import GithubUser
 from bluelog.modules.blog import Admin
 from bluelog.utils.forms import IncomeExpenseForm
-from bluelog.utils.csv_tools import read_csv
-from bluelog import config
+from bluelog.utils.csv_tools import read_csv, save_to_db
+
 import os, time
 
 admin_bp = Blueprint('admin', __name__, template_folder='templates')
-
-ALLOWED_EXTENSIONS = set(['csv'])
 
 
 @admin_bp.before_request
@@ -51,10 +49,14 @@ def table_data():
 @admin_bp.route('/upload', methods=['GET', 'POST'], strict_slashes=False)
 def upload():
     form = IncomeExpenseForm(CombinedMultiDict([request.form, request.files]))
-    if form.validate():
-        csv_file = form.csv_file.data
-        data_json = read_csv(csv_file)
-        print(data_json)
+    if form.validate_on_submit():
+        csv_file = form.file_csv.data
+        desc = form.desc.data
+        filename = secure_filename(csv_file.filename)
+        file_path = os.path.join(current_app.config['UPLOAD_PATH'], filename)
+        csv_file.save(file_path)
+        data_json = read_csv(file_path, desc)
+        save_to_db(data_json)
     return render_template('form_file_upload.html', form=form)
 
 
