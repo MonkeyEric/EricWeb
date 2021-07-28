@@ -10,7 +10,7 @@ from bluelog.utils.utils import redirect_back, generate_random_code
 from bluelog.utils.extensions import github, db
 from werkzeug.security import generate_password_hash
 
-user_bp = Blueprint('user', __name__, template_folder='templates')
+user_bp = Blueprint('user', __name__, template_folder='templates', static_folder='static')
 
 
 @user_bp.route('/login', methods=['GET', 'POST'])
@@ -23,10 +23,10 @@ def login():
         password = form.password.data
         remember = form.remember.data
 
-        admin = Admin.query.first()
+        admin = Admin.query.filter_by(email=email)
         if admin:
-            if email == admin.email and admin.validate_password(password):
-                login_user(admin, remember)
+            if email == admin[0].email and admin[0].validate_password(password):
+                login_user(admin[0], remember)
                 flash('Welcome back,', 'Eric')
                 return redirect_back()
             flash('Invalid username or password.', 'warning')
@@ -59,14 +59,13 @@ def contact():
     return render_template('contacts.html')
 
 
-@user_bp.route('/forget_password', methods=['GET','POST'])
+@user_bp.route('/forget_password', methods=['GET', 'POST'])
 def forget_password():
-
     form = LoginForm()
     if request.method == 'POST':
         email = form.email.data
         subscribe(email)
-    return render_template('forgot_password.html',form=form)
+    return render_template('forgot_password.html', form=form)
 
 
 @user_bp.route('/update_pwd', methods=['GET'])

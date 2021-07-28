@@ -1,5 +1,5 @@
 # coding:utf-8
-from flask import Blueprint, render_template, redirect, url_for, g, session, send_from_directory, request, current_app
+from flask import Blueprint, render_template, g, session, send_from_directory, request, current_app
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import CombinedMultiDict
@@ -9,7 +9,7 @@ from bluelog.modules.blog import Admin
 from bluelog.utils.forms import IncomeExpenseForm
 from bluelog.utils.csv_tools import read_csv, save_to_db
 
-import os, time
+import os
 
 admin_bp = Blueprint('admin', __name__, template_folder='templates')
 
@@ -43,7 +43,7 @@ def chart():
 
 @admin_bp.route('/data', methods=['GET'])
 def table_data():
-    return render_template('table_data_tables.html')
+    return render_template('table.html')
 
 
 @admin_bp.route('/upload', methods=['GET', 'POST'], strict_slashes=False)
@@ -60,12 +60,9 @@ def upload():
     return render_template('form_file_upload.html', form=form)
 
 
-
-
-
 @admin_bp.route('/download/<string:filetype>', methods=['GET'])
 def download(filetype):
-    current_dir = os.path.dirname(os.path.realpath(__file__))
+    current_dir = os.path.join(current_app.root_path, 'file')
     return send_from_directory(current_dir, filetype, as_attachment=True)
 
 

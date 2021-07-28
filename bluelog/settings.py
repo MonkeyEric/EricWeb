@@ -17,10 +17,10 @@ class BaseConfig(object):
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
     MAIL_DEFAULT_SENDER = ('EricWeb Admin', MAIL_USERNAME)
 
-    ERICWEB_EMAIL = os.getenv('BLUELOG_EMAIL')
-    BLUELOG_POST_PER_PAGE = 10
-    BLUELOG_MANAGE_POST_PER_PAGE = 15
-    BLUELOG_COMMENT_PER_PAGE = 15
+    WEB_EMAIL = os.getenv('BLOG_EMAIL')
+    BLOG_POST_PER_PAGE = 10
+    BLOG_MANAGE_POST_PER_PAGE = 15
+    BLOG_COMMENT_PER_PAGE = 15
 
 
 class DevelopmentConfig(BaseConfig):
