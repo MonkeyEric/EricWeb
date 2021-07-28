@@ -22,7 +22,7 @@ def send_mail(subject, to, html):
 
 
 def send_subscribe_mail(subject, to, **kwargs):
-    message = Message(subject, recipients=[to], sender='Flask Weekly <%s>' % os.getenv('MAIL_USERNAME'))
+    message = Message(subject, recipients=[to], sender='猫大侠BLog <%s>' % os.getenv('MAIL_USERNAME'))
     message.body = render_template('emails/subcribe.txt', **kwargs)
     message.html = render_template('emails/subscribe.html', **kwargs)
     mail.send(message)

@@ -1,2 +1,5 @@
 .env
 .idea/*
+ bluelog/__pycache__/*
+ __pycache__/*
+ bluelog/utils/__pycache__/*

@@ -20,6 +20,14 @@ gunicorn = "*"
 faker = "*"
 flask-wtf = "*"
 github-flask = "*"
+sqlalchemy-utils = "*"
+python-dateutil = "*"
+pandas = "*"
+matplotlib = "*"
+jieba = "*"
+wordcloud = "*"
+sklearn = "*"
+pymongo = "*"
 
 [dev-packages]
 

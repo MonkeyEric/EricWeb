@@ -18,18 +18,13 @@
 
     <link href="{{url_for('static',filename='css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{url_for('static',filename='font-awesome/css/font-awesome.css')}}" rel="stylesheet">
-
-
-    <!-- Toastr style -->
+    <link href="{{url_for('static',filename='css/animate.css')}}" rel="stylesheet">
+    <link href="{{url_for('static',filename='css/style.css')}}" rel="stylesheet">
+        <!-- Toastr style -->
     <link href="{{url_for('static',filename='css/plugins/toastr/toastr.min.css')}}" rel="stylesheet">
-
     <!-- Gritter -->
     <link href="{{url_for('static',filename='js/plugins/gritter/jquery.gritter.css')}}" rel="stylesheet">
 
-
-    <link href="{{url_for('static',filename='css/animate.css')}}" rel="stylesheet">
-    <link href="{{url_for('static',filename='css/style.css')}}" rel="stylesheet">
-    <link href="{{url_for('static',filename='css/plugins/blueimp/css/blueimp-gallery.min.css')}}" rel="stylesheet">
     {%block head%}
     {% endblock %}
 </head>
@@ -42,14 +37,14 @@
         <ul class="nav metismenu" id="side-menu">
             <li class="nav-header">
                 <div class="dropdown profile-element">
-                    {% if avatar %}
-                    <img alt="image" class="rounded-circle" style="width: 48px;height: 48px;"  src="{{avatar}}" />
+                    {% if user_info.avatar %}
+                    <img alt="image" class="rounded-circle" style="width: 48px;height: 48px;"  src="{{user_info.avatar}}" />
                     {% else %}
                     <img alt="image" class="rounded-circle" style="width: 48px;height: 48px;"  src="{{url_for('static',filename='img/profile_small.jpg')}}" />
                     {% endif %}
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                        <span class="block m-t-xs font-bold">{{username}}</span>
-                        <span class="text-muted text-xs block">管理员 <b class="caret"></b></span>
+
+                        <span class="text-muted text-xs block">{{user_info.role}} <b class="caret"></b></span>
                     </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
                         <li><a class="dropdown-item" href="{{url_for('admin.profile')}}">个人信息</a></li>
@@ -60,7 +55,7 @@
                     </ul>
                 </div>
                 <div class="logo-element">
-                    IN+
+                    CAT
                 </div>
             </li>
             <li class="active">
@@ -79,7 +74,7 @@
                 </a>
                 <ul class="nav nav-second-level">
                     <li><a href="{{url_for('blog.blog_get')}}">所有文章</a></li>
-                    {% if  is_login %}
+                    {% if  user_info.is_login %}
                     <li><a href="{{url_for('blog.code_editor')}}">写博客</a></li>
                     {% endif %}
                 </ul>
@@ -92,7 +87,7 @@
             </li>
 
             <li>
-                <a href="{{url}}" target="_blank">
+                <a href="https://github.com/MonkeyEric" target="_blank">
                     <i class="fa fa-github"></i>
                     <span class="nav-label">Github地址</span>
                 </a>
@@ -112,7 +107,7 @@
                 </a>
             </li>
 
-            {% if  is_login %}
+            {% if  user_info.is_login %}
             <li>
                 <a href="#">
                     <i class="fa fa-bar-chart-o"></i>
@@ -168,7 +163,7 @@
 
                 <ul class="nav navbar-top-links navbar-right">
                     <li style="padding: 20px">
-                        <span class="m-r-sm text-muted welcome-message">欢迎来到猫咪博客</span>
+                        <span class="m-r-sm text-muted welcome-message">您好，{{user_info.username}}，欢迎来到猫咪博客</span>
                     </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
@@ -246,6 +241,15 @@
                                     </div>
                                 </a>
                             </li>
+                            {% if user_info.is_login%}
+                            <li>
+                                <a href="{{url_for('user.login')}}" class="dropdown-item">
+                                    <div>
+                                        <i class="fa fa-sign-in fa-fw"></i> 登录
+                                    </div>
+                                </a>
+                            </li>
+                            {% endif %}
                         </ul>
                     </li>
                     <li>
@@ -281,7 +285,7 @@
     <script src="{{url_for('static',filename='js/plugins/metisMenu/jquery.metisMenu.js')}}"></script>
     <script src="{{url_for('static',filename='js/plugins/slimscroll/jquery.slimscroll.min.js')}}"></script>
 
-    <!-- Flot -->
+<!--     Flot -->
     <script src="{{url_for('static',filename='js/plugins/flot/jquery.flot.js')}}"></script>
     <script src="{{url_for('static',filename='js/plugins/flot/jquery.flot.tooltip.min.js')}}"></script>
     <script src="{{url_for('static',filename='js/plugins/flot/jquery.flot.spline.js')}}"></script>
@@ -292,7 +296,7 @@
     <script src="{{url_for('static',filename='js/plugins/peity/jquery.peity.min.js')}}"></script>
     <script src="{{url_for('static',filename='js/demo/peity-demo.js')}}"></script>
 
-    <!-- Custom and plugin javascript -->
+<!--     Custom and plugin javascript -->
     <script src="{{url_for('static',filename='js/inspinia.js')}}"></script>
     <script src="{{url_for('static',filename='js/plugins/pace/pace.min.js')}}"></script>
 
@@ -308,18 +312,12 @@
     <!-- Sparkline demo data  -->
     <script src="{{url_for('static',filename='js/demo/sparkline-demo.js')}}"></script>
 
+    <!-- Toastr -->
+    <script src="{{url_for('static',filename='js/plugins/toastr/toastr.min.js')}}"></script>
     <!-- ChartJS-->
     <script src="{{url_for('static',filename='js/plugins/chartJs/Chart.min.js')}}"></script>
 
-    <!-- Toastr -->
-    <script src="{{url_for('static',filename='js/plugins/toastr/toastr.min.js')}}"></script>
 
-    <script src="{{url_for('static',filename='js/plugins/blueimp/jquery.blueimp-gallery.min.js')}}"></script>
-    <!-- iCheck -->
-    <script src="{{url_for('static',filename='js/plugins/iCheck/icheck.min.js')}}"></script>
-
-    <!-- Full Calendar -->
-    <script src="{{url_for('static',filename='js/plugins/fullcalendar/fullcalendar.min.js')}}"></script>
 {%block script%}
 {% endblock %}
     <!--同步官网模板开始-->
