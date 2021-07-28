@@ -5,11 +5,12 @@ from flask_login import current_user, login_user, login_required, logout_user
 from bluelog.modules.blog import Admin
 
 from bluelog.utils.emails import send_mail, send_subscribe_mail
-from bluelog.utils.forms import LoginForm
-from bluelog.utils.utils import redirect_back
-from bluelog.utils.extensions import github
+from bluelog.utils.forms import LoginForm, SettingForm
+from bluelog.utils.utils import redirect_back, generate_random_code
+from bluelog.utils.extensions import github, db
+from werkzeug.security import generate_password_hash
 
-user_bp = Blueprint('user', __name__, template_folder='templates')
+user_bp = Blueprint('user', __name__, template_folder='templates', static_folder='static')
 
 
 @user_bp.route('/login', methods=['GET', 'POST'])
@@ -18,15 +19,14 @@ def login():
         return redirect(url_for('admin.index'))
     form = LoginForm()
     if form.validate_on_submit():
-        username = form.username.data
+        email = form.email.data
         password = form.password.data
         remember = form.remember.data
 
-        admin = Admin.query.first()
+        admin = Admin.query.filter_by(email=email)
         if admin:
-            print(admin.validate_password(password))
-            if username == admin.username and admin.validate_password(password):
-                login_user(admin, remember)
+            if email == admin[0].email and admin[0].validate_password(password):
+                login_user(admin[0], remember)
                 flash('Welcome back,', 'Eric')
                 return redirect_back()
             flash('Invalid username or password.', 'warning')
@@ -59,9 +59,13 @@ def contact():
     return render_template('contacts.html')
 
 
-@user_bp.route('/forget_password', methods=['GET'])
+@user_bp.route('/forget_password', methods=['GET', 'POST'])
 def forget_password():
-    return render_template('forgot_password.html')
+    form = LoginForm()
+    if request.method == 'POST':
+        email = form.email.data
+        subscribe(email)
+    return render_template('forgot_password.html', form=form)
 
 
 @user_bp.route('/update_pwd', methods=['GET'])
@@ -69,15 +73,44 @@ def update_pwd():
     return render_template('register.html')
 
 
-@user_bp.route('/register', methods=['GET'])
+@user_bp.route('/register', methods=['GET', 'POST'])
 def register():
-    return render_template('register.html')
+    form = SettingForm()
+    if request.method == 'POST':
+        email = form.email.data
+        if Admin.email == email:
+            return render_template('register.html', message='用户已经存在，请重新注册')
+        blog_title = form.blog_title.data
+        blog_sub_title = form.blog_sub_title.data
+        name = form.name.data
+        about = form.about.data
+        password = form.password.data
+        admin = Admin(
+            email=email,
+            blog_title=blog_title,
+            blog_sub_title=blog_sub_title,
+            name=name,
+            about=about,
+            role=1
+        )
+        admin.set_password(password)
+        db.session.add(admin)
+        db.session.commit()
+        return redirect(url_for('user.login'))
+    if request.method == 'GET':
+        return render_template('register.html', form=form)
 
 
-@user_bp.route('/subscribe')
-def subscribe():
-    email = '1649107451@qq.com'
+def subscribe(email):
     flash('welcome on board')
-    # send_mail('Subscribe Success', email, 'Hello,Thank you for subscribing Flask Weekly!')
-    send_subscribe_mail('Subscribe Success', email, name='艾瑞克')
-    return redirect(url_for('admin.index'))
+    admin = Admin.query.filter_by(email=email).first()
+    origin_pwd = generate_random_code()
+    Admin.query.filter_by(email=email).update({'password_hash': generate_password_hash(origin_pwd)})
+    db.session.commit()
+    print(origin_pwd)
+    if admin:
+        # send_mail('Subscribe Success', email, 'Hello,Thank you for subscribing Flask Weekly!')
+        send_subscribe_mail('发送邮件', email, name=admin.name, origin_pwd=origin_pwd)
+        return redirect(url_for('admin.index'))
+    else:
+        return redirect(url_for('user.forget_password'))

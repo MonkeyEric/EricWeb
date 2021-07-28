@@ -8,15 +8,16 @@ import random
 # 用于生成虚拟管理员信息的fake_admin()
 def fake_admin():
     admin = Admin(
-        username='admin',
+        email='1649107451@qq.com',
         blog_title='Bluelog',
         blog_sub_title="No,i'm the real thing.",
         name='Mima Kirigoe',
-        about='Um,l,Mima Kirigoe,had a fun time as a member of CHAM……'
+        about='Um,l,Mima Kirigoe,had a fun time as a member of CHAM……',
+        role=1,
     )
-    admin.set_password('helloflask')
+    admin.set_password('123456')
     db.session.add(admin)
-    db.session.commit()
+    db.session.commit(),
 
 
 # 用于生成虚拟分类的fake_categories()函数

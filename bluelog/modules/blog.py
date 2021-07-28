@@ -4,12 +4,21 @@ from datetime import datetime
 
 # 导入SQLAlchemy模块
 from bluelog.utils.extensions import db
+from sqlalchemy_utils import ChoiceType
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
 
 
-class Admin(db.Model):
+class Admin(db.Model, UserMixin):
+    types_choices = (
+        (1, '管理员'),
+        (2, '一级用户'),
+        (3, '二级用户'),
+        (4, '三级用户'),
+    )
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20))
+    role = ChoiceType(types_choices)
+    email = db.Column(db.String(50))
     password_hash = db.Column(db.String(128))
     blog_title = db.Column(db.String(60))
     blog_sub_title = db.Column(db.String(100))
@@ -31,15 +40,13 @@ class Admin(db.Model):
 
     # Required for administrative interface
     def __unicode__(self):
-        return self.username
+        return self.email
 
-    def set_password(self,password):
+    def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
-    def validate_password(self,password):
-        return check_password_hash(self.password_hash,password)
-
-
+    def validate_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 
 class Category(db.Model):
@@ -58,7 +65,7 @@ class Category(db.Model):
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(60))
+    title = db.Column(db.String(80))
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     can_comment = db.Column(db.Boolean, default=True)

@@ -1,9 +1,9 @@
 # coding:utf-8
-from flask import Blueprint, session, flash, redirect, url_for, request, g
+from flask import Blueprint, session, flash, redirect, url_for, g
 
 from bluelog.modules.user_github import GithubUser
 from bluelog.utils.extensions import github, db
-import requests
+
 github_bp = Blueprint('g_user', __name__, template_folder='templates')
 
 
@@ -33,13 +33,3 @@ def authorized(access_token):
     # if you use flask-login, just call login_user() here.
     session['user_id'] = user.id
     return redirect(url_for('admin.index'))
-
-
-@github_bp.route('/star/helloflask')
-def star():
-    github.put('user/starred/greyli/helloflask', headers={'Content-Length': '0'})
-    flash('Star success.')
-    return redirect(url_for('admin.index'))
-
-
-

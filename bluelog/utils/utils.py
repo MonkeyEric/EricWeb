@@ -3,20 +3,12 @@
 from functools import wraps
 from flask import request, session, render_template, current_app, redirect, url_for
 from flask_mail import Message, Mail
+from random import Random
 
 try:
     from urlparse import urlparse, urljoin
 except ImportError:
     from urllib.parse import urlparse, urljoin
-
-
-def require_login(func):
-    @wraps(func)
-    def logic_func(**kwargs):
-        if session.get('usercache'):
-            return render_template('login.html')
-
-    return logic_func
 
 
 def is_safe_url(target):
@@ -32,3 +24,10 @@ def redirect_back(default='blog.index', **kwargs):
         if is_safe_url(target):
             return redirect(target)
     return redirect(url_for(default, **kwargs))
+
+
+def generate_random_code():
+    chars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    random = Random()
+    x = random.sample(chars, 4)
+    return "".join(x)
