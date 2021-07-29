@@ -28,6 +28,7 @@ jieba = "*"
 wordcloud = "*"
 sklearn = "*"
 pymongo = "*"
+email-validator = "*"
 
 [dev-packages]
 

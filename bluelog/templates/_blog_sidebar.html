@@ -1,0 +1,34 @@
+<!--博客的右边模块(包含links和categories)-->
+<div class="col-lg-2">
+  {% if links %}
+  <div class="ibox">
+      <div class="ibox-content">
+          <h2>链接</h2>
+          <ul class="list-group clear-list m-t">
+            {% for link in links %}
+            <li class="list-group-item fist-item">
+                <h3> <a href="{{ link.url }}" target="_blank" >{{link.name}}</a></h3>
+            </li>
+            {% endfor %}
+          </ul>
+      </div>
+  </div>
+  {% endif %}
+  {% if categories %}
+  <div class="ibox">
+      <div class="ibox-content">
+          <h2>标签</h2>
+          <ul class="list-group clear-list m-t">
+            {% for category in categories %}
+                  <li class="list-group-item fist-item">
+                    <span class="float-right">
+                        <h4>{{ category.posts|length }}</h4>
+                    </span>
+                    <h3><a href="{{ url_for('blog.show_category', category_id=category.id) }}" >{{ category.name }}</a></h3>
+                  </li>
+            {% endfor %}
+          </ul>
+      </div>
+  </div>
+</div>
+{% endif %}
