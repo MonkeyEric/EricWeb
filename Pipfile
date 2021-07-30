@@ -20,6 +20,9 @@ gunicorn = "*"
 faker = "*"
 flask-wtf = "*"
 github-flask = "*"
+<<<<<<< HEAD
+flask-github = "*"
+=======
 sqlalchemy-utils = "*"
 python-dateutil = "*"
 pandas = "*"
@@ -28,6 +31,7 @@ jieba = "*"
 wordcloud = "*"
 sklearn = "*"
 pymongo = "*"
+>>>>>>> be4a6a1b59d3df6faf53633a0b85dd3e5ae47771
 
 [dev-packages]
 
