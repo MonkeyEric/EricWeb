@@ -24,7 +24,7 @@ def login():
         remember = form.remember.data
 
         admin = Admin.query.filter_by(email=email)
-        if admin:
+        if admin.count():
             if email == admin[0].email and admin[0].validate_password(password):
                 login_user(admin[0], remember)
                 flash('Welcome back,', 'Eric')

@@ -22,6 +22,7 @@ class BaseConfig(object):
     BLOG_POST_PER_PAGE = 5
     BLOG_MANAGE_POST_PER_PAGE = 15
     BLOG_COMMENT_PER_PAGE = 15
+    TABLE_PER_PAGE = 10
 
 
 class DevelopmentConfig(BaseConfig):

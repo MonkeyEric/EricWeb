@@ -22,5 +22,4 @@ class Income(db.Model):
     goods = db.Column(db.String(300))
     deal_source = db.Column(db.String(50))
     amount = db.Column(db.Float)
-    year = db.Column(db.DateTime)
     insert_time = db.Column(db.DateTime, default=datetime.utcnow)

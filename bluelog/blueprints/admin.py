@@ -1,14 +1,16 @@
 # coding:utf-8
-from flask import Blueprint, render_template, g, session, send_from_directory, request, current_app
+from flask import Blueprint, render_template, g, session, send_from_directory, request, current_app, redirect, url_for
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import CombinedMultiDict
 
 from bluelog.modules.user_github import GithubUser
 from bluelog.modules.blog import Admin
+from bluelog.modules.income_expense import Income
 from bluelog.utils.forms import IncomeExpenseForm
 from bluelog.utils.csv_tools import read_csv, save_to_db
-
+from bluelog.config import *
+import json
 import os
 
 admin_bp = Blueprint('admin', __name__)
@@ -41,9 +43,21 @@ def chart():
     return render_template('graph_chartjs.html')
 
 
-@admin_bp.route('/data', methods=['GET'])
+@admin_bp.route('/data', methods=['GET','POST'])
 def table_data():
+
     return render_template('table.html')
+
+
+@admin_bp.route('/table', methods=['GET','POST'])
+def table():
+    if request.method == 'GET':
+        income_result = []
+        data = Income.query.order_by(Income.deal_date.desc())
+        for i in data:
+            print(i)
+            income_result.append({j:i.j for j in Table_head.keys() })
+        return json.dumps(income_result)
 
 
 @admin_bp.route('/upload', methods=['GET', 'POST'], strict_slashes=False)
@@ -57,6 +71,7 @@ def upload():
         csv_file.save(file_path)
         data_json = read_csv(file_path, desc)
         save_to_db(data_json)
+        return redirect(url_for('admin.data'))
     return render_template('form_file_upload.html', form=form)
 
 

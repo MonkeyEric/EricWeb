@@ -33,6 +33,16 @@ Alipay_head = {
     '资金状态': 'money_status'
 }
 
+Table_head = {
+    'deal_date': '交易时间',
+    'income_expense': '收支',
+    'amount': '金额',
+    'count_type': '统计种类',
+    'pay_status': '支付状态',
+    'counterparty': '交易对方',
+    'goods': '商品名称',
+}
+
 Expense_type = {
     '餐饮': [
         '吃饭',
