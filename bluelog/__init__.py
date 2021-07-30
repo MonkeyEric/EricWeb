@@ -1,7 +1,7 @@
 import os
 
 import click
-from bluelog.modules.blog import Admin, Category
+from bluelog.modules.blog import Admin, Category, Link, Comment
 from bluelog.modules.user_github import GithubUser
 
 from bluelog.blueprints.user import user_bp
@@ -9,6 +9,7 @@ from bluelog.blueprints.admin import admin_bp
 from bluelog.blueprints.blog import blog_bp
 from bluelog.blueprints.user_github import github_bp
 from flask import Flask, render_template, g
+from flask_login import current_user
 
 from bluelog.utils.extensions import bootstrap, db, ckeditor, mail, moment, github, login_manager, csrf
 from bluelog.settings import config
@@ -21,7 +22,15 @@ load_dotenv(find_dotenv(), override=True)
 def create_app(config_name=None):
     if config_name is None:
         config_name = os.getenv('FLASK_CONFIG', 'development')
-    app = Flask('blue_log')
+    # 定义系统路径的变量
+    BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+    # 定义静态文件的路径
+    static_dir = os.path.join(BASE_DIR, r'bluelog\static')
+    # 定义模板文件的路径
+    templates_dir = os.path.join(BASE_DIR, r'bluelog\templates')
+    # 初始化app和manage.py文件夹
+    app = Flask('blue_log', static_folder=static_dir,template_folder=templates_dir)
+
     app.config.from_object(config[config_name])
     app.config['UPLOAD_PATH'] = os.path.join(app.root_path, 'file')
     app.config.update(
@@ -100,6 +109,17 @@ def register_user_info_(app):
         user_info = dict(is_login=is_login, avatar=avatar, username=username, role=role)
         print('username_____', username)
         return dict(user_info=user_info)
+
+    @app.context_processor
+    def make_template_context():
+        admin = Admin.query.first()
+        categories = Category.query.order_by(Category.name).all()
+        links = Link.query.order_by(Link.name).all()
+        if current_user.is_authenticated:
+            unread_comments = Comment.query.filter_by(reviewed=False).count()
+        else:
+            unread_comments = None
+        return dict(admin=admin, categories=categories, links=links, unread_comments=unread_comments)
 
 
 def register_template_context(app):

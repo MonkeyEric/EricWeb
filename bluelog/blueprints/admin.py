@@ -11,7 +11,7 @@ from bluelog.utils.csv_tools import read_csv, save_to_db
 
 import os
 
-admin_bp = Blueprint('admin', __name__, template_folder='templates')
+admin_bp = Blueprint('admin', __name__)
 
 
 @admin_bp.before_request

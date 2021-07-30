@@ -1,5 +1,10 @@
-﻿{% extends "base.html" %}
+﻿{% import "_macros.html" as macros %}
+{% extends "base.html" %}
 {% block title%}博客{% endblock %}
+{% block head %}
+{{ super() }}
+{{ moment.include_moment() }}
+{% endblock %}
 {% block wrapper%}
 <div id="page-wrapper" class="gray-bg">
     {{ self.pheader() }}
@@ -21,225 +26,61 @@
     </div>
     <div class="wrapper wrapper-content  animated fadeInRight blog">
         <div class="row">
-            <div class="col-lg-10">
+            <div class="col-md-8">
+                {% if posts %}
+                {% for post in posts %}
                 <div class="ibox">
                     <div class="ibox-content">
-                        <a href="article.html" class="btn-link">
+                        <a href="{{ url_for('blog.show_post', post_id=post.id)}}" class="btn-link">
                             <h2>
-                                时间从何而来？为什么时间似乎是流动的？
+                                {{ post.title }}
                             </h2>
                         </a>
                         <div class="small m-b-xs">
-                            <strong>火星一号</strong> <span class="text-muted"><i class="fa fa-clock-o"></i>2017年12月12日</span>
+                            <strong>火星一号</strong> <span class="text-muted"><i class="fa fa-clock-o"></i>&nbsp;&nbsp;{{ moment(post.timestamp).format('LLL')}}</span>
                         </div>
-                        <p>在我们看来，宇宙万物皆是永恒变化的，所以我们产生了时间的概念。通过时间，我们可以研究事物的变化。然而，关于时间的本质，还有待我们进一步探究。
+                        <p>
+                            {{post.body|striptags|truncate}}
+                             <small><a  href="{{ url_for('.show_post', post_id=post.id) }}">更多</a></small>
                         </p>
                         <div class="row">
                             <div class="col-md-6">
                                     <h5>标签:</h5>
-                                    <button class="btn btn-primary btn-xs" type="button">标签</button>
-                                    <button class="btn btn-white btn-xs" type="button">标签</button>
+
+
+                                    <button class="btn btn-white btn-xs" type="button"><a href="{{ url_for('.show_category', category_id=post.category.id) }}">{{ post.category.name }}</a></button>
+<!--                                    <button class="btn btn-white btn-xs" type="button">标签</button>-->
                             </div>
                             <div class="col-md-6">
                                 <div class="small text-right">
                                     <h5>统计:</h5>
-                                    <div> <i class="fa fa-comments-o"> </i> 56 评论 </div>
+                                    <div>
+                                        <i class="fa fa-comments-o"> </i>
+                                        <a href="{{ url_for('.show_post', post_id=post.id) }}#comments">{{ post.comments|length}} 评论 </a>
+                                    </div>
                                     <i class="fa fa-eye"> </i> 144 浏览
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="ibox">
-                    <div class="ibox-content">
-                        <a href="article.html" class="btn-link">
-                            <h2>
-                                时间从何而来？为什么时间似乎是流动的？
-                            </h2>
-                        </a>
-                        <div class="small m-b-xs">
-                            <strong>火星一号</strong> <span class="text-muted"><i class="fa fa-clock-o"></i>2017年12月12日</span>
-                        </div>
-                        <p>在我们看来，宇宙万物皆是永恒变化的，所以我们产生了时间的概念。通过时间，我们可以研究事物的变化。然而，关于时间的本质，还有待我们进一步探究。
-                        </p>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h5>标签:</h5>
-                                <button class="btn btn-primary btn-xs" type="button">标签</button>
-                                <button class="btn btn-white btn-xs" type="button">标签</button>
-                                <button class="btn btn-white btn-xs" type="button">标签</button>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="small text-right">
-                                    <h5>统计:</h5>
-                                    <div> <i class="fa fa-comments-o"> </i> 36 评论 </div>
-                                    <i class="fa fa-eye"> </i> 100 浏览
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                {% endfor %}
+                {% else %}
+                <div class="tooltip">
+                    <h5>没有文章</h5>
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('blog.code_editor') }}">现在就去写博客</a>
+                    {% endif %}
                 </div>
-                <div class="ibox">
-                    <div class="ibox-content">
-                        <a href="article.html" class="btn-link">
-                            <h2>
-                                时间从何而来？为什么时间似乎是流动的？
-                            </h2>
-                        </a>
-                        <div class="small m-b-xs">
-                            <strong>火星一号</strong> <span class="text-muted"><i class="fa fa-clock-o"></i>2017年12月12日</span>
-                        </div>
-                        <p>在我们看来，宇宙万物皆是永恒变化的，所以我们产生了时间的概念。通过时间，我们可以研究事物的变化。然而，关于时间的本质，还有待我们进一步探究。
-                        </p>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h5>标签:</h5>
-                                <button class="btn btn-white btn-xs" type="button">标签</button>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="small text-right">
-                                    <h5>统计:</h5>
-                                    <div> <i class="fa fa-comments-o"> </i> 11 评论 </div>
-                                    <i class="fa fa-eye"> </i> 46 浏览
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                {% endif %}
+            {% if pagination %}
+                <div class="pagination">
+                    {{ macros.pagination_widget(pagination, 'blog.blog_get') }}
                 </div>
-                <div class="ibox">
-                    <div class="ibox-content">
-                        <a href="article.html" class="btn-link">
-                            <h2>
-                                时间从何而来？为什么时间似乎是流动的？
-                            </h2>
-                        </a>
-                        <div class="small m-b-xs">
-                            <strong>火星一号</strong> <span class="text-muted"><i class="fa fa-clock-o"></i>2017年12月12日</span>
-                        </div>
-                        <p>在我们看来，宇宙万物皆是永恒变化的，所以我们产生了时间的概念。通过时间，我们可以研究事物的变化。然而，关于时间的本质，还有待我们进一步探究。
-                        </p>
-                        <div class="row">
-                            <div class="col-md-6">
-                                    <h5>标签:</h5>
-                                    <button class="btn btn-primary btn-xs" type="button">标签</button>
-                                    <button class="btn btn-white btn-xs" type="button">标签</button>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="small text-right">
-                                    <h5>统计:</h5>
-                                    <div> <i class="fa fa-comments-o"> </i> 56 评论 </div>
-                                    <i class="fa fa-eye"> </i> 144 浏览
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="ibox">
-                    <div class="ibox-content">
-                        <a href="article.html" class="btn-link">
-                            <h2>
-                                时间从何而来？为什么时间似乎是流动的？
-                            </h2>
-                        </a>
-                        <div class="small m-b-xs">
-                            <strong>火星一号</strong> <span class="text-muted"><i class="fa fa-clock-o"></i>2017年12月12日</span>
-                        </div>
-                        <p>在我们看来，宇宙万物皆是永恒变化的，所以我们产生了时间的概念。通过时间，我们可以研究事物的变化。然而，关于时间的本质，还有待我们进一步探究。
-                        </p>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h5>标签:</h5>
-                                <button class="btn btn-primary btn-xs" type="button">标签</button>
-                                <button class="btn btn-white btn-xs" type="button">标签</button>
-                                <button class="btn btn-white btn-xs" type="button">标签</button>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="small text-right">
-                                    <h5>统计:</h5>
-                                    <div> <i class="fa fa-comments-o"> </i> 36 评论 </div>
-                                    <i class="fa fa-eye"> </i> 100 浏览
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="ibox">
-                    <div class="ibox-content">
-                        <a href="article.html" class="btn-link">
-                            <h2>
-                                时间从何而来？为什么时间似乎是流动的？
-                            </h2>
-                        </a>
-                        <div class="small m-b-xs">
-                            <strong>火星一号</strong> <span class="text-muted"><i class="fa fa-clock-o"></i>2017年12月12日</span>
-                        </div>
-                        <p>在我们看来，宇宙万物皆是永恒变化的，所以我们产生了时间的概念。通过时间，我们可以研究事物的变化。然而，关于时间的本质，还有待我们进一步探究。
-                        </p>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h5>标签:</h5>
-                                <button class="btn btn-white btn-xs" type="button">标签</button>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="small text-right">
-                                    <h5>统计:</h5>
-                                    <div> <i class="fa fa-comments-o"> </i> 11 评论 </div>
-                                    <i class="fa fa-eye"> </i> 46 浏览
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            {% endif %}
+
             </div>
-            <div class="col-lg-2">
-                <div class="ibox">
-                    <div class="ibox-content">
-                        <h2>链接</h2>
-                        <ul class="list-group clear-list m-t">
-                    <li class="list-group-item fist-item">
-                        <h3> <a href="article.html" >链接</a></h3>
-                    </li>
-                </ul>
-                    </div>
-                </div>
-                <div class="ibox">
-                    <div class="ibox-content">
-                        <h2>类别</h2>
-                        <ul class="list-group clear-list m-t">
-                            <li class="list-group-item fist-item">
-                        <span class="float-right">
-                            <h4>6条</h4>
-                        </span>
-                        <h3><a href="article.html" >Python</a></h3>
-                    </li>
-                            <li class="list-group-item fist-item">
-                        <span class="float-right">
-                            <h4>6条</h4>
-                        </span>
-                        <h3><a href="article.html" >Python</a></h3>
-                    </li>
-                            <li class="list-group-item fist-item">
-                        <span class="float-right">
-                            <h4>6条</h4>
-                        </span>
-                        <h3><a href="article.html" >Python</a></h3>
-                    </li>
-                            <li class="list-group-item fist-item">
-                        <span class="float-right">
-                            <h4>6条</h4>
-                        </span>
-                        <h3><a href="article.html" >Python</a></h3>
-                    </li>
-                            <li class="list-group-item fist-item">
-                        <span class="float-right">
-                            <h4>6条</h4>
-                        </span>
-                        <h3><a href="article.html" >Python</a></h3>
-                    </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+           {% include '_blog_sidebar.html' %}
         </div>
     </div>
     {{ self.footer() }}

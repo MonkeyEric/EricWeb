@@ -9,6 +9,7 @@ class BaseConfig(object):
     SECRET_KEY = os.getenv('SECRET_KEY', 'secret string')
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    APP_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
     MAIL_SERVER = os.getenv('MAIL_SERVER')
     MAIL_PORT = 465
@@ -18,7 +19,7 @@ class BaseConfig(object):
     MAIL_DEFAULT_SENDER = ('EricWeb Admin', MAIL_USERNAME)
 
     WEB_EMAIL = os.getenv('BLOG_EMAIL')
-    BLOG_POST_PER_PAGE = 10
+    BLOG_POST_PER_PAGE = 5
     BLOG_MANAGE_POST_PER_PAGE = 15
     BLOG_COMMENT_PER_PAGE = 15
 
