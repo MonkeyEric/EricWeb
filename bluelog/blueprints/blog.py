@@ -3,7 +3,6 @@
 from flask import Blueprint, render_template, request, current_app, url_for, flash, redirect
 from bluelog.modules.blog import *
 from bluelog.utils.forms import AdminCommentFrom, CommentForm
-from bluelog.utils.extensions import moment
 from flask_login import current_user
 
 blog_bp = Blueprint('blog', __name__)
@@ -16,7 +15,7 @@ def blog_get():
     pagination = Post.query.order_by(Post.timestamp.desc()).paginate(page, per_page=per_page)
     posts = pagination.items
 
-    return render_template('blog.html', pagination=pagination, posts=posts)
+    return render_template('blog_list.html', pagination=pagination, posts=posts)
 
 
 @blog_bp.route('/category/<int:category_id>', methods=['GET'])

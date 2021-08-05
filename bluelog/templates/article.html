@@ -1,9 +1,5 @@
 ﻿{% extends "base.html" %}
 {% block title%}文章{% endblock %}
-{% block head %}
-{{ super() }}
-{{ moment.include_moment() }}
-{% endblock %}
 {% block wrapper%}
 <div id="page-wrapper" class="gray-bg">
     {{ self.pheader() }}
@@ -27,7 +23,7 @@
 
     <div class="wrapper wrapper-content  animated fadeInRight article">
     <div class="row justify-content-md-center">
-        <div class="col-lg-10">
+        <div class="col-lg-9">
 
             <div class="ibox">
                 <div class="ibox-content">
@@ -36,26 +32,31 @@
                         <button class="btn btn-outline btn-danger  dim " type="button"><i class="fa fa-heart"></i></button>
                         <button class="btn btn-outline btn-success  dim " type="button"><i class="fa fa-share-alt"></i></button>
                     </div>
-                    <div class="text-center article-title">
-                    <span class="text-muted"><i class="fa fa-clock-o"></i> &nbsp;&nbsp;{{ moment(post.timestamp).format('LLL')}}</span>
-                        <h1>
+                    <div class="article-title">
+
+                        <h1 class="text-center">
                             {{ post.title }}
                         </h1>
+                        <span class="text-muted"><i class="fa fa-clock-o"></i> &nbsp;&nbsp;{{ moment(post.timestamp).format('LLL')}}</span>
                     </div>
+
                     {{post.body|safe}}
                     <div class="row">
                         <div class="col-md-6">
-                                <h5>标签:</h5>
+                            <h4>标签</h4>
                                 <button class="btn btn-white btn-xs" type="button"><a href="{{ url_for('.show_category', category_id=post.category.id) }}">{{ post.category.name }}</a></button>
                         </div>
                         <div class="col-md-6">
+
                             <div class="small text-right">
-                                <h5>统计:</h5>
                                 <div>
+                                        <h4>统计</h4>
                                         <i class="fa fa-comments-o"> </i>
-                                        <a href="{{ url_for('.show_post', post_id=post.id) }}#comments">{{ post.comments|length}} 评论 </a>
+                                        <a href="{{ url_for('blog.show_post', post_id=post.id) }}#comments">{{ post.comments|length}} 评论 </a>&nbsp;&nbsp;
+                                        <i class="fa fa-eye"> </i> 144 浏览 &nbsp;&nbsp;
+                                        <i class="fa fa-thumbs-up"> </i>
+                                        <a href="#"> 23 点赞 </a>
                                     </div>
-                                <i class="fa fa-eye"> </i> 144 查看
                             </div>
                         </div>
                     </div>
@@ -128,8 +129,9 @@
                 </div>
             </div>
         </div>
-
+         <div class="col-lg-3">
         {% include '_blog_sidebar.html' %}
+             </div>
     </div>
 
 
@@ -137,4 +139,9 @@
  {{ self.footer() }}
 
 </div>
+{% endblock %}
+{% block script %}
+{{ super() }}
+{{ moment.include_moment() }}
+{{moment.locale('zh-cn')}}
 {% endblock %}

@@ -13,6 +13,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="猫大侠博客" />
+    <meta name="Description" content="由个人开发的猫大侠博客,用来积累自己的开发经验" />
 
     <title>{% block title %}{% endblock %} | 猫大侠Blog</title>
 
@@ -24,7 +26,6 @@
     <link href="{{url_for('static',filename='css/plugins/toastr/toastr.min.css')}}" rel="stylesheet">
     <!-- Gritter -->
     <link href="{{url_for('static',filename='js/plugins/gritter/jquery.gritter.css')}}" rel="stylesheet">
-
     {%block head%}
     {% endblock %}
 </head>
@@ -33,123 +34,126 @@
 
     <div id="wrapper">
         <nav class="navbar-default navbar-static-side" role="navigation">
-    <div class="sidebar-collapse">
-        <ul class="nav metismenu" id="side-menu">
-            <li class="nav-header">
-                <div class="dropdown profile-element">
-                    {% if user_info.avatar %}
-                    <img alt="image" class="rounded-circle" style="width: 48px;height: 48px;"  src="{{user_info.avatar}}" />
-                    {% else %}
-                    <img alt="image" class="rounded-circle" style="width: 48px;height: 48px;"  src="{{url_for('static',filename='img/profile_small.jpg')}}" />
-                    {% endif %}
-                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu" id="side-menu">
+                    <li class="nav-header">
 
-                        <span class="text-muted text-xs block">{{user_info.role}} <b class="caret"></b></span>
-                    </a>
-                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                        <li><a class="dropdown-item" href="{{url_for('admin.profile')}}">个人信息</a></li>
-                        <li><a class="dropdown-item" href="{{url_for('user.contact')}}">好友</a></li>
-                        <li><a class="dropdown-item" href="{{url_for('admin.mailbox')}}">信箱</a></li>
-                        <li class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{{url_for('user.logout')}}">登出</a></li>
-                    </ul>
-                </div>
-                <div class="logo-element">
-                    CAT
-                </div>
-            </li>
-            <li class="active">
-                <a href="{{url_for('admin.index')}}">
-                    <i class="fa fa-desktop"></i>
-                    <span class="nav-label">首页</span>
-                    <span class="float-right label label-primary">特别</span>
-                </a>
-            </li>
+                        <div class="dropdown profile-element text-center">
+                            {% if user_info.avatar %}
+                            <img alt="image" class="rounded-circle" style="width: 48px;height: 48px;"  src="{{user_info.avatar}}" />
+                            {% else %}
+                            <img alt="image" class="rounded-circle" style="width: 60px;height: 60px;"  src="{{url_for('static',filename='img/profile_small.jpg')}}" />
+                            {% endif %}
+                            <br>
+                            <h3 class="font-bold no-margins text-muted" style="padding-top: 9px">
+                                王宇
+                            </h3>
+                            <div>
+                                <span class="text-muted text-xs">角色:{{user_info.role}}</span>
+                            </div>
+                            <div>
+                                <span class="text-muted text-xs">文章 100</span> |
+                                <span class="text-muted text-xs">访问量 350</span>
 
-            <li>
-                <a href="{{url_for('blog.blog_get')}}">
-                    <i class="fa fa-book"></i>
-                    <span class="nav-label">个人博客</span>
-                    <span class="fa arrow"></span>
-                </a>
-                <ul class="nav nav-second-level">
-                    <li><a href="{{url_for('blog.blog_get')}}">所有文章</a></li>
+                            </div>
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                                <span class="text-muted text-xs block">更多<b class="caret"></b></span>
+                            </a>
+
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                <li><a class="dropdown-item" href="{{url_for('admin.profile')}}">个人信息</a></li>
+                                <li><a class="dropdown-item" href="{{url_for('user.contact')}}">好友</a></li>
+                                <li><a class="dropdown-item" href="{{url_for('admin.mailbox')}}">信箱</a></li>
+                                <li class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{url_for('user.logout')}}">登出</a></li>
+                            </ul>
+                        </div>
+                        <div class="logo-element">
+                            CAT
+                        </div>
+                    </li>
+<!--                    首页-->
+                    <li class="active">
+                        <a href="{{url_for('admin.index')}}">
+                            <i class="fa fa-home"></i>
+                            <span class="nav-label">首页</span>
+
+                        </a>
+                    </li>
+<!--博客列表-->
+                    <li>
+                        <a href="{{url_for('blog.blog_get')}}">
+                            <i class="fa fa-book"></i>
+                            <span class="nav-label">博客列表</span>
+
+                        </a>
+                    </li>
+
+<!--                    收藏网站-->
+                    <li>
+                        <a href="{{url_for('admin.favourite')}}">
+                            <i class="fa fa-heart"></i>
+                            <span class="nav-label">收藏网站</span>
+                            <span class="float-right label label-primary">特别</span>
+                        </a>
+                    </li>
+<!--个人wiki-->
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-sitemap"></i>
+                            <span class="nav-label">个人wiki</span>
+                        </a>
+                    </li>
+<!--                    关于博主-->
+                    <li>
+                        <a href="{{url_for('admin.about')}}" >
+                            <i class="fa fa-info"></i>
+                            <span class="nav-label">关于博主</span>
+
+                        </a>
+                    </li>
+
+
+
                     {% if  user_info.is_login %}
-                    <li><a href="{{url_for('blog.code_editor')}}">写博客</a></li>
+                    <!--                    小工具-->
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-grav"></i>
+                            <span class="nav-label">小工具</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level collapse">
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-bar-chart-o"></i>
+                                    <span class="nav-label">收支分析</span>
+                                    <span class="fa arrow"></span>
+                                </a>
+                                <ul class="nav nav-third-level collapse">
+                                    <li><a href="{{url_for('admin.chart')}}">可视化</a></li>
+                                    <li><a href="{{url_for('admin.table_data')}}">数据展示</a></li>
+                                    <li><a href="{{url_for('admin.upload')}}">数据录入</a></li>
+                                </ul>
+                             </li>
+
+                           <li>
+                                <a target="_blank" href="landing.html"><i class="fa fa-star"></i> <span class="nav-label">猫咪专属</span> <span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level collapse">
+                                    <li><a href="{{url_for('admin.timeline')}}">时间线</a></li>
+                                    <li><a href="{{url_for('admin.gallery')}}">相册</a></li>
+                                    <li><a href="{{url_for('admin.video')}}">视频</a></li>
+                                    <li><a href="graph_morris.html">其他</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
                     {% endif %}
+
                 </ul>
-            </li>
-            <li>
-                <a href="{{url_for('admin.calendar')}}">
-                    <i class="fa fa-calendar"></i>
-                    <span class="nav-label">日历</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="https://github.com/MonkeyEric" target="_blank">
-                    <i class="fa fa-github"></i>
-                    <span class="nav-label">Github地址</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="{{url_for('admin.about')}}" >
-                    <i class="fa fa-info"></i>
-                    <span class="nav-label">关于博主</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="{{url_for('admin.favourite')}}">
-                    <i class="fa fa-heart"></i>
-                    <span class="nav-label">收藏网站</span>
-                </a>
-            </li>
-
-            {% if  user_info.is_login %}
-            <li>
-                <a href="#">
-                    <i class="fa fa-bar-chart-o"></i>
-                    <span class="nav-label">收支分析</span>
-                    <span class="fa arrow"></span>
-                </a>
-                <ul class="nav nav-second-level collapse">
-                    <li><a href="{{url_for('admin.chart')}}">可视化</a></li>
-                    <li><a href="{{url_for('admin.table_data')}}">数据展示</a></li>
-                    <li><a href="{{url_for('admin.upload')}}">数据录入</a></li>
-                </ul>
-            </li>
-
-            <li>
-                <a target="_blank" href="landing.html"><i class="fa fa-star"></i> <span class="nav-label">猫咪专属</span> <span class="label label-warning float-right">新</span></a>
-                <ul class="nav nav-second-level collapse">
-                    <li><a href="{{url_for('admin.timeline')}}">时间线</a></li>
-                    <li><a href="{{url_for('admin.gallery')}}">相册</a></li>
-                    <li><a href="{{url_for('admin.video')}}">视频</a></li>
-                    <li><a href="graph_morris.html">其他</a></li>
-                </ul>
-            </li>
-
-            <li>
-                <a href="mailbox.html">
-                    <i class="fa fa-envelope"></i>
-                    <span class="nav-label">邮件 </span>
-                    <span class="label label-warning float-right">16/24</span>
-                </a>
-
-                <ul class="nav nav-second-level collapse">
-                    <li><a href="mailbox.html">收件箱</a></li>
-                    <li><a href="mail_detail.html">邮件内容</a></li>
-                    <li><a href="mail_compose.html">撰写邮件</a></li>
-                    <li><a href="email_template.html">邮件模板</a></li>
-                </ul>
-            </li>
-            {% endif %}
-
-        </ul>
-    </div>
-</nav>
+            </div>
+        </nav>
         {% block wrapper %}
         <div id="page-wrapper" class="gray-bg">
 

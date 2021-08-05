@@ -68,9 +68,10 @@ def forget_password():
     return render_template('forgot_password.html', form=form)
 
 
-@user_bp.route('/update_pwd', methods=['GET'])
+@user_bp.route('/update_pwd', methods=['POST','GET'])
 def update_pwd():
-    return render_template('register.html')
+    form = LoginForm()
+    return render_template('update_pwd.html',form=form)
 
 
 @user_bp.route('/register', methods=['GET', 'POST'])

@@ -23,14 +23,13 @@ def create_app(config_name=None):
     if config_name is None:
         config_name = os.getenv('FLASK_CONFIG', 'development')
     # 定义系统路径的变量
-    BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+    BASE_DIR = os.path.dirname(__file__)
     # 定义静态文件的路径
-    static_dir = os.path.join(BASE_DIR, r'bluelog\static')
+    static_dir = os.path.join(BASE_DIR, 'static')
     # 定义模板文件的路径
-    templates_dir = os.path.join(BASE_DIR, r'bluelog\templates')
+    templates_dir = os.path.join(BASE_DIR, 'templates')
     # 初始化app和manage.py文件夹
     app = Flask('blue_log', static_folder=static_dir,template_folder=templates_dir)
-
     app.config.from_object(config[config_name])
     app.config['UPLOAD_PATH'] = os.path.join(app.root_path, r'bluelog\file')
     app.config.update(

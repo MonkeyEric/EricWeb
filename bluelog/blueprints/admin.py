@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 from werkzeug.datastructures import CombinedMultiDict
 
 from bluelog.modules.user_github import GithubUser
-from bluelog.modules.blog import Admin
+from bluelog.modules.blog import *
 from bluelog.modules.income_expense import Income
 from bluelog.utils.forms import IncomeExpenseForm
 from bluelog.utils.csv_tools import read_csv, save_to_db
@@ -35,7 +35,12 @@ def before_request():
 @admin_bp.route('/index', methods=['GET'])
 # @login_required
 def index():
-    return render_template('index.html')
+    print('22222', current_app.root_path)
+    page = request.args.get('page', 1, type=int)
+    per_page = current_app.config['BLOG_POST_PER_PAGE']
+    pagination = Post.query.order_by(Post.timestamp.desc()).paginate(page, per_page=per_page)
+    posts = pagination.items
+    return render_template('index.html',pagination=pagination, posts=posts)
 
 
 @admin_bp.route('/chart', methods=['GET'])

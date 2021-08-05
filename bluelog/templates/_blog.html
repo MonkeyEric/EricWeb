@@ -1,0 +1,61 @@
+<div class="wrapper wrapper-content  animated fadeInRight blog" id="blog">
+        <div class="row">
+            <div class="col-md-8">
+                {% if posts %}
+                {% for post in posts %}
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <a href="{{ url_for('blog.show_post', post_id=post.id)}}" class="btn-link">
+                            <h2>
+                                {{ post.title }}
+                            </h2>
+                        </a>
+                        <div class="small m-b-xs">
+                            <strong>火星一号</strong> <span class="text-muted"><i class="fa fa-clock-o"></i>&nbsp;&nbsp;{{ moment(post.timestamp).format('lll')}}</span>
+                        </div>
+                        <p>
+                            {{post.body|striptags|truncate}}
+                             <small><a  href="{{ url_for('blog.show_post', post_id=post.id) }}">更多</a></small>
+                        </p>
+                        <div class="row">
+                            <div class="col-md-7">
+                                    <button class="btn btn-white btn-xs" type="button"><a href="{{ url_for('blog.show_category', category_id=post.category.id) }}">{{ post.category.name }}</a></button>
+<!--                                    <button class="btn btn-white btn-xs" type="button">标签</button>-->
+                            </div>
+                            <div class="col-md-5">
+                                <div class="small text-right">
+                                    <div>
+                                        <i class="fa fa-comments-o"> </i>
+                                        <a href="{{ url_for('blog.show_post', post_id=post.id) }}#comments">{{ post.comments|length}} 评论 </a>&nbsp;&nbsp;
+                                        <i class="fa fa-eye"> </i> 144 浏览 &nbsp;&nbsp;
+                                        <i class="fa fa-thumbs-up"> </i>
+                                        <a href="#"> 23 点赞 </a>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="tooltip">
+                    <h5>没有文章</h5>
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('blog.code_editor') }}">现在就去写博客</a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            {% if pagination %}
+                <div class="pagination">
+                    {{ macros.pagination_widget(pagination, 'blog.blog_get') }}
+                </div>
+            {% endif %}
+
+            </div>
+            <div class="col-md-3">
+           {% include '_blog_sidebar.html' %}
+            </div>
+        </div>
+    </div>
