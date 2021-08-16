@@ -1,174 +1,195 @@
 {% extends "base.html" %}
-{% block title%}收支表格{% endblock%}
-{% block head%}
-<link href="{{url_for('static',filename='css/plugins/jQueryUI/jquery-ui-1.10.4.custom.min.css')}}" rel="stylesheet">
-<link href="{{url_for('static',filename='css/plugins/jqGrid/ui.jqgrid.css')}}" rel="stylesheet">
-<style>
-    /* Additional style to fix warning dialog position */
-    #alertmod_table_list_2 {
-        top: 900px !important;
-    }
-
-</style>
-{% endblock%}
+{% block title%}首页{% endblock%}
+<body>
 {% block wrapper%}
-        <div id="page-wrapper" class="gray-bg">
-        {{ self.pheader() }}
-            <div class="row wrapper border-bottom white-bg page-heading">
-                <div class="col-lg-12">
-                    <h2>数据表</h2>
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="{{url_for('admin.index')}}">主页</a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a>收支分析</a>
-                        </li>
-                        <li class="breadcrumb-item active">
-                            <strong>表格</strong>
-                        </li>
-                    </ol>
-                </div>
-            </div>
-            <div class="wrapper wrapper-content  animated fadeInRight">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="ibox ">
-                            <div class="ibox-content">
-                                <div class="jqGrid_wrapper">
-                                    <table id="table_list_2"></table>
-                                    <div id="pager_list_2"></div>
+<div id="page-wrapper" class="gray-bg">
+<table class="layui-hide" id="demo" lay-filter="test"></table>
+</div>
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        {{ self.footer() }}
-        </div>
 {% endblock%}
-
-{% block script%}
-
-
-
-    <!-- jqGrid -->
-    <script src="{{url_for('static',filename='js/plugins/jqGrid/i18n/grid.locale-en.js')}}"></script>
-    <script src="{{url_for('static',filename='js/plugins/jqGrid/jquery.jqGrid.min.js')}}"></script>
-
-    <script>
-        $(document).ready(function () {
-
-            //请求表格中的数据
-            $.ajax({
-                url:'/table',
-                type:'GET',
-                data:{},
-                dataType:'json',
-                success:function(income_result){
-                  console.log(income_result);
-                },
-                error:function(){
-                    console.log('请求出错！');
-                }
-            })
-            // Examle data for jqGrid
-            var mydata = income_result;
-              //选中行启用行编辑
-                function EditSelectRow(id)
-                {
-                    //原选中行ID
-                    var oldSelectRowId = $("#selectRowId").val();
-                    if (oldSelectRowId != null && oldSelectRowId != "" && oldSelectRowId.length > 0) {
-                        $("#table_list_2").jqGrid('saveRow', oldSelectRowId);//保存上一行
-                    }
-
-                    //当前选中行
-                    $("#selectRowId").val(id);//临时存储当前选中行
-                    //$("#fieldGrid").jqGrid('editRow', id);
-                    $("#table_list_2").jqGrid('editRow', id, { keys: true, focusField: 1 });
-                }
-
-
-            // Configuration for jqGrid Example 2
-            $("#table_list_2").jqGrid({
-                data: mydata,
-                datatype: "local",
-                height: 450,
-                autowidth: true,
-                shrinkToFit: true,
-                rowNum: 20,
-                rowList: [10, 20, 30],
-                colNames: ['交易时间', '收支', '金额', '统计种类', '支付状态', '交易对方', '商品名称'],
-                colModel:[
-                    {name:'id',index:'id', editable: true, width:60, sorttype:"int",search:true},
-                    {name:'invdate',index:'invdate', editable: true, edittype:'select', width:90, sorttype:"date", formatter:"date", editoptions: {value: "1:在用; 2:空闲; 3:故障" }},
-                    {name:'name',index:'name', editable: true, width:100},
-                    {name:'amount',index:'amount', editable: true, width:80, align:"right",sorttype:"float", formatter:"number"},
-                    {name:'tax',index:'tax', editable: true, width:80, align:"right",sorttype:"float"},
-                    {name:'total',index:'total', editable: true, width:80,align:"right",sorttype:"float"},
-                    {name:'note',index:'note', editable: true, width:100, sortable:false},
-                ],
-                pager: "#pager_list_2",
-                caption: "收支数据表",
-                add: true,
-                edit: true,
-                addtext: 'Add',
-                edittext: 'edit',
-                hidegrid: false,
-                multiselect: true,
-                sortname: 'id',
-                sortorder: "asc",
-                editurl: "server.php",
+{%block script%}
+<script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+  <a class="layui-btn layui-btn-xs" lay-event="more">更多 <i class="layui-icon layui-icon-down"></i></a>
+</script>
+<script src="{{url_for('static',filename='js/layui.js')}}"></script>
+<script>
+ 
+//加载模块  
+layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate', function(){
+  //得到各种内置组件
+  var layer = layui.layer //弹层
+  ,laypage = layui.laypage //分页
+  ,laydate = layui.laydate //日期
+  ,table = layui.table //表格
+  ,carousel = layui.carousel //轮播
+  ,upload = layui.upload //上传
+  ,element = layui.element //元素操作
+  ,slider = layui.slider //滑块
+  ,dropdown = layui.dropdown //下拉菜单
+  
+  //向世界问个好
+  layer.msg('Hello World');
+  
+  //监听Tab切换
+  element.on('tab(demo)', function(data){
+    layer.tips('切换了 '+ data.index +'：'+ this.innerHTML, this, {
+      tips: 1
+    });
+  });
+  
+  //执行一个 table 实例
+  table.render({
+    elem: '#demo'
+    ,height: 420
+    ,url: '/demo/table/user/' //数据接口
+    ,title: '用户表'
+    ,page: true //开启分页
+    ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+    ,totalRow: true //开启合计行
+    ,cols: [[ //表头
+      {type: 'checkbox', fixed: 'left'}
+      ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left', totalRowText: '合计：'}
+      ,{field: 'username', title: '用户名', width:80}
+      ,{field: 'experience', title: '积分', width: 90, sort: true, totalRow: true}
+      ,{field: 'sex', title: '性别', width:80, sort: true}
+      ,{field: 'score', title: '评分', width: 80, sort: true, totalRow: '100分'}
+      ,{field: 'city', title: '城市', width:150} 
+      ,{field: 'sign', title: '签名', width: 200}
+      ,{field: 'classify', title: '职业', width: 100}
+      ,{field: 'wealth', title: '财富', width: 135, sort: true, totalRow: true}
+      ,{fixed: 'right', width: 150, align:'center', toolbar: '#barDemo'}
+    ]]
+  });
+  
+  //监听头工具栏事件
+  table.on('toolbar(test)', function(obj){
+    var checkStatus = table.checkStatus(obj.config.id)
+    ,data = checkStatus.data; //获取选中的数据
+    switch(obj.event){
+      case 'add':
+        layer.msg('添加');
+      break;
+      case 'update':
+        if(data.length === 0){
+          layer.msg('请选择一行');
+        } else if(data.length > 1){
+          layer.msg('只能同时编辑一个');
+        } else {
+          layer.alert('编辑 [id]：'+ checkStatus.data[0].id);
+        }
+      break;
+      case 'delete':
+        if(data.length === 0){
+          layer.msg('请选择一行');
+        } else {
+          layer.msg('删除');
+        }
+      break;
+    };
+  });
+  
+  //监听行工具事件
+  table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+    var data = obj.data //获得当前行数据
+    ,layEvent = obj.event; //获得 lay-event 对应的值
+    if(layEvent === 'detail'){
+      layer.msg('查看操作');
+    } else if(layEvent === 'more'){
+      //下拉菜单
+      dropdown.render({
+        elem: this //触发事件的 DOM 对象
+        ,show: true //外部事件触发即显示
+        ,data: [{
+          title: '编辑'
+          ,id: 'edit'
+        },{
+          title: '删除'
+          ,id: 'del'
+        }]
+        ,click: function(menudata){
+          if(menudata.id === 'del'){
+            layer.confirm('真的删除行么', function(index){
+              obj.del(); //删除对应行（tr）的DOM结构
+              layer.close(index);
+              //向服务端发送删除指令
             });
+          } else if(menudata.id === 'edit'){
+            layer.msg('编辑操作，当前行 ID:'+ data.id);
+          }
+        }
+        ,align: 'right' //右对齐弹出（v2.6.8 新增）
+        ,style: 'box-shadow: 1px 1px 10px rgb(0 0 0 / 12%);' //设置额外样式
+      })
+    }
+  });
+  
+  //执行一个轮播实例
+  carousel.render({
+    elem: '#test1'
+    ,width: '100%' //设置容器宽度
+    ,height: 200
+    ,arrow: 'none' //不显示箭头
+    ,anim: 'fade' //切换动画方式
+  });
+  
+  //将日期直接嵌套在指定容器中
+  var dateIns = laydate.render({
+    elem: '#laydateDemo'
+    ,position: 'static'
+    ,calendar: true //是否开启公历重要节日
+    ,mark: { //标记重要日子
+      '0-10-14': '生日'
+      ,'2020-01-18': '小年'
+      ,'2020-01-24': '除夕'
+      ,'2020-01-25': '春节'
+      ,'2020-02-01': '上班'
+    } 
+    ,done: function(value, date, endDate){
+      if(date.year == 2017 && date.month == 11 && date.date == 30){
+        dateIns.hint('一不小心就月底了呢');
+      }
+    }
+    ,change: function(value, date, endDate){
+      layer.msg(value)
+    }
+  });
+  
+  //分页
+  laypage.render({
+    elem: 'pageDemo' //分页容器的id
+    ,count: 1000 //数据总数
+    ,limit: 10 //每页显示的数据条数
+    ,skin: '#1E9FFF' //自定义选中色值
+    //,layout: ['prev', 'page', 'next', 'count', 'limit', 'refresh', 'skip'] //自定义排版
+    ,jump: function(obj, first){
+      if(!first){
+        layer.msg('第'+ obj.curr +'页', {offset: 'b'});
+      }
+    }
+  });
+  
+  //上传
+  upload.render({
+    elem: '#uploadDemo'
+    ,url: '' //此处配置你自己的上传接口即可
+    ,done: function(res){
+      layer.msg('上传成功');
+      layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', res.files.file);
+      console.log(res)
+    }
+    ,before: function(){
+      layer.msg('上传中', {icon: 16, time: 0});
+    }
+  });
+  
+  //滑块
+  var sliderInst = slider.render({
+    elem: '#sliderDemo'
+    ,input: true //输入框
+  });
 
-
-            // Add selection
-            $("#table_list_2").setSelection(1, true);
-
-            // Setup buttons
-            $("#table_list_2").jqGrid('navGrid', '#pager_list_2',
-                        //options
-                        {edit:true,add:true,del:true
-                        },
-                        //edit options
-                       {
-                           editCaption: "修改数据",
-                           bSubmit: "提交",
-                           bCancel: "退出",
-                                },
-                        // add options
-                        {
-                            addCaption: "添加数据",
-                            bSubmit: "提交",
-                            bCancel: "退出",
-
-                        },
-                        // del options
-                        {
-                            caption: "删除",
-                            msg: "删除选中的数据嘛？",
-                            bSubmit: "删除",
-                            bCancel: "关闭",
-
-                            },
-
-            );
-
-            // Add responsive to jqGrid
-            $(window).bind('resize', function () {
-                var width = $('.jqGrid_wrapper').width();
-                $('#table_list_2').setGridWidth(width);
-            });
-
-
-            setTimeout(function(){
-                $('.wrapper-content').removeClass('animated fadeInRight');
-            },700);
-
-        });
-
-    </script>
+});
+</script>
 {% endblock%}
+        

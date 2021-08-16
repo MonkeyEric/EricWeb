@@ -125,6 +125,28 @@
                             <span class="fa arrow"></span>
                         </a>
                         <ul class="nav nav-second-level collapse">
+<!--                            <li>-->
+<!--                                <a href="#">-->
+<!--                                    <i class="fa fa-star"></i>-->
+<!--                                    <span class="nav-label"></span>-->
+<!--                                    <span class="fa arrow"></span>-->
+<!--                                </a>-->
+<!--                                <ul class="nav nav-third-level collapse">-->
+<!--&lt;!&ndash;                                    <li><a href="{{url_for('admin.timeline')}}">时间线</a></li>&ndash;&gt;-->
+<!--                                    -->
+<!--                                </ul>-->
+<!--                            </li>-->
+                            <li>
+                                <a href="#">
+                                    <i class="fa fa-heart"></i>
+                                    <span class="nav-label">猫咪专属</span>
+                                    <span class="fa arrow"></span>
+                                </a>
+                                <ul class="nav nav-third-level collapse">
+                                   <li><a href="{{url_for('admin.gallery')}}">相册</a></li>
+                                    <li><a href="{{url_for('admin.video')}}">视频</a></li>
+                                </ul>
+                             </li>
                             <li>
                                 <a href="#">
                                     <i class="fa fa-bar-chart-o"></i>
@@ -138,14 +160,12 @@
                                 </ul>
                              </li>
 
-                           <li>
-                                <a target="_blank" href="landing.html"><i class="fa fa-star"></i> <span class="nav-label">猫咪专属</span> <span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level collapse">
-                                    <li><a href="{{url_for('admin.timeline')}}">时间线</a></li>
-                                    <li><a href="{{url_for('admin.gallery')}}">相册</a></li>
-                                    <li><a href="{{url_for('admin.video')}}">视频</a></li>
-                                    <li><a href="graph_morris.html">其他</a></li>
-                                </ul>
+
+                            <li>
+                                <a href="{{url_for('admin.file_manage')}}">
+                                    <i class="fa "></i>
+                                <span class="nav-label">文件管理</span>
+                                </a>
                             </li>
                         </ul>
                     </li>
@@ -382,83 +402,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="setings-item">
-                    <span>
-                        顶部导航栏V.2
-                        <br>
-                        <small>*主要布局</small>
-                    </span>
 
-                    <div class="switch">
-                        <div class="onoffswitch">
-                            <input type="checkbox" name="fixednavbar2" class="onoffswitch-checkbox" id="fixednavbar2">
-                            <label class="onoffswitch-label" for="fixednavbar2">
-                                <span class="onoffswitch-inner"></span>
-                                <span class="onoffswitch-switch"></span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="setings-item">
-                    <span>
-                        盒子布局
-                    </span>
-
-                    <div class="switch">
-                        <div class="onoffswitch">
-                            <input type="checkbox" name="boxedlayout" class="onoffswitch-checkbox" id="boxedlayout">
-                            <label class="onoffswitch-label" for="boxedlayout">
-                                <span class="onoffswitch-inner"></span>
-                                <span class="onoffswitch-switch"></span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="setings-item">
-                    <span>
-                        固定页脚
-                    </span>
-
-                    <div class="switch">
-                        <div class="onoffswitch">
-                            <input type="checkbox" name="fixedfooter" class="onoffswitch-checkbox" id="fixedfooter">
-                            <label class="onoffswitch-label" for="fixedfooter">
-                                <span class="onoffswitch-inner"></span>
-                                <span class="onoffswitch-switch"></span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="title">换肤</div>
-                <div class="setings-item default-skin">
-                    <span class="skin-name ">
-                        <a href="#" class="s-skin-0">
-                            默认
-                        </a>
-                    </span>
-                </div>
-                <div class="setings-item blue-skin">
-                    <span class="skin-name ">
-                        <a href="#" class="s-skin-1">
-                            蓝色
-                        </a>
-                    </span>
-                </div>
-                <div class="setings-item yellow-skin">
-                    <span class="skin-name ">
-                        <a href="#" class="s-skin-3">
-                            黄色
-                        </a>
-                    </span>
-                </div>
-                <div class="setings-item ultra-skin">
-                    <span class="skin-name ">
-                        <a href="#" class="md-skin">
-                            绿色（没用）
-                        </a>
-                    </span>
-                </div>
             </div>
         </div>
     </div>

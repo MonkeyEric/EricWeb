@@ -10,10 +10,32 @@ from bluelog.modules.income_expense import Income
 from bluelog.utils.forms import IncomeExpenseForm
 from bluelog.utils.csv_tools import read_csv, save_to_db
 from bluelog.config import *
+
+from datetime import datetime as cdatetime
+from datetime import date,time
+from sqlalchemy import DateTime,Numeric,Date,Time
 import json
 import os
 
 admin_bp = Blueprint('admin', __name__)
+
+
+def find_datetime(value):
+    for v in value:
+        if (isinstance(value[v], cdatetime)):
+            value[v] = convert_datetime(value[v])   # 这里原理类似，修改的字典对象，不用返回即可修改
+
+
+def convert_datetime(value):
+    if value:
+        if(isinstance(value,(cdatetime,DateTime))):
+            return value.strftime("%Y-%m-%d %H:%M:%S")
+        elif(isinstance(value,(date,Date))):
+            return value.strftime("%Y-%m-%d")
+        elif(isinstance(value,(Time,time))):
+            return value.strftime("%H:%M:%S")
+    else:
+        return ""
 
 
 @admin_bp.before_request
@@ -40,7 +62,7 @@ def index():
     per_page = current_app.config['BLOG_POST_PER_PAGE']
     pagination = Post.query.order_by(Post.timestamp.desc()).paginate(page, per_page=per_page)
     posts = pagination.items
-    return render_template('index.html',pagination=pagination, posts=posts)
+    return render_template('index.html', pagination=pagination, posts=posts)
 
 
 @admin_bp.route('/chart', methods=['GET'])
@@ -48,20 +70,21 @@ def chart():
     return render_template('graph_chartjs.html')
 
 
-@admin_bp.route('/data', methods=['GET','POST'])
+@admin_bp.route('/data', methods=['GET', 'POST'])
 def table_data():
-
     return render_template('table.html')
 
 
-@admin_bp.route('/table', methods=['GET','POST'])
+@admin_bp.route('/table', methods=['GET', 'POST'])
 def table():
     if request.method == 'GET':
-        income_result = []
-        data = Income.query.order_by(Income.deal_date.desc())
-        for i in data:
-            print(i)
-            income_result.append({j:i.j for j in Table_head.keys() })
+        data = Income.query.order_by(Income.deal_date.desc()).with_entities(Income.deal_date, Income.income_expense,
+                                                                            Income.amount, Income.count_type,
+                                                                            Income.pay_status, Income.counterparty,
+                                                                            Income.goods)
+        income_result = [dict(zip(r.keys(), r)) for r in data]
+        for r in income_result:
+            find_datetime(r)
         return json.dumps(income_result)
 
 
@@ -76,7 +99,7 @@ def upload():
         csv_file.save(file_path)
         data_json = read_csv(file_path, desc)
         save_to_db(data_json)
-        return redirect(url_for('admin.data'))
+        return redirect(url_for('admin.table_data'))
     return render_template('form_file_upload.html', form=form)
 
 
@@ -134,3 +157,8 @@ def package():
 @admin_bp.route('/about', methods=['GET'])
 def about():
     return render_template('about.html')
+
+
+@admin_bp.route('/file_manage', methods=['GET'])
+def file_manage():
+    return render_template('file_manager.html')

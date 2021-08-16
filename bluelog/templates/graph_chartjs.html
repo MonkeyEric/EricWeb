@@ -5,16 +5,13 @@
     {{self.pheader()}}
     <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-        <h2>Chart.js</h2>
+        <h2>数据分析</h2>
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="{{url_for('admin.index')}}">主页</a>
             </li>
-            <li class="breadcrumb-item">
-                <a>图表</a>
-            </li>
             <li class="breadcrumb-item active">
-                <strong>Chart</strong>
+                <strong>echart分析</strong>
             </li>
         </ol>
     </div>
@@ -25,96 +22,64 @@
             <div class="col-lg-3">
                 <div class="ibox">
                     <div class="ibox-content">
-                        <h5>收入</h5>
-                        <h1 class="no-margins">886,200</h1>
+                        <h5>存储</h5>
+                        <h2 class="no-margins">￥886,200</h2>
                         <div class="stat-percent font-bold text-navy">98% <i class="fa fa-bolt"></i></div>
-                        <small>总收入</small>
+
                     </div>
                 </div>
             </div>
             <div class="col-lg-3">
                 <div class="ibox">
                     <div class="ibox-content">
-                        <h5>上个月收入</h5>
-                        <h1 class="no-margins">1 738,200</h1>
+                        <h5>上个月支出</h5>
+                        <h2 class="no-margins">￥1 738,200</h2>
                         <div class="stat-percent font-bold text-navy">98% <i class="fa fa-bolt"></i></div>
-                        <small>总收入</small>
+
                     </div>
                 </div>
             </div>
             <div class="col-lg-3">
                 <div class="ibox">
                     <div class="ibox-content">
-                        <h5>最后一天收入</h5>
-                        <h1 class="no-margins">-200,100</h1>
-                        <div class="stat-percent font-bold text-danger">12% <i class="fa fa-level-down"></i></div>
-                        <small>总收入</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="ibox">
-                    <div class="ibox-content">
-                        <h5>全部收入</h5>
-                        <h1 class="no-margins">54,200</h1>
+                        <h5>支出费用最高的类型</h5>
+                         <h2 class="no-margins">54,200</h2>
                         <div class="stat-percent font-bold text-danger">24% <i class="fa fa-level-down"></i></div>
-                        <small>总收入</small>
+
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>支出次数最高的类型</h5>
+                        <h2 class="no-margins">54,200</h2>
+                        <div class="stat-percent font-bold text-danger">24% <i class="fa fa-level-down"></i></div>
+
                     </div>
                 </div>
             </div>
         </div>
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>线图
-                        <small>具有自定义颜色</small>
-                    </h5>
+                    <h5>消费总计</h5>
                 </div>
                 <div class="ibox-content">
-                    <div>
-                        <canvas id="lineChart" height="140"></canvas>
-                    </div>
+                  <div id="main2" style="height: 300px"></div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>条形图</h5>
+                    <h5>消费类型总计</h5>
                 </div>
                 <div class="ibox-content">
-                    <div>
-                        <canvas id="barChart" height="140"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="ibox ">
-                <div class="ibox-title">
-                    <h5>极线图</h5>
-
-                </div>
-                <div class="ibox-content">
-                    <div class="text-center">
-                        <canvas id="polarChart" height="140"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6">
-            <div class="ibox ">
-                <div class="ibox-title">
-                    <h5>饼图</h5>
-
-                </div>
-                <div class="ibox-content">
-                    <div>
-                        <canvas id="doughnutChart" height="140"></canvas>
-                    </div>
+                 <div id="main3" style="height: 380px"></div>
                 </div>
             </div>
         </div>
@@ -123,21 +88,418 @@
         <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>雷达图</h5>
+                    <h5>收入支出比</h5>
                 </div>
                 <div class="ibox-content">
-                    <div>
-                        <canvas id="radarChart"></canvas>
+                    <div id="main" style="height: 440px"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="row">
+        <div class="col-lg-6">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>Top3消费类型折线图</h5>
+
+                </div>
+                <div class="ibox-content">
+                    <div class="text-center">
+                        <div id="main4" style="height: 370px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="col-lg-6">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>Top5商品支付次数</h5>
+
+                </div>
+                <div class="ibox-content">
+                    <div class="text-center">
+                        <div id="main5" style="height: 370px"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
     </div>
     {{self.footer()}}
 </div>
 {% endblock%}
 {%block script%}
+<script src="{{url_for('static',filename='js/echarts.js')}}"></script>
+<script type="text/javascript">
+   $(function (){
+        // 每个月的收入指出比
+        var chartDom1 = document.getElementById('main');
+        var myChart1 = echarts.init(chartDom1, 'dark');
+        var option1;
 
-    <script src="{{url_for('static',filename='js/demo/chartjs-demo.js')}}"></script>
+        option1 = {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        legend: {
+            data: ['利润', '支出', '收入']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: [
+            {
+                type: 'value'
+            }
+        ],
+        yAxis: [
+            {
+                type: 'category',
+                axisTick: {
+                    show: false
+                },
+                data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+            }
+        ],
+        series: [
+            {
+                name: '利润',
+                type: 'bar',
+                label: {
+                    show: true,
+                    position: 'inside'
+                },
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [200, 170, 240, 244, 200, 220, 210]
+            },
+            {
+                name: '收入',
+                type: 'bar',
+                stack: '总量',
+                label: {
+                    show: true
+                },
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [320, 302, 341, 374, 390, 450, 420]
+            },
+            {
+                name: '支出',
+                type: 'bar',
+                stack: '总量',
+                label: {
+                    show: true,
+                    position: 'left'
+                },
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [-120, -132, -101, -134, -190, -230, -210]
+            }
+        ]
+        };
+
+        option1 && myChart1.setOption(option1);
+
+       //每个月的
+        var chartDom = document.getElementById('main2');
+        var myChart = echarts.init(chartDom, 'dark');
+        var option;
+
+        option = {
+        tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'cross',
+            crossStyle: {
+                color: '#999'
+            }
+        }
+        },
+        toolbox: {
+        feature: {
+
+            magicType: {show: true, type: ['line', 'bar']},
+            restore: {show: true},
+            saveAsImage: {show: true}
+        }
+        },
+        legend: {
+        data: ['蒸发量', '降水量', '平均温度']
+        },
+        xAxis: [
+        {
+            type: 'category',
+            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+            axisPointer: {
+                type: 'shadow'
+            }
+        }
+        ],
+        yAxis: [
+        {
+            type: 'value',
+            name: '水量',
+            min: 0,
+            max: 250,
+            interval: 50,
+            axisLabel: {
+                formatter: '{value} ml'
+            }
+        },
+        {
+            type: 'value',
+            name: '温度',
+            min: 0,
+            max: 25,
+            interval: 5,
+            axisLabel: {
+                formatter: '{value} °C'
+            }
+        }
+        ],
+        series: [
+        {
+            name: '蒸发量',
+            type: 'bar',
+            data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
+        },
+        {
+            name: '降水量',
+            type: 'bar',
+            data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
+        },
+        {
+            name: '平均温度',
+            type: 'line',
+            yAxisIndex: 1,
+            data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+        }
+        ]
+        };
+
+        option && myChart.setOption(option);
+
+
+        //消费类型
+
+        var chartDom2 = document.getElementById('main3');
+        var myChart3 = echarts.init(chartDom2, 'dark');
+        var option3;
+
+        option3 = {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {            // Use axis to trigger tooltip
+                type: 'shadow'        // 'shadow' as default; can also be 'line' or 'shadow'
+            }
+        },
+        legend: {
+            data: ['Direct', 'Mail Ad', 'Affiliate Ad', 'Video Ad', 'Search Engine']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value'
+        },
+        yAxis: {
+            type: 'category',
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        series: [
+            {
+                name: 'Direct',
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: true
+                },
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [320, 302, 301, 334, 390, 330, 320]
+            },
+            {
+                name: 'Mail Ad',
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: true
+                },
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [120, 132, 101, 134, 90, 230, 210]
+            },
+            {
+                name: 'Affiliate Ad',
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: true
+                },
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [220, 182, 191, 234, 290, 330, 310]
+            },
+            {
+                name: 'Video Ad',
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: true
+                },
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [150, 212, 201, 154, 190, 330, 410]
+            },
+            {
+                name: 'Search Engine',
+                type: 'bar',
+                stack: 'total',
+                label: {
+                    show: true
+                },
+                emphasis: {
+                    focus: 'series'
+                },
+                data: [820, 832, 901, 934, 1290, 1330, 1320]
+            }
+        ]
+        };
+
+        option3 && myChart3.setOption(option3);
+
+        // top3的费用情况
+    var chartDom4 = document.getElementById('main4');
+    var myChart4 = echarts.init(chartDom4, 'dark');
+    var option4;
+
+    option4 = {
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
+                name: '邮件营销',
+                type: 'line',
+                stack: '总量',
+                 radius: '80%',
+                data: [120, 132, 101, 134, 90, 230, 210]
+            },
+            {
+                name: '联盟广告',
+                type: 'line',
+                stack: '总量',
+                 radius: '80%',
+                data: [220, 182, 191, 234, 290, 330, 310]
+            },
+            {
+                name: '视频广告',
+                type: 'line',
+                stack: '总量',
+                 radius: '80%',
+                data: [150, 232, 201, 154, 190, 330, 410]
+            },
+            {
+                name: '直接访问',
+                type: 'line',
+                stack: '总量',
+                 radius: '80%',
+                data: [320, 332, 301, 334, 390, 330, 320]
+            },
+            {
+                name: '搜索引擎',
+                type: 'line',
+                stack: '总量',
+                 radius: '80%',
+                data: [820, 932, 901, 934, 1290, 1330, 1320]
+            }
+        ]
+    };
+
+    option4 && myChart4.setOption(option4);
+
+    //top3
+    var chartDom5 = document.getElementById('main5');
+    var myChart5 = echarts.init(chartDom5, 'dark');
+    var option5;
+
+    option5 = {
+
+    tooltip: {
+    trigger: 'item'
+    },
+    legend: {
+        top: '5%',
+        left: 'center'
+    },
+    series: [
+    {
+        name: '访问来源',
+        type: 'pie',
+        radius: '70%',
+        data: [
+            {value: 1048, name: '搜索引擎'},
+            {value: 735, name: '直接访问'},
+            {value: 580, name: '邮件营销'},
+            {value: 484, name: '联盟广告'},
+            {value: 300, name: '视频广告'}
+        ],
+        emphasis: {
+            itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+        }
+    }
+    ]
+    };
+
+    option5 && myChart5.setOption(option5);
+
+        })
+
+
+
+</script>
 {% endblock%}

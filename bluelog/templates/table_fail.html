@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% block title%}收支表格{% endblock%}
+{% block head%}
+<link href="{{url_for('static',filename='css/plugins/jQueryUI/jquery-ui-1.10.4.custom.min.css')}}" rel="stylesheet">
+<link href="{{url_for('static',filename='css/plugins/jqGrid/ui.jqgrid.css')}}" rel="stylesheet">
+<style>
+    /* Additional style to fix warning dialog position */
+    #alertmod_table_list_2 {
+        top: 900px !important;
+    }
+
+</style>
+{% endblock%}
+{% block wrapper%}
+        <div id="page-wrapper" class="gray-bg">
+        {{ self.pheader() }}
+            <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-12">
+                    <h2>数据表</h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{url_for('admin.index')}}">主页</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a>收支分析</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <strong>表格</strong>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <div class="wrapper wrapper-content  animated fadeInRight">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox ">
+                            <div class="ibox-content">
+                                <div class="jqGrid_wrapper">
+                                    <table id="table_list_2"></table>
+                                    <div id="pager_list_2"></div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {{ self.footer() }}
+        </div>
+{% endblock%}
+
+{% block script%}
+
+
+
+    <!-- jqGrid -->
+    <script src="{{url_for('static',filename='js/plugins/jqGrid/i18n/grid.locale-en.js')}}"></script>
+    <script src="{{url_for('static',filename='js/plugins/jqGrid/jquery.jqGrid.min.js')}}"></script>
+
+    <script>
+        $(document).ready(function () {
+            var table_data=[]
+            //请求表格中的数据
+            $.ajax({
+                url:'/table',
+                type:'GET',
+                data:{},
+                dataType:'json',
+                success:function(income_result){
+                    table_data=income_result
+                },
+                error:function(){
+                    console.log('请求出错！');
+                }
+            })
+            // Examle data for jqGrid
+
+              //选中行启用行编辑
+
+
+
+            // Configuration for jqGrid Example 2
+            $("#table_list_2").jqGrid({
+                // url: '/table',
+                datatype: "local",
+                height: 450,
+                autowidth: true,
+                shrinkToFit: true,
+                rowNum: 20,
+                rowList: [10, 20, 30],
+                colNames: ['收支', '金额','统计种类', '商品名称',  '支付状态', '交易对方', '交易时间'],
+                colModel:[
+                    {name:'income_expense',index:'income_expense', editable: true, width:30, sorttype:"int",search:true},
+                    {name:'amount',index:'amount', editable: true, width:40, align:"left",sorttype:"float", formatter:"number"},
+                    {name:'count_type',index:'count_type', editable: true, edittype:'select', width:90, formatter:"date", editoptions: {value: "1:在用; 2:空闲; 3:故障" }},
+                    {name:'goods',index:'goods', editable: true, width:100},
+                     {name:'pay_status',index:'pay_status', editable: true, width:50},
+                     {name:'counterparty',index:'counterparty', editable: true, width:100},
+                     {name:'deal_date',index:'deal_date', editable: true, width:100,sorttype:"date"},
+                ],
+                pager: "#pager_list_2",
+                caption: "收支数据表",
+                multiselect: true,
+                sortname : 'deal_date',
+                sortorder : "desc",
+                viewrecords : true,
+            });
+            for ( var i = 0; i <= table_data.length; i++){
+            jQuery("#table_list_2").jqGrid('addRowData', i + 1, table_data[i]);
+          }
+
+
+            // Add selection
+            $("#table_list_2").setSelection(1, true);
+
+            // Setup buttons
+            $("#table_list_2").jqGrid('navGrid', '#pager_list_2',
+                        //options
+                        {edit:true,add:true,del:true
+                        },
+                        //edit options
+                       {
+                           editCaption: "修改数据",
+                           bSubmit: "提交",
+                           bCancel: "退出",
+                                },
+                        // add options
+                        {
+                            addCaption: "添加数据",
+                            bSubmit: "提交",
+                            bCancel: "退出",
+
+                        },
+                        // del options
+                        {
+                            caption: "删除",
+                            msg: "删除选中的数据嘛？",
+                            bSubmit: "删除",
+                            bCancel: "关闭",
+
+                            },
+
+            );
+
+            // Add responsive to jqGrid
+            $(window).bind('resize', function () {
+                var width = $('.jqGrid_wrapper').width();
+                $('#table_list_2').setGridWidth(width);
+            });
+
+
+            setTimeout(function(){
+                $('.wrapper-content').removeClass('animated fadeInRight');
+            },700);
+
+        });
+
+    </script>
+{% endblock%}
