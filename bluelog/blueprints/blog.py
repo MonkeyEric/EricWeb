@@ -42,7 +42,7 @@ def show_post(post_id):
         form = AdminCommentFrom()
         form.author.data = current_user.name
         form.email.data = current_app.config['WEB_EMAIL']
-        form.site.data = url_for('blog.index')
+        form.site.data = url_for('blog.blog_get')
         from_admin = True
         reviewed = True
     else:

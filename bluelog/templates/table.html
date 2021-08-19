@@ -1,32 +1,67 @@
 {% extends "base.html" %}
 {% block title%}首页{% endblock%}
-<body>
+
+{%block head%}
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
+<link href="{{url_for('static',filename='layui/css/layui.css')}}" rel="stylesheet">
+<link href="{{url_for('static',filename='layui/css/modules/code.css')}}" rel="stylesheet">
+<style>
+  .layui-table-cell {
+        height: auto;
+        overflow: visible !important;
+		}
+    /*使列表框与表格单元格重合*/
+    td .layui-form-select {
+        margin-top: -10px;
+        margin-left: -15px;
+        margin-right: -15px;
+    }
+    .layui-table-grid-down { display: none; }
+</style>
+{% endblock %}
 {% block wrapper%}
 <div id="page-wrapper" class="gray-bg">
-<table class="layui-hide" id="demo" lay-filter="test"></table>
+<table class="layui-table-cell" id="demo" lay-filter="test"></table>
 </div>
+
+
 
 {% endblock%}
 {%block script%}
-<script type="text/html" id="barDemo">
-  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
-  <a class="layui-btn layui-btn-xs" lay-event="more">更多 <i class="layui-icon layui-icon-down"></i></a>
+
+<script src="{{url_for('static',filename='layui/layui.js')}}"></script>
+<script type="text/html" id="WHAttr">
+    <select lay-filter='table' lay-verify=''>
+
+        {%for father in fathers%}
+        <option name="count_type_f" value="{{father}}">{{father}}</option>
+        {% endfor %}
+    </select>
 </script>
-<script src="{{url_for('static',filename='js/layui.js')}}"></script>
+
+
 <script>
- 
+var csrftoken = $('meta[name=csrf-token]').attr('content')
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken)
+        }
+    }
+})
+
 //加载模块  
 layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate', function(){
   //得到各种内置组件
   var layer = layui.layer //弹层
   ,laypage = layui.laypage //分页
-  ,laydate = layui.laydate //日期
   ,table = layui.table //表格
-  ,carousel = layui.carousel //轮播
   ,upload = layui.upload //上传
   ,element = layui.element //元素操作
-  ,slider = layui.slider //滑块
   ,dropdown = layui.dropdown //下拉菜单
+    ,form = layui.form
   
   //向世界问个好
   layer.msg('Hello World');
@@ -41,27 +76,80 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
   //执行一个 table 实例
   table.render({
     elem: '#demo'
-    ,height: 420
-    ,url: '/demo/table/user/' //数据接口
+    ,url: '/table' //数据接口
     ,title: '用户表'
     ,page: true //开启分页
     ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
     ,totalRow: true //开启合计行
+    ,limit: 20
+    ,parseData:function (res){
+      return{
+        "code":0
+        ,"msg":""
+        ,"count":res['total']
+        ,"data":res['data']
+      }
+    }
     ,cols: [[ //表头
       {type: 'checkbox', fixed: 'left'}
-      ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left', totalRowText: '合计：'}
-      ,{field: 'username', title: '用户名', width:80}
-      ,{field: 'experience', title: '积分', width: 90, sort: true, totalRow: true}
-      ,{field: 'sex', title: '性别', width:80, sort: true}
-      ,{field: 'score', title: '评分', width: 80, sort: true, totalRow: '100分'}
-      ,{field: 'city', title: '城市', width:150} 
-      ,{field: 'sign', title: '签名', width: 200}
-      ,{field: 'classify', title: '职业', width: 100}
-      ,{field: 'wealth', title: '财富', width: 135, sort: true, totalRow: true}
-      ,{fixed: 'right', width: 150, align:'center', toolbar: '#barDemo'}
+      ,{field: 'deal_date', title: '交易时间', width:170, sort: true, totalRowText: '合计：'}
+      ,{field: 'counterparty', title: '交易对方', sort: true}
+      ,{field: 'income_expense', title: '收支', width: 80, sort: true}
+      ,{field: 'count_type_f', title: '父类',width: 160, sort: true,templet:"#WHAttr"}
+      ,{field: 'count_type_s', title: '子类',width: 160, sort: true}
+      ,{field: 'amount', title: '金额',width: 150, sort: true, totalRow: true}
+      ,{field: 'goods', title: '商品',sort: true}
     ]]
+      ,done:function (){
+        //实现数据同步
+        var divForm = $("#demo").next();  // 获取表格，tableId是表格的id
+        var tableCache = layui.table.cache['demo'];  // 获取表格缓存数据，tableCacheId也是表格的id
+        var trJqs = divForm.find(".layui-table-body tr");  // 获取表格body下的所有tr标签
+        trJqs.each(function () {  // 遍历每个tr标签
+        var trJq = $(this);  // 获得当前遍历的tr标签
+        var dataIndex = trJq.attr("data-index");  // 得到当前数据行的data-index，即为第几行数据
+        trJq.find("td").each(function () {  // 遍历tr标签下的每一个td标签
+        var tdJq = $(this);  // 获得当前遍历的td标签
+        var fieldName = tdJq.attr("data-field");  // 获得当前td标签的字段名
+        var selectJq = tdJq.find("select");  // 获得当前td标签下的select标签
+        if (selectJq.length == 1) {  // 判断select标签是否存在
+            selectJq.eq(0).val(tableCache[dataIndex][fieldName]);  // 将表格里的缓存数据赋值给select标签
+        }
+    });
+    });
+    form.render('select');  // 重新加载select表单
+
+        //数据动态更新
+        form.on('select(table)', function (data) {
+        var tableCache = table.cache['demo'],  // 获得数据表格的缓存数据
+
+        value = data.value,  // 得到下拉列表改变后的value值
+        field = data.othis.parents('td').attr('data-field'),  // 获得下拉列表的父级td标签的字段名称
+        dataIndex = parseInt(data.othis.parents('tr').attr('data-index')),  // 获得变化的下拉列表所在的行index
+        lineDate = tableCache[dataIndex];  // 获得数据表格中该行的缓存数据
+        if (tableCache[dataIndex][field] != value) {  // 判断数据是否发生了变化
+        // 这里可以写ajax实现与后台数据的交互
+            console.log(lineDate)
+            $.ajax({
+                type: "POST",
+                url: "{{url_for('admin.table')}}",
+                data: {name: 'jenny'},
+                contentType: 'application/json;charset=utf-8',//请求数据类型必须有
+                dataType: "json",
+                async: true,//异步
+                success: function(res) {
+                    // data = jQuery.parseJSON(data);  //dataType指明了返回数据为json类型，故不需要再反序列化
+                    console.log(res)
+                }
+            });
+        // tableCache[dataIndex][field] = value;  // 将修改后的数据更新到数据表格的缓存数据中
+        }
+        });
+      }
   });
-  
+
+
+
   //监听头工具栏事件
   table.on('toolbar(test)', function(obj){
     var checkStatus = table.checkStatus(obj.config.id)
@@ -87,6 +175,14 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
         }
       break;
     };
+  });
+
+  //监听单元格编辑
+  table.on('edit(test3)', function(obj){
+    var value = obj.value //得到修改后的值
+    ,data = obj.data //得到所在行所有键值
+    ,field = obj.field; //得到字段
+    layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改值为：'+ util.escape(value));
   });
   
   //监听行工具事件
@@ -123,51 +219,9 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
       })
     }
   });
+
   
-  //执行一个轮播实例
-  carousel.render({
-    elem: '#test1'
-    ,width: '100%' //设置容器宽度
-    ,height: 200
-    ,arrow: 'none' //不显示箭头
-    ,anim: 'fade' //切换动画方式
-  });
-  
-  //将日期直接嵌套在指定容器中
-  var dateIns = laydate.render({
-    elem: '#laydateDemo'
-    ,position: 'static'
-    ,calendar: true //是否开启公历重要节日
-    ,mark: { //标记重要日子
-      '0-10-14': '生日'
-      ,'2020-01-18': '小年'
-      ,'2020-01-24': '除夕'
-      ,'2020-01-25': '春节'
-      ,'2020-02-01': '上班'
-    } 
-    ,done: function(value, date, endDate){
-      if(date.year == 2017 && date.month == 11 && date.date == 30){
-        dateIns.hint('一不小心就月底了呢');
-      }
-    }
-    ,change: function(value, date, endDate){
-      layer.msg(value)
-    }
-  });
-  
-  //分页
-  laypage.render({
-    elem: 'pageDemo' //分页容器的id
-    ,count: 1000 //数据总数
-    ,limit: 10 //每页显示的数据条数
-    ,skin: '#1E9FFF' //自定义选中色值
-    //,layout: ['prev', 'page', 'next', 'count', 'limit', 'refresh', 'skip'] //自定义排版
-    ,jump: function(obj, first){
-      if(!first){
-        layer.msg('第'+ obj.curr +'页', {offset: 'b'});
-      }
-    }
-  });
+
   
   //上传
   upload.render({
@@ -181,12 +235,6 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
     ,before: function(){
       layer.msg('上传中', {icon: 16, time: 0});
     }
-  });
-  
-  //滑块
-  var sliderInst = slider.render({
-    elem: '#sliderDemo'
-    ,input: true //输入框
   });
 
 });

@@ -47,3 +47,8 @@ class LinkForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(1, 30)])
     url = StringField('URL', validators=[DataRequired(), Length(1, 255)])
     submit = SubmitField()
+
+
+class IncomeForm(FlaskForm):
+    count_type_f = StringField('count_type_f', validators=[DataRequired(), Length(1, 30)])
+    count_type_s = StringField('count_type_f', validators=[DataRequired(), Length(1, 30)])

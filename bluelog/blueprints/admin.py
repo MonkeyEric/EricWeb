@@ -1,19 +1,20 @@
 # coding:utf-8
 from flask import Blueprint, render_template, g, session, send_from_directory, request, current_app, redirect, url_for
 from flask_login import login_required, current_user
+from flask_wtf.csrf import generate_csrf
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import CombinedMultiDict
 
 from bluelog.modules.user_github import GithubUser
 from bluelog.modules.blog import *
 from bluelog.modules.income_expense import Income
-from bluelog.utils.forms import IncomeExpenseForm
+from bluelog.utils.forms import IncomeExpenseForm, IncomeForm
 from bluelog.utils.csv_tools import read_csv, save_to_db
-from bluelog.config import *
+from bluelog import config
 
 from datetime import datetime as cdatetime
-from datetime import date,time
-from sqlalchemy import DateTime,Numeric,Date,Time
+from datetime import date, time
+from sqlalchemy import DateTime, Numeric, Date, Time
 import json
 import os
 
@@ -23,19 +24,30 @@ admin_bp = Blueprint('admin', __name__)
 def find_datetime(value):
     for v in value:
         if (isinstance(value[v], cdatetime)):
-            value[v] = convert_datetime(value[v])   # 这里原理类似，修改的字典对象，不用返回即可修改
+            value[v] = convert_datetime(value[v])  # 这里原理类似，修改的字典对象，不用返回即可修改
 
 
 def convert_datetime(value):
     if value:
-        if(isinstance(value,(cdatetime,DateTime))):
+        if (isinstance(value, (cdatetime, DateTime))):
             return value.strftime("%Y-%m-%d %H:%M:%S")
-        elif(isinstance(value,(date,Date))):
+        elif (isinstance(value, (date, Date))):
             return value.strftime("%Y-%m-%d")
-        elif(isinstance(value,(Time,time))):
+        elif (isinstance(value, (Time, time))):
             return value.strftime("%H:%M:%S")
     else:
         return ""
+
+
+
+
+@admin_bp.after_request
+def after_request(response):
+    # 调用函数生成csrf token
+    csrf_token = generate_csrf()
+    # 设置cookie传给前端
+    response.set_cookie('csrf_token', csrf_token)
+    return response
 
 
 @admin_bp.before_request
@@ -72,20 +84,33 @@ def chart():
 
 @admin_bp.route('/data', methods=['GET', 'POST'])
 def table_data():
-    return render_template('table.html')
+    form = IncomeForm()
+    print(config.Expense_type.keys())
+    print(form.csrf_token)
+    return render_template('table.html', fathers=list(config.Expense_type.keys()))
 
 
 @admin_bp.route('/table', methods=['GET', 'POST'])
 def table():
     if request.method == 'GET':
-        data = Income.query.order_by(Income.deal_date.desc()).with_entities(Income.deal_date, Income.income_expense,
-                                                                            Income.amount, Income.count_type,
-                                                                            Income.pay_status, Income.counterparty,
-                                                                            Income.goods)
-        income_result = [dict(zip(r.keys(), r)) for r in data]
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('limit', 20, type=int)
+        pagination = Income.query.order_by(Income.deal_date.desc()).with_entities(Income.deal_date,
+                                                                                  Income.income_expense,
+                                                                                  Income.amount, Income.deal_number,
+                                                                                  Income.count_type_f,
+                                                                                  Income.count_type_s,
+                                                                                  Income.pay_status,
+                                                                                  Income.counterparty,
+                                                                                  Income.goods).paginate(page,
+                                                                                                         per_page=per_page)
+        income_result = [dict(zip(r.keys(), r)) for r in pagination.items]
         for r in income_result:
             find_datetime(r)
-        return json.dumps(income_result)
+        return json.dumps({'data': income_result, 'total': pagination.total, 'pages': pagination.pages})
+    elif request.method == 'POST':
+        print(request.args)
+        return json.dumps({'code': 10000, 'msg': 'ok'})
 
 
 @admin_bp.route('/upload', methods=['GET', 'POST'], strict_slashes=False)

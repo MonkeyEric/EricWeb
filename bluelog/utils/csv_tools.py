@@ -18,19 +18,35 @@ def read_csv(filename, desc):
     table_data = []
     deal_source = ''
     with open(filename, 'r') as file:
-        if '支付宝' in desc:
-            csv_data = csv.DictReader(file, fieldnames=Alipay_head.values())
-            deal_source = 'alipay'
+        if '支付宝' in desc or '微信' in desc:
+            if '支付宝' in desc:
+                csv_data = csv.DictReader(file, fieldnames=Alipay_head.values())
+                deal_source = 'alipay'
+            elif '微信' in desc:
+                csv_data = csv.DictReader(file, fieldnames=Wechat_head.values())
+                deal_source = 'wechat'
+            for row in csv_data:
+                # 读取的内容是字典格式的
+                try:
+                    if row.get('deal_number').isdigit():
+                        if deal_source:
+                            row['deal_source'] = deal_source
+                        table_data.append(dict(row))
+                except:
+                    continue
+            return table_data
         else:
-            csv_data = csv.DictReader(file, fieldnames=Wechat_head.values())
-            deal_source = 'wechat'
-        for row in csv_data:
-            # 读取的内容是字典格式的
-            if row.get('deal_number').isdigit():
-                row['deal_source'] = deal_source
-                table_data.append(dict(row))
+            csv_data = csv.DictReader(file, fieldnames=detail_head.values())
+            try:
+                for row in csv_data:
+                    # 读取的内容是字典格式的
+                    if row.get('money')!='金额':
+                        if deal_source:
+                            row['deal_source'] = deal_source
+                        table_data.append(dict(row))
+            finally:
+                return table_data
 
-        return table_data
 
 
 def save_to_db(data):
@@ -49,6 +65,7 @@ def save_to_db(data):
                 else:
                     i['logic2'] = 0
                 i['amount'] = round(i['logic2']*i['logic1']*float(i.get('money')),2)
+
                 income = Income(
                     deal_number=i.get('deal_number'),
                     income_expense=i.get('income_expense'),
@@ -56,7 +73,8 @@ def save_to_db(data):
                     logic2=i.get('logic2'),
                     deal_date=i.get('deal_date'),
                     money=i.get('money'),
-                    count_type=i.get('count_type'),
+                    count_type_s=i.get('count_type').split('-')[1] if i.get('count_type') != '非必需品' else '非必需品',
+                    count_type_f=i.get('count_type').split('-')[0] if i.get('count_type') != '非必需品' else '非必需品',
                     pay_status=i.get('pay_status'),
                     deal_type=i.get('deal_type'),
                     counterparty=i.get('counterparty'),
