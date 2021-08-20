@@ -65,5 +65,12 @@
 {{ super() }}
 {{ moment.include_moment() }}
 {{moment.locale('zh-cn')}}
+<script>
+    $(document).ready(function () {
+
+
+        $("#two").addClass("active")
+    })
+</script>
 {% endblock %}
 

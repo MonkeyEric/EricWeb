@@ -73,7 +73,7 @@
                         </div>
                     </li>
 <!--                    首页-->
-                    <li class="active">
+                    <li id="one">
                         <a href="{{url_for('admin.index')}}">
                             <i class="fa fa-home"></i>
                             <span class="nav-label">首页</span>
@@ -81,7 +81,7 @@
                         </a>
                     </li>
 <!--博客列表-->
-                    <li>
+                    <li id="two">
                         <a href="{{url_for('blog.blog_get')}}">
                             <i class="fa fa-book"></i>
                             <span class="nav-label">博客列表</span>
@@ -90,7 +90,7 @@
                     </li>
 
 <!--                    收藏网站-->
-                    <li>
+                    <li id="three">
                         <a href="{{url_for('admin.favourite')}}">
                             <i class="fa fa-heart"></i>
                             <span class="nav-label">收藏网站</span>
@@ -98,14 +98,14 @@
                         </a>
                     </li>
 <!--个人wiki-->
-                    <li>
+                    <li id="four">
                         <a href="#">
                             <i class="fa fa-sitemap"></i>
                             <span class="nav-label">个人wiki</span>
                         </a>
                     </li>
 <!--                    关于博主-->
-                    <li>
+                    <li id="five">
                         <a href="{{url_for('admin.about')}}" >
                             <i class="fa fa-info"></i>
                             <span class="nav-label">关于博主</span>
@@ -117,56 +117,34 @@
 
                     {% if  user_info.is_login %}
                     <!--                    小工具-->
-                    <li>
+                    <li id="cat">
                         <a href="#">
-                            <i class="fa fa-grav"></i>
-                            <span class="nav-label">小工具</span>
+                            <i class="fa fa-heart"></i>
+                            <span class="nav-label">猫咪专属</span>
                             <span class="fa arrow"></span>
                         </a>
                         <ul class="nav nav-second-level collapse">
-<!--                            <li>-->
-<!--                                <a href="#">-->
-<!--                                    <i class="fa fa-star"></i>-->
-<!--                                    <span class="nav-label"></span>-->
-<!--                                    <span class="fa arrow"></span>-->
-<!--                                </a>-->
-<!--                                <ul class="nav nav-third-level collapse">-->
-<!--&lt;!&ndash;                                    <li><a href="{{url_for('admin.timeline')}}">时间线</a></li>&ndash;&gt;-->
-<!--                                    -->
-<!--                                </ul>-->
-<!--                            </li>-->
-                            <li>
-                                <a href="#">
-                                    <i class="fa fa-heart"></i>
-                                    <span class="nav-label">猫咪专属</span>
-                                    <span class="fa arrow"></span>
-                                </a>
-                                <ul class="nav nav-third-level collapse">
-                                   <li><a href="{{url_for('admin.gallery')}}">相册</a></li>
-                                    <li><a href="{{url_for('admin.video')}}">视频</a></li>
-                                </ul>
-                             </li>
-                            <li>
-                                <a href="#">
-                                    <i class="fa fa-bar-chart-o"></i>
-                                    <span class="nav-label">收支分析</span>
-                                    <span class="fa arrow"></span>
-                                </a>
-                                <ul class="nav nav-third-level collapse">
-                                    <li><a href="{{url_for('admin.chart')}}">可视化</a></li>
-                                    <li><a href="{{url_for('admin.table_data')}}">数据展示</a></li>
-                                    <li><a href="{{url_for('admin.upload')}}">数据录入</a></li>
-                                </ul>
-                             </li>
-
-
-                            <li>
-                                <a href="{{url_for('admin.file_manage')}}">
-                                    <i class="fa "></i>
-                                <span class="nav-label">文件管理</span>
-                                </a>
-                            </li>
+                           <li id="seven"><a href="{{url_for('admin.gallery')}}">相册</a></li>
+                            <li id="eight"><a href="{{url_for('admin.video')}}">视频</a></li>
                         </ul>
+                     </li>
+                    <li id="income">
+                        <a href="#">
+                            <i class="fa fa-bar-chart-o"></i>
+                            <span class="nav-label">收支分析</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level collapse">
+                            <li id="nine"><a href="{{url_for('admin.chart')}}">可视化</a></li>
+                            <li id="ten"><a href="{{url_for('admin.table_data')}}">数据展示</a></li>
+                            <li id="eleven"><a href="{{url_for('admin.upload')}}">数据录入</a></li>
+                        </ul>
+                     </li>
+                    <li id="twelve">
+                        <a href="{{url_for('admin.file_manage')}}">
+                            <i class="fa "></i>
+                        <span class="nav-label">文件管理</span>
+                        </a>
                     </li>
                     {% endif %}
 
@@ -401,8 +379,6 @@
         </div>
     </div>
     <script>
-        // Config box
-
         // Enable/disable fixed top navbar
         $('#fixednavbar').click(function () {
             if ($('#fixednavbar').is(':checked')) {

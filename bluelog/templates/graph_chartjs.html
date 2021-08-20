@@ -133,6 +133,8 @@
 <script src="{{url_for('static',filename='js/echarts.js')}}"></script>
 <script type="text/javascript">
    $(function (){
+        $("#income a").click()
+        $("#nine").addClass('active')
         // 每个月的收入指出比
         var chartDom1 = document.getElementById('main');
         var myChart1 = echarts.init(chartDom1, 'dark');

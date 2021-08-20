@@ -10,11 +10,11 @@ from bluelog.modules.blog import *
 from bluelog.modules.income_expense import Income
 from bluelog.utils.forms import IncomeExpenseForm, IncomeForm
 from bluelog.utils.csv_tools import read_csv, save_to_db
-from bluelog import config
+from bluelog import config_dict
 
 from datetime import datetime as cdatetime
-from datetime import date, time
-from sqlalchemy import DateTime, Numeric, Date, Time
+from datetime import date, time, timedelta
+from sqlalchemy import DateTime, Numeric, Date, Time, func
 import json
 import os
 
@@ -79,15 +79,38 @@ def index():
 
 @admin_bp.route('/chart', methods=['GET'])
 def chart():
+    # 存储
+    storage = round(db.session.query(func.sum(Income.amount)).scalar(),2)
+    # 上个月支出
+    now = cdatetime.now()
+    last_month = now.replace(month=now.month-1)
+    expand = round(db.session.query(func.sum(Income.money)).filter(Income.income_expense=="支出",Income.deal_date>=last_month,Income.deal_date<now).scalar(),2)
+    # 近一个月支出最高得类型
+    high_money_count_type_s = Income.query.filter(Income.deal_date>=now-timedelta(days=30)).order_by(Income.money.desc()).first()
+    high_money = {'count_type_s':high_money_count_type_s.count_type_s,'money':high_money_count_type_s.money}
+    print(high_money_count_type_s)
+    # 近一个月支出次数最高得类型
+    high_count = db.session.query(func.count(Income.count_type_s)).scalar()
+    print(high_count)
+    # 消费总计
+    # 消费类型总计
+    # 收入支出比
+    # TOP3消费类型折线图
+    # Top5支付次数扇形图
+
     return render_template('graph_chartjs.html')
 
 
 @admin_bp.route('/data', methods=['GET', 'POST'])
 def table_data():
     form = IncomeForm()
-    print(config.Expense_type.keys())
-    print(form.csrf_token)
-    return render_template('table.html', fathers=list(config.Expense_type.keys()))
+
+    son = []
+    for key,value in config_dict.Expense_type.items():
+        son.append('——%s——'%key)
+        for j in value:
+            son.append(j)
+    return render_template('table.html', fathers=list(config_dict.Expense_type.keys()),sons=son)
 
 
 @admin_bp.route('/table', methods=['GET', 'POST'])
@@ -109,7 +132,11 @@ def table():
             find_datetime(r)
         return json.dumps({'data': income_result, 'total': pagination.total, 'pages': pagination.pages})
     elif request.method == 'POST':
-        print(request.args)
+        response = json.loads(request.data.decode('utf-8'))
+        deal_number = response['deal_number']
+        response.pop('deal_number')
+        res = Income.query.filter_by(deal_number=deal_number).update(response)
+        db.session.commit()
         return json.dumps({'code': 10000, 'msg': 'ok'})
 
 

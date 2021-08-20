@@ -1,5 +1,5 @@
 # coding:utf-8
-from bluelog.config import *
+from bluelog.config_dict import *
 from bluelog.utils.extensions import db
 from bluelog.modules.income_expense import Income
 from datetime import datetime

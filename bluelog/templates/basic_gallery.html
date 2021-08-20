@@ -135,4 +135,10 @@
 {% endblock %}
 {% block script%}
 <script src="{{url_for('static',filename='js/plugins/blueimp/jquery.blueimp-gallery.min.js')}}"></script>
+<script>
+    $(document).ready(function () {
+        $("#cat a").click()
+        $("#seven").addClass('active')
+    })
+</script>
 {% endblock %}

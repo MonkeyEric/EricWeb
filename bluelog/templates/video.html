@@ -124,6 +124,12 @@
 <script src="{{url_for('static',filename='js/plugins/video/responsible-video.js')}}"></script>
 
 <script>
+
+    $(document).ready(function () {
+        $("#cat a").click()
+        $("#eight").addClass('active')
+    })
+
     $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange', function (e){
         $('body').hasClass('fullscreen-video') ? $('body').removeClass('fullscreen-video') : $('body').addClass('fullscreen-video')
     });

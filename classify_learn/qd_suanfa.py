@@ -2,7 +2,7 @@
 import csv
 import datetime
 from functools import reduce
-from bluelog.config import *
+from bluelog.config_dict import *
 from datetime import datetime
 from collections import Counter
 import pandas as pd
