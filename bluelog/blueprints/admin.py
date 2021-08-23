@@ -14,7 +14,7 @@ from bluelog import config_dict
 
 from datetime import datetime as cdatetime
 from datetime import date, time, timedelta
-from sqlalchemy import DateTime, Numeric, Date, Time, func
+from sqlalchemy import DateTime, Numeric, Date, Time, func, desc
 import json
 import os
 
@@ -37,8 +37,6 @@ def convert_datetime(value):
             return value.strftime("%H:%M:%S")
     else:
         return ""
-
-
 
 
 @admin_bp.after_request
@@ -80,19 +78,23 @@ def index():
 @admin_bp.route('/chart', methods=['GET'])
 def chart():
     # 存储
-    storage = round(db.session.query(func.sum(Income.amount)).scalar(),2)
+    storage = round(db.session.query(func.sum(Income.amount)).scalar(), 2)
     # 上个月支出
     now = cdatetime.now()
-    last_month = now.replace(month=now.month-1)
-    expand = round(db.session.query(func.sum(Income.money)).filter(Income.income_expense=="支出",Income.deal_date>=last_month,Income.deal_date<now).scalar(),2)
+    last_month = now.replace(month=now.month - 1)
+    expand = round(
+        db.session.query(func.sum(Income.money)).filter(Income.income_expense == "支出", Income.deal_date >= last_month,
+                                                        Income.deal_date < now).scalar(), 2)
     # 近一个月支出最高得类型
-    high_money_count_type_s = Income.query.filter(Income.deal_date>=now-timedelta(days=30)).order_by(Income.money.desc()).first()
-    high_money = {'count_type_s':high_money_count_type_s.count_type_s,'money':high_money_count_type_s.money}
-    print(high_money_count_type_s)
+    high_money_count_type_s = Income.query.filter(Income.deal_date >= now - timedelta(days=30)).order_by(
+        Income.money.desc()).first()
+    high_money = {'count_type_s': high_money_count_type_s.count_type_s, 'money': high_money_count_type_s.money}
     # 近一个月支出次数最高得类型
-    high_count = db.session.query(func.count(Income.count_type_s)).scalar()
-    print(high_count)
+    order_by_type_s = func.count('*').label('total')
+    high_count = db.session.query(Income.count_type_s, func.count('*').label('total')).group_by(
+        Income.count_type_s).order_by(desc(order_by_type_s)).first().total
     # 消费总计
+
     # 消费类型总计
     # 收入支出比
     # TOP3消费类型折线图
@@ -106,11 +108,11 @@ def table_data():
     form = IncomeForm()
 
     son = []
-    for key,value in config_dict.Expense_type.items():
-        son.append('——%s——'%key)
+    for key, value in config_dict.Expense_type.items():
+        son.append('——%s——' % key)
         for j in value:
             son.append(j)
-    return render_template('table.html', fathers=list(config_dict.Expense_type.keys()),sons=son)
+    return render_template('table.html', fathers=list(config_dict.Expense_type.keys()), sons=son)
 
 
 @admin_bp.route('/table', methods=['GET', 'POST'])
