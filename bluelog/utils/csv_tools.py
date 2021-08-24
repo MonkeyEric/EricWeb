@@ -54,6 +54,7 @@ def save_to_db(data):
         if i.get('deal_number'):
             income_result = Income.query.filter_by(deal_number=i.get('deal_number'))
             if not income_result.count():
+                i['money'] = float(i.get('money').replace('￥',''))
                 if i.get('income_expense') == '支出':
                     i['logic1'] = -1
                 elif i.get('income_expense') == '收入':
@@ -65,7 +66,12 @@ def save_to_db(data):
                 else:
                     i['logic2'] = 0
                 i['amount'] = round(i['logic2']*i['logic1']*float(i.get('money')),2)
-
+                if not i.get('count_type'):
+                    count_type_f = ''
+                    count_type_s = ''
+                else:
+                    count_type_s = i.get('count_type').split('-')[1] if i.get('count_type') != '非必需品' else '非必需品',
+                    count_type_f = i.get('count_type').split('-')[0] if i.get('count_type') != '非必需品' else '非必需品',
                 income = Income(
                     deal_number=i.get('deal_number'),
                     income_expense=i.get('income_expense'),
@@ -73,8 +79,8 @@ def save_to_db(data):
                     logic2=i.get('logic2'),
                     deal_date=i.get('deal_date'),
                     money=i.get('money'),
-                    count_type_s=i.get('count_type').split('-')[1] if i.get('count_type') != '非必需品' else '非必需品',
-                    count_type_f=i.get('count_type').split('-')[0] if i.get('count_type') != '非必需品' else '非必需品',
+                    count_type_s=count_type_s,
+                    count_type_f=count_type_f,
                     pay_status=i.get('pay_status'),
                     deal_type=i.get('deal_type'),
                     counterparty=i.get('counterparty'),

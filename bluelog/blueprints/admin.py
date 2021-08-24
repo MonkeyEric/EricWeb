@@ -1,4 +1,6 @@
 # coding:utf-8
+import bdb
+
 from flask import Blueprint, render_template, g, session, send_from_directory, request, current_app, redirect, url_for
 from flask_login import login_required, current_user
 from flask_wtf.csrf import generate_csrf
@@ -14,7 +16,7 @@ from bluelog import config_dict
 
 from datetime import datetime as cdatetime
 from datetime import date, time, timedelta
-from sqlalchemy import DateTime, Numeric, Date, Time, func, desc
+from sqlalchemy import DateTime, Numeric, Date, Time, func, desc, extract,asc
 import json
 import os
 
@@ -92,15 +94,53 @@ def chart():
     # 近一个月支出次数最高得类型
     order_by_type_s = func.count('*').label('total')
     high_count = db.session.query(Income.count_type_s, func.count('*').label('total')).group_by(
-        Income.count_type_s).order_by(desc(order_by_type_s)).first().total
+        Income.count_type_s).order_by(desc(order_by_type_s)).first()
     # 消费总计
-
+    res = db.session.query(func.sum(Income.money).label('total_money'),extract('month',Income.deal_date).label('month'),extract('year',Income.deal_date).label('year')).filter(Income.income_expense=='支出').group_by(extract('month',Income.deal_date).label('month')).order_by(asc(Income.deal_date))
+    consume = {}
+    for i in res:
+        if not consume.get(i[2]):
+            consume[i[2]]={}
+        consume[i[2]][i[1]] = i[0]
+    for key,value in consume.items():
+        consume[key] = [round(value.get(i,0),2) for i in range(1,13)]
+    del res
+    res1 = db.session.query(func.count(Income.money).label('total_money'),extract('month',Income.deal_date).label('month'),extract('year',Income.deal_date).label('year')).filter(Income.income_expense=='支出').group_by(extract('month',Income.deal_date).label('month')).order_by(asc(Income.deal_date))
+    consume_count = {}
+    for i in res1:
+        if not consume_count.get(i[2]):
+            consume_count[i[2]] = {}
+        consume_count[i[2]][i[1]] = i[0]
+    for key, value in consume_count.items():
+        consume_count[key] = [round(value.get(i, 0), 2) for i in range(1, 13)]
+    print(consume_count)
+    del res1
     # 消费类型总计
     # 收入支出比
     # TOP3消费类型折线图
     # Top5支付次数扇形图
 
-    return render_template('graph_chartjs.html')
+    return render_template('graph_chartjs.html',storage=storage,expand=expand,high_money=high_money,high_count=high_count,consume=consume,consume_count=consume_count)
+
+
+@admin_bp.route('/chart_type', methods=['GET'])
+def chart_type():
+    res = db.session.query(Income.count_type_f,func.sum(Income.money).label('total_money'),extract('month',Income.deal_date).label('month'),extract('year',Income.deal_date).label('year')).filter(Income.income_expense=='支出').group_by(Income.count_type_f).order_by(asc(Income.deal_date))
+    consume_type = {}
+    for i in res:
+        if not consume_type.get(i[1]):
+            consume_type[i[0]] = {}
+
+        if not consume_type[i[0]].get(i[3]):
+            consume_type[i[0]][i[3]] ={}
+        consume_type[i[0]][i[3]][i[2]]=i[1]
+
+    for key, value in consume_type.items():
+        for j in range(2018,2024):
+            if not value.get(j):
+                value[j] = {}
+            value[j] =[round(value[j].get(i, 0), 2) for i in range(1, 13)]
+    return consume_type
 
 
 @admin_bp.route('/data', methods=['GET', 'POST'])
@@ -112,6 +152,7 @@ def table_data():
         son.append('——%s——' % key)
         for j in value:
             son.append(j)
+    print(list(config_dict.Expense_type.keys()))
     return render_template('table.html', fathers=list(config_dict.Expense_type.keys()), sons=son)
 
 
@@ -120,15 +161,42 @@ def table():
     if request.method == 'GET':
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('limit', 20, type=int)
-        pagination = Income.query.order_by(Income.deal_date.desc()).with_entities(Income.deal_date,
-                                                                                  Income.income_expense,
-                                                                                  Income.amount, Income.deal_number,
-                                                                                  Income.count_type_f,
-                                                                                  Income.count_type_s,
-                                                                                  Income.pay_status,
-                                                                                  Income.counterparty,
-                                                                                  Income.goods).paginate(page,
-                                                                                                         per_page=per_page)
+        son = request.args.get('son','')
+        father = request.args.get('father', '')
+        c_type = request.args.get('type', '')
+        if son and c_type :
+            pagination = Income.query.filter(Income.count_type_s==son,Income.income_expense==c_type).order_by(Income.deal_date.desc()).with_entities(Income.deal_date,
+                                                                                      Income.income_expense,
+                                                                                      Income.amount, Income.deal_number,
+                                                                                      Income.count_type_f,
+                                                                                      Income.count_type_s,
+                                                                                      Income.pay_status,
+                                                                                      Income.counterparty,
+                                                                                      Income.goods).paginate(page,
+                                                                                                             per_page=per_page)
+
+        elif father and c_type:
+            pagination = Income.query.filter(Income.count_type_f == father, Income.income_expense == c_type).order_by(
+                Income.deal_date.desc()).with_entities(Income.deal_date,
+                                                       Income.income_expense,
+                                                       Income.amount, Income.deal_number,
+                                                       Income.count_type_f,
+                                                       Income.count_type_s,
+                                                       Income.pay_status,
+                                                       Income.counterparty,
+                                                       Income.goods).paginate(page,
+                                                                              per_page=per_page)
+
+        else:
+            pagination = Income.query.order_by(Income.deal_date.desc()).with_entities(Income.deal_date,
+                                                                                      Income.income_expense,
+                                                                                      Income.amount, Income.deal_number,
+                                                                                      Income.count_type_f,
+                                                                                      Income.count_type_s,
+                                                                                      Income.pay_status,
+                                                                                      Income.counterparty,
+                                                                                      Income.goods).paginate(page,
+                                                                                                             per_page=per_page)
         income_result = [dict(zip(r.keys(), r)) for r in pagination.items]
         for r in income_result:
             find_datetime(r)
