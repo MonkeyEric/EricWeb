@@ -1,8 +1,8 @@
 # coding:utf-8
 from flask_wtf import FlaskForm, Form
-from wtforms import StringField, SubmitField, TextField, ValidationError, HiddenField, BooleanField, PasswordField, \
+from wtforms import StringField, SubmitField, TextAreaField, ValidationError, HiddenField, BooleanField, PasswordField, \
     DateTimeField, FileField
-from wtforms.validators import DataRequired, Length, InputRequired
+from wtforms.validators import DataRequired, Length, InputRequired, Email, URL
 from flask_wtf.file import FileAllowed, FileRequired
 
 
@@ -29,7 +29,21 @@ class IncomeExpenseForm(FlaskForm):
     submit = SubmitField()
 
 
+class CommentForm(FlaskForm):
+    author = StringField('Name', validators=[DataRequired(), Length(1, 30)])
+    email = StringField('Email', validators=[DataRequired(), Email(), Length(1, 254)])
+    site = StringField('Site', validators=[DataRequired(), URL(), Length(0, 255)])
+    body = TextAreaField('Comment', validators=[DataRequired()])
+    submit = SubmitField()
 
 
+class AdminCommentFrom(CommentForm):
+    author = HiddenField()
+    email = HiddenField()
+    site = HiddenField()
 
 
+class LinkForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(1, 30)])
+    url = StringField('URL', validators=[DataRequired(), Length(1, 255)])
+    submit = SubmitField()

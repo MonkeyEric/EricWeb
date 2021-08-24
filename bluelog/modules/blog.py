@@ -67,7 +67,7 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80))
     body = db.Column(db.Text)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)
     can_comment = db.Column(db.Boolean, default=True)
 
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
@@ -92,3 +92,9 @@ class Comment(db.Model):
 
     replies = db.relationship('Comment', back_populates='replied', cascade='all')
     replied = db.relationship('Comment', back_populates='replies', remote_side=[id])
+
+
+class Link(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30))
+    url = db.Column(db.String(255))

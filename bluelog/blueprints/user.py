@@ -10,7 +10,7 @@ from bluelog.utils.utils import redirect_back, generate_random_code
 from bluelog.utils.extensions import github, db
 from werkzeug.security import generate_password_hash
 
-user_bp = Blueprint('user', __name__, template_folder='templates', static_folder='static')
+user_bp = Blueprint('user', __name__)
 
 
 @user_bp.route('/login', methods=['GET', 'POST'])

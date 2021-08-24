@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [[source]]
 url = "https://mirrors.aliyun.com/pypi/simple"
 verify_ssl = true
@@ -33,3 +34,41 @@ pymongo = "*"
 
 [requires]
 python_version = "3.6"
+=======
+[[source]]
+url = "https://mirrors.aliyun.com/pypi/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+python-dotenv = "*"
+flask-bootstrap = "*"
+flask-sqlalchemy = "*"
+pymysql = "*"
+flask-mail = "*"
+flask-ckeditor = "*"
+wtforms = "*"
+flask-moment = "*"
+numpy = "*"
+"sqlalchemy.utils" = "*"
+mysql-connector = "*"
+flask-login = "*"
+gunicorn = "*"
+faker = "*"
+flask-wtf = "*"
+github-flask = "*"
+sqlalchemy-utils = "*"
+python-dateutil = "*"
+pandas = "*"
+matplotlib = "*"
+jieba = "*"
+wordcloud = "*"
+sklearn = "*"
+pymongo = "*"
+email-validator = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.6"
+>>>>>>> 134a9a7b2a29695757df698f18f0de540fadc265

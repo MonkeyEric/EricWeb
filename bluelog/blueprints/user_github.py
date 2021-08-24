@@ -4,7 +4,7 @@ from flask import Blueprint, session, flash, redirect, url_for, g
 from bluelog.modules.user_github import GithubUser
 from bluelog.utils.extensions import github, db
 
-github_bp = Blueprint('g_user', __name__, template_folder='templates')
+github_bp = Blueprint('g_user', __name__)
 
 
 @github.access_token_getter

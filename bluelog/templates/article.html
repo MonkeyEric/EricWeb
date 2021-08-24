@@ -1,10 +1,211 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+﻿{% extends "base.html" %}
+{% block title%}文章{% endblock %}
+{% block head %}
+{{ super() }}
+{{ moment.include_moment() }}
+{% endblock %}
+{% block wrapper%}
+<div id="page-wrapper" class="gray-bg">
+    {{ self.pheader() }}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>文章</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="index.html">主页</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a>应用</a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <strong>文章</strong>
+                </li>
+            </ol>
+        </div>
 
-</body>
-</html>
+    </div>
+
+    <div class="wrapper wrapper-content  animated fadeInRight article">
+    <div class="row justify-content-md-center">
+        <div class="col-lg-10">
+
+            <div class="ibox">
+                <div class="ibox-content">
+                    <div class="float-right">
+                        <button class="btn btn-outline btn-primary  dim " type="button"><i class="fa fa-star"></i></button>
+                        <button class="btn btn-outline btn-danger  dim " type="button"><i class="fa fa-heart"></i></button>
+                        <button class="btn btn-outline btn-success  dim " type="button"><i class="fa fa-share-alt"></i></button>
+                    </div>
+                    <div class="text-center article-title">
+                    <span class="text-muted"><i class="fa fa-clock-o"></i> &nbsp;&nbsp;{{ moment(post.timestamp).format('LLL')}}</span>
+                        <h1>
+                            {{ post.title }}
+                        </h1>
+                    </div>
+                    {{post.body|safe}}
+                    <div class="row">
+                        <div class="col-md-6">
+                                <h5>标签:</h5>
+                                <button class="btn btn-white btn-xs" type="button"><a href="{{ url_for('.show_category', category_id=post.category.id) }}">{{ post.category.name }}</a></button>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="small text-right">
+                                <h5>统计:</h5>
+                                <div>
+                                        <i class="fa fa-comments-o"> </i>
+                                        <a href="{{ url_for('.show_post', post_id=post.id) }}#comments">{{ post.comments|length}} 评论 </a>
+                                    </div>
+                                <i class="fa fa-eye"> </i> 144 查看
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <h2>评论:</h2>
+                            {% if comments %}
+                            {% for comment in comments %}
+                            <div class="social-feed-box">
+                                <div class="social-avatar">
+                                    <a href="" class="float-left">
+                                        <img alt="image" src="{{url_for('static',filename='img/a7.jpg')}}">
+                                    </a>
+                                    <div class="media-body">
+                                        <a href="{% if comment.site %}{{ comment.site }}{% else %}#{% endif %}" target="_blank">
+                                             {% if comment.from_admin %}
+                                                {{ admin.name }}
+                                            {% else %}
+                                                {{ comment.author }}
+                                            {% endif %}
+                                        </a>
+                                        {% if comment.from_admin %}
+                                            <span class="badge badge-primary">Author</span>{% endif %}
+                                        {% if comment.replied %}<span class="badge badge-light">Reply</span>{% endif %}
+                                        <small class="text-muted" data-timestamp="{{ comment.timestamp.strftime('%Y-%m-%dT%H:%M:%SZ') }}">{{ moment(comment.timestamp).fromNow() }}</small>
+                                    </div>
+                                </div>
+                                <div class="social-body">
+                                    {% if comment.replied %}
+                                    <p class="alert alert-dark reply-body">{{ comment.replied.author }}:
+                                        <br>{{ comment.replied.body }}
+                                    </p>
+                                    {%- endif -%}
+                                    <p>
+                                        {{ comment.body }}
+                                    </p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+            <div class="col-lg-7">
+                <div class="ibox ">
+                    <div class="ibox-title">
+                        <h5>基本表单 <small>简单的登录表单示例</small></h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#" class="dropdown-item">选项 1</a>
+                                </li>
+                                <li><a href="#" class="dropdown-item">选项 2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-6 b-r"><h3 class="m-t-none m-b">登录</h3>
+                                <p>登录获得更多经验。</p>
+                                <form role="form">
+                                    <div class="form-group"><label>电子邮件</label> <input type="email" placeholder="Enter email" class="form-control"></div>
+                                    <div class="form-group"><label>密码</label> <input type="password" placeholder="Password" class="form-control"></div>
+                                    <div>
+                                        <button class="btn btn-sm btn-primary float-right m-t-n-xs" type="submit"><strong>登录</strong></button>
+                                        <label> <input type="checkbox" class="i-checks"> 记住密码 </label>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-sm-6"><h4>非平台会员?</h4>
+                                <p>您可以创建一个帐户:</p>
+                                <p class="text-center">
+                                    <a href=""><i class="fa fa-sign-in big-icon"></i></a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="col-lg-5">
+                    <div class="ibox ">
+                        <div class="ibox-title">
+                            <h5>水平表单</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="#" class="dropdown-item">选项 1</a>
+                                    </li>
+                                    <li><a href="#" class="dropdown-item">选项 2</a>
+                                    </li>
+                                </ul>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <form>
+                                <p>今天登录获得更多经验。</p>
+                                <div class="form-group row"><label class="col-lg-2 col-form-label">电子邮件</label>
+
+                                    <div class="col-lg-10"><input type="email" placeholder="请输入邮件地址" class="form-control"> <span class="form-text m-b-none">Example block-level help text here.</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row"><label class="col-lg-2 col-form-label">密码</label>
+
+                                    <div class="col-lg-10"><input type="password" placeholder="请输入密码" class="form-control"></div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-offset-2 col-lg-10">
+                                        <div class="i-checks"><label> <input type="checkbox"><i></i> 记住密码 </label></div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-offset-2 col-lg-10">
+                                        <button class="btn btn-sm btn-white" type="submit">登录</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                </div>
+            </div>
+        </div>
+
+        {% include '_blog_sidebar.html' %}
+    </div>
+
+
+</div>
+ {{ self.footer() }}
+
+</div>
+{% endblock %}
