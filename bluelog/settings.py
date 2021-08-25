@@ -23,6 +23,8 @@ class BaseConfig(object):
     BLOG_COMMENT_PER_PAGE = 15
     TABLE_PER_PAGE = 10
 
+    JSON_AS_ASCII = False
+
 
 class DevelopmentConfig(BaseConfig):
     # SQLALCHEMY_DATABASE_URI = 'mysql:///'+os.path.join(basedir, 'data-dev.db')

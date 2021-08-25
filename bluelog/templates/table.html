@@ -22,11 +22,12 @@
 {% endblock %}
 {% block wrapper%}
 <div id="page-wrapper" class="gray-bg">
+	{{self.pheader()}}
     <form class="layui-form" action="" style="padding-top: 20px">
 		<div class="layui-inline">
 			<label class="layui-form-label">父类</label>
 			<div class="layui-input-inline">
-				<select name="majorid" id="search_f">
+				<select name="father" id="search_f">
                 <option style='display: none'></option>
 					 {%for father in fathers%}
                     <option name="count_type_f" value="{{father}}">{{father}}</option>
@@ -37,11 +38,11 @@
 		<div class="layui-inline">
 			<label class="layui-form-label">子类</label>
 			<div class="layui-input-inline">
-				<select name="majorid" id="search_s">
+				<select name="father" id="search_s">
                     <option style='display: none'></option>
 					{%for son in sons%}
                     {% if '——' not in son%}
-                     <option name="count_type_s">{{son}}</option>
+                     <option name="count_type_s" value="{{son}}">{{son}}</option>
                     {%endif%}
                     {% endfor %}
 				</select>
@@ -50,17 +51,16 @@
         <div class="layui-inline">
 			<label class="layui-form-label">收支</label>
 			<div class="layui-input-inline">
-				<select name="majorid" id="search_i">
+				<select name="father" id="search_i">
                     <option style='display: none'></option>
-					<option value="">收入</option>
-                    <option value="">支出</option>
+					<option value="收入">收入</option>
+                    <option value="支出">支出</option>
 				</select>
 			</div>
 		</div>
 		<div class="layui-inline">
 			<div class="layui-input-inline">
-				<button class="layui-btn" id="searchBtn" lay-submit
-					lay-filter="formDemo" data-type="reload" style="margin-left: 15px">
+				<button class="layui-btn" id="searchBtn" lay-filter="formDemo" data-type="reload" style="margin-left: 15px">
 					<i class="layui-icon layui-icon-search"></i> 查询
 				</button>
 				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
@@ -77,6 +77,11 @@
 {%block script%}
 
 <script src="{{url_for('static',filename='layui/layui.js')}}"></script>
+<script type="text/html" id="tableToolBar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-icon layui-icon-refresh-3" lay-event="refresh">刷新</button>
+    </div>
+</script>
 <script type="text/html" id="WHAttr">
     <select lay-filter='table' lay-verify=''>
 
@@ -102,6 +107,8 @@
         $("#ten").addClass('active')
     })
 
+
+
     //ajax请求
     var csrftoken = $('meta[name=csrf-token]').attr('content')
 
@@ -114,100 +121,112 @@
     })
 
 //加载模块  
-layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate', function(){
-  //得到各种内置组件
-  var layer = layui.layer //弹层
-  ,table = layui.table //表格
-    ,form = layui.form
-  
-  //向世界问个好
-  layer.msg('Hello World');
-  
+layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate', function(){
+	//得到各种内置组件
+	var layer = layui.layer //弹层
+			, table = layui.table //表格
+			, form = layui.form
 
-  var data_url = {{table_url}}
-  //执行一个 table 实例
-  table.render({
-    elem: '#demo'
-    ,url: '/table?father=餐饮&type=支出' //数据接口
-    ,title: '用户表'
-    ,page: true //开启分页
-    ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
-    ,totalRow: true //开启合计行
-    ,limit: 20
-    ,parseData:function (res){
-      return{
-        "code":0
-        ,"msg":""
-        ,"count":res['total']
-        ,"data":res['data']
-      }
-    }
-    ,cols: [[ //表头
-      {type: 'checkbox', fixed: 'left'}
-      ,{field: 'deal_date', title: '交易时间', width:170, sort: true, totalRowText: '合计：'}
-      ,{field: 'counterparty', title: '交易对方', sort: true}
-      ,{field: 'income_expense', title: '收支', width: 80, sort: true}
-      ,{field: 'count_type_f', title: '父类',width: 160, sort: true,templet:"#WHAttr"}
-      ,{field: 'count_type_s', title: '子类',width: 160, sort: true,templet: "#table_son"}
-      ,{field: 'amount', title: '金额',width: 150, sort: true, totalRow: true}
-      ,{field: 'goods', title: '商品',sort: true}
-    ]]
-      ,done:function (){
-        //实现数据同步
-        var divForm = $("#demo").next();  // 获取表格，tableId是表格的id
-        var tableCache = layui.table.cache['demo'];  // 获取表格缓存数据，tableCacheId也是表格的id
-        var trJqs = divForm.find(".layui-table-body tr");  // 获取表格body下的所有tr标签
-        trJqs.each(function () {  // 遍历每个tr标签
-        var trJq = $(this);  // 获得当前遍历的tr标签
-        var dataIndex = trJq.attr("data-index");  // 得到当前数据行的data-index，即为第几行数据
-        trJq.find("td").each(function () {  // 遍历tr标签下的每一个td标签
-        var tdJq = $(this);  // 获得当前遍历的td标签
-        var fieldName = tdJq.attr("data-field");  // 获得当前td标签的字段名
-        var selectJq = tdJq.find("select");  // 获得当前td标签下的select标签
-        if (selectJq.length == 1) {  // 判断select标签是否存在
-            selectJq.eq(0).val(tableCache[dataIndex][fieldName]);  // 将表格里的缓存数据赋值给select标签
-        }
+	//向世界问个好
+	layer.msg('Hello World');
+
+
+	var data_url = "{{table}}"
+    //表格form
+	var resquest_dict= {}
+	$('#searchBtn').on('click', function() {
+    $('form').on('submit', function() {
+        var title = $('inpur[name=title]').val(),
+        resquest_dict = {'father':$('#search_f').val(),'son':$('#search_s').val(),'type':$('#search_i').val()}
+		tableObj.reload({'where':resquest_dict})
+        return false;
     });
-    });
-    form.render('select');  // 重新加载select表单
+});
+	console.log(resquest_dict)
+	//执行一个 table 实例
 
-        //数据动态更新
-        form.on('select(table)', function (data) {
-        var tableCache = table.cache['demo'],  // 获得数据表格的缓存数据
+	var tableObj =table.render({
+		elem: '#demo'
+		, url: '/table' //数据接口
+		, title: '用户表'
+		, page: true //开启分页
+		, defaultToolbar: ['filter', 'print', 'exports']
+		, toolbar: '#tableToolBar' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+		, totalRow: true //开启合计行
+		, limit: 20
+		, parseData: function (res) {
+			return {
+				"code": 0
+				, "msg": ""
+				, "count": res['total']
+				, "data": res['data']
+			}
+		}
+		, cols: [[ //表头
+			{type: 'checkbox', fixed: 'left'}
+			, {field: 'deal_date', title: '交易时间', width: 170, sort: true, totalRowText: '合计：'}
+			, {field: 'counterparty', title: '交易对方', sort: true}
+			, {field: 'income_expense', title: '收支', width: 80, sort: true}
+			, {field: 'count_type_f', title: '父类', width: 160, sort: true, templet: "#WHAttr"}
+			, {field: 'count_type_s', title: '子类', width: 160, sort: true, templet: "#table_son"}
+			, {field: 'amount', title: '金额', width: 150, sort: true, totalRow: true}
+			, {field: 'goods', title: '商品', sort: true}
+		]]
+		, done: function () {
+			//实现数据同步
+			var divForm = $("#demo").next();  // 获取表格，tableId是表格的id
+			var tableCache = layui.table.cache['demo'];  // 获取表格缓存数据，tableCacheId也是表格的id
+			var trJqs = divForm.find(".layui-table-body tr");  // 获取表格body下的所有tr标签
+			trJqs.each(function () {  // 遍历每个tr标签
+				var trJq = $(this);  // 获得当前遍历的tr标签
+				var dataIndex = trJq.attr("data-index");  // 得到当前数据行的data-index，即为第几行数据
+				trJq.find("td").each(function () {  // 遍历tr标签下的每一个td标签
+					var tdJq = $(this);  // 获得当前遍历的td标签
+					var fieldName = tdJq.attr("data-field");  // 获得当前td标签的字段名
+					var selectJq = tdJq.find("select");  // 获得当前td标签下的select标签
+					if (selectJq.length == 1) {  // 判断select标签是否存在
+						selectJq.eq(0).val(tableCache[dataIndex][fieldName]);  // 将表格里的缓存数据赋值给select标签
+					}
+				});
+			});
+			form.render('select');  // 重新加载select表单
 
-        value = data.value,  // 得到下拉列表改变后的value值
-        field = data.othis.parents('td').attr('data-field'),  // 获得下拉列表的父级td标签的字段名称
-        dataIndex = parseInt(data.othis.parents('tr').attr('data-index')),  // 获得变化的下拉列表所在的行index
-        lineDate = tableCache[dataIndex];  // 获得数据表格中该行的缓存数据
-        if (tableCache[dataIndex][field] != value) {  // 判断数据是否发生了变化
-        // 这里可以写ajax实现与后台数据的交互
-            console.log(lineDate)
-            var update_data = {};
-            update_data['deal_number'] = lineDate['deal_number']
-            update_data[field] = value
-            $.ajax({
-                type: "POST",
-                url: "{{url_for('admin.table')}}",
-                data: JSON.stringify(update_data),
-                contentType: 'application/json;charset=utf-8',//请求数据类型必须有
-                dataType: "json",
-                async: true,//异步
-                success: function(res) {
-                    // data = jQuery.parseJSON(data);  //dataType指明了返回数据为json类型，故不需要再反序列化
-                    if (res['msg']=='ok'){
-                        layer.msg('修改数据成功')
-                    }else {
-                        layer.msg('修改数据失败')
-                    }
+			//数据动态更新
+			form.on('select(table)', function (data) {
+				var tableCache = table.cache['demo'],  // 获得数据表格的缓存数据
 
-                }
-            });
-        // tableCache[dataIndex][field] = value;  // 将修改后的数据更新到数据表格的缓存数据中
-        }
-        });
-      }
-  });
+						value = data.value,  // 得到下拉列表改变后的value值
+						field = data.othis.parents('td').attr('data-field'),  // 获得下拉列表的父级td标签的字段名称
+						dataIndex = parseInt(data.othis.parents('tr').attr('data-index')),  // 获得变化的下拉列表所在的行index
+						lineDate = tableCache[dataIndex];  // 获得数据表格中该行的缓存数据
+				if (tableCache[dataIndex][field] != value) {  // 判断数据是否发生了变化
+					// 这里可以写ajax实现与后台数据的交互
+					console.log(lineDate)
+					var update_data = {};
+					update_data['deal_number'] = lineDate['deal_number']
+					update_data[field] = value
+					$.ajax({
+						type: "POST",
+						url: "{{url_for('admin.table')}}",
+						data: JSON.stringify(update_data),
+						contentType: 'application/json;charset=utf-8',//请求数据类型必须有
+						dataType: "json",
+						async: true,//异步
+						success: function (res) {
+							// data = jQuery.parseJSON(data);  //dataType指明了返回数据为json类型，故不需要再反序列化
+							if (res['msg'] == 'ok') {
+								layer.msg('修改数据成功')
+							} else {
+								layer.msg('修改数据失败')
+							}
 
+						}
+					});
+					// tableCache[dataIndex][field] = value;  // 将修改后的数据更新到数据表格的缓存数据中
+				}
+			});
+		}
+	});
 
 
 
