@@ -44,7 +44,7 @@
                                             <datalist  id="typelist">
                                                 <option>收支表-支付宝</option>
                                                 <option>收支表-微信</option>
-                                                <option>其他</option>
+                                                <option>明细汇总</option>
                                             </datalist>
                                         </div>
                                     </div>
@@ -98,7 +98,7 @@
                         </div>
                         <div class="ibox-content" style="display: none">
                             <figure>
-                                 <iframe width="1000" height="460" src="//player.bilibili.com/player.html?aid=456228385&bvid=BV145411Y7Bj&cid=208565018&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+                                 <iframe width="100%" height="460" src="//player.bilibili.com/player.html?aid=456228385&bvid=BV145411Y7Bj&cid=208565018&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
                             </figure>
                         </div>
                     </div>
@@ -122,6 +122,10 @@
 
     <script>
         $(document).ready(function(){
+
+        $("#income a").click()
+        $("#eleven").addClass('active')
+
             $('.custom-file-input').on('change', function() {
                 let fileName = $(this).val().split('\\').pop();
                 $(this).next('.custom-file-label').addClass("selected").html(fileName);

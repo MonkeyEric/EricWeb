@@ -3,7 +3,6 @@
 from flask import Blueprint, render_template, request, current_app, url_for, flash, redirect
 from bluelog.modules.blog import *
 from bluelog.utils.forms import AdminCommentFrom, CommentForm
-from bluelog.utils.extensions import moment
 from flask_login import current_user
 
 blog_bp = Blueprint('blog', __name__)
@@ -12,11 +11,11 @@ blog_bp = Blueprint('blog', __name__)
 @blog_bp.route('/', methods=['GET'])
 def blog_get():
     page = request.args.get('page', 1, type=int)
-    per_page = current_app.config['BLOG_POST_PER_PAGE']
+    per_page = 30
     pagination = Post.query.order_by(Post.timestamp.desc()).paginate(page, per_page=per_page)
     posts = pagination.items
 
-    return render_template('blog.html', pagination=pagination, posts=posts)
+    return render_template('blog_list.html', pagination=pagination, posts=posts)
 
 
 @blog_bp.route('/category/<int:category_id>', methods=['GET'])
@@ -43,7 +42,7 @@ def show_post(post_id):
         form = AdminCommentFrom()
         form.author.data = current_user.name
         form.email.data = current_app.config['WEB_EMAIL']
-        form.site.data = url_for('blog.index')
+        form.site.data = url_for('blog.blog_get')
         from_admin = True
         reviewed = True
     else:

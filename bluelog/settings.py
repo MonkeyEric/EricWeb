@@ -2,7 +2,6 @@
 import os
 
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-# print(basedir)
 
 
 class BaseConfig(object):
@@ -22,6 +21,9 @@ class BaseConfig(object):
     BLOG_POST_PER_PAGE = 5
     BLOG_MANAGE_POST_PER_PAGE = 15
     BLOG_COMMENT_PER_PAGE = 15
+    TABLE_PER_PAGE = 10
+
+    JSON_AS_ASCII = False
 
 
 class DevelopmentConfig(BaseConfig):

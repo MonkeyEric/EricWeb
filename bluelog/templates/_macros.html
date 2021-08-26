@@ -1,6 +1,7 @@
 <!--翻页模板-->
 {% macro pagination_widget(pagination, endpoint) %}
-    <ul class="pagination">
+<div class="container" style="margin: 0 auto;text-align: center">
+    <ul class="pagination pagination-lg">
         <li {% if not pagination.has_prev %} class="disabled"{% endif %}>
             <a href="{% if pagination.has_prev %}{{ url_for(endpoint,page = pagination.page - 1, **kwargs) }}
             {% else %}#{% endif %}">&laquo;
@@ -27,4 +28,5 @@
             <a href="{% if pagination.has_next %}{{ url_for(endpoint,page = pagination.page + 1, **kwargs) }}{% else %}#{% endif %}">&raquo;</a>
         </li>
     </ul>
+</div>
 {% endmacro %}

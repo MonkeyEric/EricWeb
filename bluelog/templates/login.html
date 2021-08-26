@@ -1,18 +1,22 @@
 {% extends "base.html" %}
 {% block title %}登录{% endblock %}
+{%block head%}
+<style>
+    body{
+        background-image:url("../static/img/bg_login2.jpg");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+    }
+</style>
+{% endblock %}
 {%block body%}
-<body class="gray-bg">
+<body class="gray-bg" >
 
     <div class="loginColumns animated fadeInDown">
+
         <div class="row">
-
-            <div class="col-md-6">
-                <h2 class="font-bold">欢迎登录猫大侠.v1</h2>
-
-                <p>在以后的岁月中，我是你的一只大懒猫，跳上窗台，爬到屋顶，蹲在一株老树上，溜过了一段岁月，看着我们曾经幸福的回忆
-                </p>
-                <p>—— 猫大侠</p>
-
+            <div class="col-md-3">
             </div>
             <div class="col-md-6">
                 <div class="ibox-content">
@@ -52,6 +56,5 @@
         <hr/>
 
     </div>
-    {{self.footer()}}
 </body>
 {% endblock %}
