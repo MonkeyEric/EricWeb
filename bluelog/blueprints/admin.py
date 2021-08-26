@@ -57,18 +57,15 @@ def before_request():
         g.user = GithubUser.query.get(session['user_id'])
         g.db = 'github_user'
     if current_user.is_authenticated:
-        print(current_user)
         if not g.user:
             g.user = Admin.query.get(current_user.id)
             g.db = 'admin'
-    print(g.user)
 
 
 @admin_bp.route('/', methods=['GET'])
 @admin_bp.route('/index', methods=['GET'])
 # @login_required
 def index():
-    print('22222', current_app.root_path)
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BLOG_POST_PER_PAGE']
     pagination = Post.query.order_by(desc(Post.timestamp)).paginate(page, per_page=per_page)
@@ -181,7 +178,6 @@ def table_data():
         son.append('——%s——' % key)
         for j in value:
             son.append(j)
-    print(list(config_dict.Expense_type.keys()))
     return render_template('table.html', fathers=list(config_dict.Expense_type.keys()), sons=son,table='/table')
 
 
@@ -193,8 +189,15 @@ def table():
         son = request.args.get('son', '')
         father = request.args.get('father', '')
         c_type = request.args.get('type', '')
-        if son and c_type:
-            pagination = Income.query.filter(Income.count_type_s == son, Income.income_expense == c_type).order_by(
+        re_dict = {}
+        if son:
+            re_dict['count_type_s']=son
+        if father:
+            re_dict['count_type_f']=father
+        if c_type:
+            re_dict['income_expense'] = c_type
+        if re_dict:
+            pagination = Income.query.filter_by(**re_dict).order_by(
                 desc(Income.deal_date)).with_entities(Income.deal_date,
                                                       Income.income_expense,
                                                       Income.amount, Income.deal_number,
@@ -204,19 +207,6 @@ def table():
                                                       Income.counterparty,
                                                       Income.goods).paginate(page,
                                                                              per_page=per_page)
-
-        elif father and c_type:
-            pagination = Income.query.filter(Income.count_type_f == father, Income.income_expense == c_type).order_by(
-                desc(Income.deal_date)).with_entities(Income.deal_date,
-                                                      Income.income_expense,
-                                                      Income.amount, Income.deal_number,
-                                                      Income.count_type_f,
-                                                      Income.count_type_s,
-                                                      Income.pay_status,
-                                                      Income.counterparty,
-                                                      Income.goods).paginate(page,
-                                                                             per_page=per_page)
-
         else:
             pagination = Income.query.order_by(desc(Income.deal_date)).with_entities(Income.deal_date,
                                                                                      Income.income_expense,
@@ -294,11 +284,6 @@ def favourite():
 @admin_bp.route('/profile', methods=['GET'])
 def profile():
     return render_template('profile.html')
-
-
-@admin_bp.route('/mailbox', methods=['GET'])
-def mailbox():
-    return render_template('mailbox.html')
 
 
 @admin_bp.route('/package', methods=['GET'])

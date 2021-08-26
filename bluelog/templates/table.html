@@ -55,6 +55,7 @@
                     <option style='display: none'></option>
 					<option value="收入">收入</option>
                     <option value="支出">支出</option>
+					<option value=" ">空</option>
 				</select>
 			</div>
 		</div>
@@ -130,9 +131,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
 	//向世界问个好
 	layer.msg('Hello World');
 
-
-	var data_url = "{{table}}"
-    //表格form
+    //表格form，筛选条件
 	var resquest_dict= {}
 	$('#searchBtn').on('click', function() {
     $('form').on('submit', function() {

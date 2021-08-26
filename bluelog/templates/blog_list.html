@@ -35,13 +35,13 @@
 
                                 {{moment(post.timestamp).format('lll')}}
                                 <br/>
-                                <small class="text-navy">{{ moment(post.timestamp).fromNow(refresh=True) }}</small>
+                                <h4 class="text-navy">{{ moment(post.timestamp).fromNow(refresh=True) }}</h4>
                             </div>
                             <div class="col-7 content no-top-border">
                                 <p class="m-b-xs">
-                                    <strong>{{ post.author }}</strong>
+                                    <strong>作者:{{ post.author }}</strong>
                                 </p>
-                                <p>{{ post.title }}</p>
+                                <h3>{{ post.title }}</h3>
                                 <i class="fa fa-eye"> </i> 144 浏览
                             </div>
                         </div>
