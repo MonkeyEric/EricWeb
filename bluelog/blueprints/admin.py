@@ -90,30 +90,25 @@ def chart():
     now = datetime.now()
     last_month = now.replace(month=now.month - 1)
     expand = round(
-        db.session.query(func.sum(Income.money)).filter(Income.income_expense == "支出", Income.deal_date >= last_month,
-                                                        Income.deal_date < now).scalar(), 2)
+        db.session.query(func.sum(Income.money)).filter(Income.income_expense == "支出", Income.deal_date >= last_month,Income.deal_date < now).scalar(), 2)
     # 近一个月支出最高得类型
     high_money_count_type_s = Income.query.filter(Income.deal_date >= now - timedelta(days=30)).order_by(
         desc(Income.money)).first()
     high_money = {'count_type_s': high_money_count_type_s.count_type_s, 'money': high_money_count_type_s.money}
     # 近一个月支出次数最高得类型
     order_by_type_s = func.count('*').label('total')
-    high_count = db.session.query(Income.count_type_s, func.count('*').label('total')).group_by(
-        Income.count_type_s).order_by(desc(order_by_type_s)).first()
+    high_count = db.session.query(Income.count_type_s, func.count('*').label('total')).group_by(Income.count_type_s).order_by(desc(order_by_type_s)).first()
     # 消费总计
     res = db.session.query(func.sum(Income.money).label('total_money'),
-                           extract('month', Income.deal_date).label('month'),
-                           extract('year', Income.deal_date).label('year')).filter(
-        Income.income_expense == '支出').group_by(extract('month', Income.deal_date).label('month')).order_by(
-        asc(Income.deal_date))
+        extract('month', Income.deal_date).label('month'),extract('year', Income.deal_date).label('year')
+        ).filter(Income.income_expense=='支出').group_by(extract('month', Income.deal_date).label('month')).order_by(asc(Income.deal_date))
 
     consume = arrange(res)
     del res
     res1 = db.session.query(func.count(Income.money).label('total_money'),
                             extract('month', Income.deal_date).label('month'),
                             extract('year', Income.deal_date).label('year')).filter(
-        Income.income_expense == '支出').group_by(extract('month', Income.deal_date).label('month')).order_by(
-        asc(Income.deal_date))
+        Income.income_expense == '支出').group_by(extract('month', Income.deal_date).label('month')).order_by(asc(Income.deal_date))
     consume_count = arrange(res1)
 
     del res1

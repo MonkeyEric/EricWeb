@@ -44,6 +44,8 @@ def read_csv(filename, desc):
                         if deal_source:
                             row['deal_source'] = deal_source
                         table_data.append(dict(row))
+            except Exception as e:
+                print('@@@@@@@@',e)
             finally:
                 return table_data
 
@@ -51,28 +53,29 @@ def read_csv(filename, desc):
 
 def save_to_db(data):
     for i in data:
-        if i.get('deal_number'):
-            income_result = Income.query.filter_by(deal_number=i.get('deal_number'))
-            if not income_result.count():
-                i['money'] = float(i.get('money').replace('￥',''))
-                if i.get('income_expense') == '支出':
-                    i['logic1'] = -1
-                elif i.get('income_expense') == '收入':
-                    i['logic1'] = 1
-                else:
-                    i['logic1'] = 0
-                if i.get('pay_status') in ["支付成功","交易成功","已转账","已存入零钱","已收钱"]:
-                    i['logic2'] = 1
-                else:
-                    i['logic2'] = 0
-                i['amount'] = round(i['logic2']*i['logic1']*float(i.get('money')),2)
-                if not i.get('count_type'):
-                    count_type_f = ''
-                    count_type_s = ''
-                else:
-                    count_type_s = i.get('count_type').split('-')[1] if i.get('count_type') != '非必需品' else '非必需品',
-                    count_type_f = i.get('count_type').split('-')[0] if i.get('count_type') != '非必需品' else '非必需品',
-                income = Income(
+        try:
+            if i.get('deal_number'):
+                income_result = Income.query.filter_by(deal_number=i.get('deal_number'),deal_date=i.get('deal_date'))
+                if not income_result.count():
+                    i['money'] = float(i.get('money').replace('￥',''))
+                    if i.get('income_expense') == '支出':
+                        i['logic1'] = -1
+                    elif i.get('income_expense') == '收入':
+                        i['logic1'] = 1
+                    else:
+                        i['logic1'] = 0
+                    if i.get('pay_status') in ["支付成功","交易成功","已转账","已存入零钱","已收钱"]:
+                        i['logic2'] = 1
+                    else:
+                        i['logic2'] = 0
+                    i['amount'] = round(i['logic2']*i['logic1']*float(i.get('money')),2)
+                    if not i.get('count_type'):
+                        count_type_f = ''
+                        count_type_s = ''
+                    else:
+                        count_type_s = i.get('count_type').split('-')[1] if i.get('count_type') != '非必需品' else '非必需品',
+                        count_type_f = i.get('count_type').split('-')[0] if i.get('count_type') != '非必需品' else '非必需品',
+                    income = Income(
                     deal_number=i.get('deal_number'),
                     income_expense=i.get('income_expense'),
                     logic1=i.get('logic1'),
@@ -88,9 +91,12 @@ def save_to_db(data):
                     deal_source=i.get('deal_source'),
                     amount=i.get('amount'),
                 )
-                db.session.add(income)
-                db.session.commit()
-                print('insert success')
+                    db.session.add(income)
+                    db.session.commit()
+        except Exception as e:
+            print(i,'&&&&&&')
+            print(e)
+            continue
 
 
 def count_type_ai(name_str):
