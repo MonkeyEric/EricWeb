@@ -106,7 +106,8 @@ def chart():
         Income.income_expense != '/').group_by(
         Income.income_expense, extract('month', Income.deal_date).label('month')).order_by(asc(Income.deal_date))
     income_rate = arrange(res2)
-    income_rate['存储'] = [round(income_rate['收入'][i] - income_rate['支出'][i], 2) for i in range(len(income_rate['支出']))]
+    if income_rate.get('收入','') and income_rate.get('支出',''):
+        income_rate['存储'] = [round(income_rate['收入'][i] - income_rate['支出'][i], 2) for i in range(len(income_rate['支出']))]
     del res2
     return render_template('graph_chartjs.html', storage=storage, expand=expand, high_money=high_money,
                            high_count=high_count,income_rate=json.dumps(income_rate))

@@ -106,7 +106,6 @@ def register_user_info_(app):
                 username = user.name
                 role = '一级管理员'
         user_info = dict(is_login=is_login, avatar=avatar, username=username, role=role)
-        print('username_____', username)
         return dict(user_info=user_info)
 
     @app.context_processor
