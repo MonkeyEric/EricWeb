@@ -9,8 +9,7 @@ import random
 def fake_admin():
     admin = Admin(
         email='1649107451@qq.com',
-        blog_title='Bluelog',
-        blog_sub_title="No,i'm the real thing.",
+        my_title='Bluelog',
         name='Mima Kirigoe',
         about='Um,l,Mima Kirigoe,had a fun time as a member of CHAM……',
         role=1,

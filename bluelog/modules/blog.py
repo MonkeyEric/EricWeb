@@ -20,8 +20,7 @@ class Admin(db.Model, UserMixin):
     role = ChoiceType(types_choices)
     email = db.Column(db.String(50))
     password_hash = db.Column(db.String(128))
-    blog_title = db.Column(db.String(60))
-    blog_sub_title = db.Column(db.String(100))
+    my_title = db.Column(db.String(60))
     name = db.Column(db.String(30))
     about = db.Column(db.Text)
     a_create_time = db.Column(db.DateTime, default=datetime.now)
@@ -98,3 +97,23 @@ class Link(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
     url = db.Column(db.String(255))
+
+
+class Wiki(db.Model):
+    # 这个到开发的时候，可以根据情况存储到本地md文件中
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+    title = db.Column(db.String(80))
+    tag = db.Column(db.String(80))
+    body = db.Column(db.Text)
+
+
+class Favorite(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    avatar = db.Column(db.String(150))  # 图片地址
+    web_url = db.Column(db.String(150))
+    name = db.Column(db.String(30))
+    express = db.Column(db.String(80))
+    thumb_down = db.Column(db.Integer)
+    category = db.Column(db.String(30))
+    thumb_up = db.Column(db.Integer)

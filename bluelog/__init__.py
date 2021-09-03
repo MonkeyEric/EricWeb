@@ -32,6 +32,7 @@ def create_app(config_name=None):
     app = Flask('blue_log', static_folder=static_dir,template_folder=templates_dir)
     app.config.from_object(config[config_name])
     app.config['UPLOAD_PATH'] = os.path.join(app.root_path, r'bluelog\file')
+    app.config['fav_img'] = r'bluelog\file\favorite_img'
     app.config.update(
         GITHUB_CLIENT_ID=os.getenv('GITHUB_CLIENT_ID'),
         GITHUB_CLIENT_SECRET=os.getenv('GITHUB_CLIENT_SECRET'),
@@ -106,7 +107,6 @@ def register_user_info_(app):
                 username = user.name
                 role = '一级管理员'
         user_info = dict(is_login=is_login, avatar=avatar, username=username, role=role)
-        print('username_____', username)
         return dict(user_info=user_info)
 
     @app.context_processor

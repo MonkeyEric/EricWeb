@@ -1,10 +1,10 @@
 # coding:utf-8
 from flask import Blueprint, render_template, flash, session, redirect, url_for, request
-from flask_login import current_user, login_user, login_required, logout_user
+from flask_login import current_user, login_user, logout_user
 
 from bluelog.modules.blog import Admin
 
-from bluelog.utils.emails import send_mail, send_subscribe_mail
+from bluelog.utils.emails import send_subscribe_mail
 from bluelog.utils.forms import LoginForm, SettingForm
 from bluelog.utils.utils import redirect_back, generate_random_code
 from bluelog.utils.extensions import github, db
@@ -44,7 +44,6 @@ def github_login():
 
 
 @user_bp.route('/logout')
-# @login_required
 def logout():
     session.pop('user_id', None)
     # flash('Goodbye.')
@@ -68,10 +67,10 @@ def forget_password():
     return render_template('forgot_password.html', form=form)
 
 
-@user_bp.route('/update_pwd', methods=['POST','GET'])
+@user_bp.route('/update_pwd', methods=['POST', 'GET'])
 def update_pwd():
     form = LoginForm()
-    return render_template('update_pwd.html',form=form)
+    return render_template('update_pwd.html', form=form)
 
 
 @user_bp.route('/register', methods=['GET', 'POST'])
@@ -81,14 +80,14 @@ def register():
         email = form.email.data
         if Admin.email == email:
             return render_template('register.html', message='用户已经存在，请重新注册')
-        blog_title = form.blog_title.data
+        my_title = form.my_title.data
         blog_sub_title = form.blog_sub_title.data
         name = form.name.data
         about = form.about.data
         password = form.password.data
         admin = Admin(
             email=email,
-            blog_title=blog_title,
+            my_title=my_title,
             blog_sub_title=blog_sub_title,
             name=name,
             about=about,

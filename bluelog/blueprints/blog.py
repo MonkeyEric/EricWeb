@@ -1,18 +1,33 @@
 # coding:utf-8
 # 博客
-from flask import Blueprint, render_template, request, current_app, url_for, flash, redirect
+from flask import Blueprint, render_template, request, current_app, url_for, flash, redirect, session, g
 from bluelog.modules.blog import *
 from bluelog.utils.forms import AdminCommentFrom, CommentForm
+from bluelog.modules.user_github import GithubUser
 from flask_login import current_user
+from sqlalchemy import desc
 
 blog_bp = Blueprint('blog', __name__)
+
+
+@blog_bp.before_request
+def before_request():
+    g.user = None
+    g.db = None
+    if 'user_id' in session:
+        g.user = GithubUser.query.get(session['user_id'])
+        g.db = 'github_user'
+    if current_user.is_authenticated:
+        if not g.user:
+            g.user = Admin.query.get(current_user.id)
+            g.db = 'admin'
 
 
 @blog_bp.route('/', methods=['GET'])
 def blog_get():
     page = request.args.get('page', 1, type=int)
     per_page = 30
-    pagination = Post.query.order_by(Post.timestamp.desc()).paginate(page, per_page=per_page)
+    pagination = Post.query.order_by(desc(Post.timestamp)).paginate(page, per_page=per_page)
     posts = pagination.items
 
     return render_template('blog_list.html', pagination=pagination, posts=posts)
@@ -23,7 +38,7 @@ def show_category(category_id):
     category = Category.query.get_or_404(category_id)
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BLOG_POST_PER_PAGE']
-    pagination = Post.query.with_parent(category).order_by(Post.timestamp.desc()).paginate(page, per_page)
+    pagination = Post.query.with_parent(category).order_by(desc(Post.timestamp)).paginate(page, per_page)
     posts = pagination.items
 
     return render_template('blog.html', pagination=pagination, posts=posts)
@@ -34,8 +49,8 @@ def show_post(post_id):
     post = Post.query.get_or_404(post_id)
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BLOG_POST_PER_PAGE']
-    pagination = Comment.query.with_parent(post).filter_by(reviewed=True).order_by(Comment.timestamp.desc()).paginate(
-        page,per_page)
+    pagination = Comment.query.with_parent(post).filter_by(reviewed=True).order_by(desc(Comment.timestamp)).paginate(
+        page, per_page)
     comments = pagination.items
 
     if current_user.is_authenticated:

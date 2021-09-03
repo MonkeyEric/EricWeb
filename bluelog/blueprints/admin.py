@@ -1,7 +1,6 @@
 # coding:utf-8
 
-from flask import Blueprint, render_template, g, session, send_from_directory, request, current_app, redirect, url_for, \
-    jsonify
+from flask import Blueprint, render_template, g, session, send_from_directory, request, current_app, redirect, url_for
 from flask_login import current_user
 from flask_wtf.csrf import generate_csrf
 from werkzeug.utils import secure_filename
@@ -10,7 +9,7 @@ from werkzeug.datastructures import CombinedMultiDict
 from bluelog.modules.user_github import GithubUser
 from bluelog.modules.blog import *
 from bluelog.modules.income_expense import Income
-from bluelog.utils.forms import IncomeExpenseForm, IncomeForm
+from bluelog.utils.forms import IncomeExpenseForm, FavoriteForm
 from bluelog.utils.csv_tools import read_csv, save_to_db
 from bluelog import config_dict
 
@@ -64,7 +63,6 @@ def before_request():
 
 @admin_bp.route('/', methods=['GET'])
 @admin_bp.route('/index', methods=['GET'])
-# @login_required
 def index():
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BLOG_POST_PER_PAGE']
@@ -155,17 +153,18 @@ def chart_type():
             value[j] = [round(value[j].get(i, 0), 2) for i in range(1, 13)]
     del res
     # top5类型
-    res1 = db.session.query(func.sum(Income.money).label('total_money'), extract('month', Income.deal_date).label('month')
-                            , Income.count_type_f).filter(Income.income_expense == '支出',
-                                                          Income.deal_date >= datetime.today().replace(
-                                                              month=1, day=1)).group_by(
+    res1 = db.session.query(func.sum(Income.money).label('total_money'),
+                            extract('month', Income.deal_date).label('month'), Income.count_type_f).filter(
+        Income.income_expense == '支出', Income.deal_date >= datetime.today().replace(
+            month=1, day=1)).group_by(
         extract('month', Income.deal_date).label('month')).order_by(asc(Income.deal_date))
     top5_type = arrange(res1, 8)
     del res1
     # top5次数
     res2 = db.session.query(func.count(Income.money).label('total_money'), Income.count_type_f).filter(
-        Income.income_expense == '支出',Income.count_type_f!='',
-        Income.deal_date >= datetime.today().replace(month=1, day=1)).group_by(Income.count_type_f).order_by(desc(Income.count_type_f))
+        Income.income_expense == '支出', Income.count_type_f != '',
+        Income.deal_date >= datetime.today().replace(month=1, day=1)).group_by(Income.count_type_f).order_by(
+        desc(Income.count_type_f))
     top5_count = [{'value': i[0], 'name': i[1]} for i in res2]
 
     return {'top5_type': top5_type, 'consume_type': consume_type, 'top5_count': top5_count}
@@ -178,7 +177,7 @@ def table_data():
         son.append('——%s——' % key)
         for j in value:
             son.append(j)
-    return render_template('table.html', fathers=list(config_dict.Expense_type.keys()), sons=son,table='/table')
+    return render_template('table.html', fathers=list(config_dict.Expense_type.keys()), sons=son, table='/table')
 
 
 @admin_bp.route('/table', methods=['GET', 'POST'])
@@ -191,9 +190,9 @@ def table():
         c_type = request.args.get('type', '')
         re_dict = {}
         if son:
-            re_dict['count_type_s']=son
+            re_dict['count_type_s'] = son
         if father:
-            re_dict['count_type_f']=father
+            re_dict['count_type_f'] = father
         if c_type:
             re_dict['income_expense'] = c_type
         if re_dict:
@@ -225,7 +224,7 @@ def table():
         response = json.loads(request.data.decode('utf-8'))
         deal_number = response['deal_number']
         response.pop('deal_number')
-        res = Income.query.filter_by(deal_number=deal_number).update(response)
+        Income.query.filter_by(deal_number=deal_number).update(response)
         db.session.commit()
         return json.dumps({'code': 10000, 'msg': 'ok'})
 
@@ -276,9 +275,43 @@ def contacts():
     return render_template('contacts.html')
 
 
-@admin_bp.route('/favourite', methods=['GET'])
+@admin_bp.route('/favourite', methods=['GET', 'POST'])
 def favourite():
-    return render_template('favourite.html')
+    # GET的形式，返回相应的html，并且传递相应的form表单CSRF
+    form_fav = FavoriteForm(CombinedMultiDict([request.form, request.files]))
+    res = Favorite.query.all()
+    new_dict = {}
+    for i in res:
+
+        if not new_dict.get(i.category):
+            new_dict[i.category] = []
+        new_dict[i.category].append(
+            {'category': i.category, 'name': i.name,
+             'avatar': i.avatar, 'web_url': i.web_url,
+             'express': i.express,
+             'thumb_down': i.thumb_down, 'thumb_up': i.thumb_up})
+
+    if form_fav.validate_on_submit():
+        icon = form_fav.icon.data
+        filename = secure_filename(icon.filename)
+        avatar = os.path.join(current_app.config['fav_img'], filename)
+        file_path = os.path.join(current_app.root_path, avatar)
+        icon.save(file_path)
+
+        fav = Favorite(name=form_fav.name.data, avatar=avatar, web_url=form_fav.web_url.data,
+                       express=form_fav.express.data,
+                       thumb_up=0, thumb_down=0, category=form_fav.category.data)
+        db.session.add(fav)
+        db.session.commit()
+
+    # POST的形式，进行添加相应的网站，
+    return render_template('favourite.html', form=form_fav, data_fav=new_dict)
+
+
+@admin_bp.route('/img', methods=['POST'])
+def img_save():
+
+    return render_template('profile.html')
 
 
 @admin_bp.route('/profile', methods=['GET'])

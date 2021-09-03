@@ -1,7 +1,7 @@
 # coding:utf-8
 from flask_wtf import FlaskForm, Form
 from wtforms import StringField, SubmitField, TextAreaField, ValidationError, HiddenField, BooleanField, PasswordField, \
-    DateTimeField, FileField
+    DateTimeField, FileField, IntegerField
 from wtforms.validators import DataRequired, Length, InputRequired, Email, URL
 from flask_wtf.file import FileAllowed, FileRequired
 
@@ -17,7 +17,7 @@ class SettingForm(FlaskForm):
     email = StringField('email', validators=[DataRequired(), Length(1, 40)])
     name = StringField('name', validators=[DataRequired(), Length(1, 20)])
     password = PasswordField('Password', validators=[DataRequired(), Length(1, 128)])
-    blog_title = StringField('Blog Title', validators=[DataRequired(), Length(1, 60)])
+    my_title = StringField('Blog Title', validators=[DataRequired(), Length(1, 60)])
     blog_sub_title = StringField('Blog Sub Title', validators=[DataRequired(), Length(1, 100)])
     about = StringField('About Page', validators=[DataRequired()])
     submit = SubmitField()
@@ -52,3 +52,12 @@ class LinkForm(FlaskForm):
 class IncomeForm(FlaskForm):
     count_type_f = StringField('count_type_f', validators=[DataRequired(), Length(1, 30)])
     count_type_s = StringField('count_type_f', validators=[DataRequired(), Length(1, 30)])
+
+
+class FavoriteForm(FlaskForm):
+    web_url = StringField('web_url', validators=[DataRequired(), Length(1, 80)])
+    name = StringField('name', validators=[DataRequired(), Length(1, 30)])
+    express = StringField('express', validators=[DataRequired(), Length(1, 80)])
+    category = StringField('category', validators=[DataRequired(), Length(1, 30)])
+    icon = FileField('头像', validators=[FileRequired(message='请选择文件'), FileAllowed(['jpg','jpeg','png','gif'])])
+    submit = SubmitField()
