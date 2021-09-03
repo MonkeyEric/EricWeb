@@ -1,3 +1,5 @@
+from gevent import monkey
+monkey.patch_all()   # python 网络接口多进程处理包
 import os
 
 path_of_current_file = os.path.abspath(__file__)
@@ -9,7 +11,8 @@ chdir = path_of_current_dir
 workers = 3  # 进程数量
 threads = 2  # 线程数量
 
-worker_class = 'sync'
+worker_class = 'gevent'
+worker_connections = 20
 
 bind = '127.0.0.1:5001'  # 监听内网端口5001
 
