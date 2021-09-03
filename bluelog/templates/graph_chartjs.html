@@ -307,14 +307,37 @@
         option1 && myChart1.setOption(option1);
 
 
-        //每个月的
-        var chartDom = document.getElementById('main2');
-        var myChart = echarts.init(chartDom, 'dark');
-        var option;
 
-        var dataMap = {};
 
-        function dataFormatter(obj) {
+
+
+
+
+        //消费类型
+       $.ajax({
+                type: "GET",
+                url: "{{url_for('admin.chart_type')}}",
+                contentType: 'application/json;charset=utf-8',//请求数据类型必须有
+                dataType: "json",
+                async: true,//异步
+                success: function(res) {
+                    // data = jQuery.parseJSON(data);  //dataType指明了返回数据为json类型，故不需要再反序列化
+                    expense_type(res['consume_type'])
+                    top5_type(res['top5_type'])
+                    top5_count(res['top5_count'])
+                    each_month(res['consume'],res['consume_count'])
+
+                }
+            });
+
+       //每个月的
+        function each_month(consume,consume_count) {
+            var chartDom = document.getElementById('main2');
+            var myChart = echarts.init(chartDom, 'dark');
+            var option;
+
+            var dataMap = {};
+            function dataFormatter(obj) {
             var pList = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
             var temp;
             for (var year = 2018; year <= 2023; year++) {
@@ -334,8 +357,8 @@
             }
             return obj;
         }
-        dataMap.databar = dataFormatter(JSON.parse({{consume | tojson}}));
-        dataMap.dataline = dataFormatter(JSON.parse({{consume_count | tojson}}));
+        dataMap.databar = dataFormatter(consume);
+        dataMap.dataline = dataFormatter(consume_count);
 
 
         option = {
@@ -479,23 +502,10 @@
         };
 
         option && myChart.setOption(option);
+        }
 
 
-        //消费类型
-       $.ajax({
-                type: "GET",
-                url: "{{url_for('admin.chart_type')}}",
-                contentType: 'application/json;charset=utf-8',//请求数据类型必须有
-                dataType: "json",
-                async: true,//异步
-                success: function(res) {
-                    // data = jQuery.parseJSON(data);  //dataType指明了返回数据为json类型，故不需要再反序列化
-                    expense_type(res['consume_type'])
-                    top5_type(res['top5_type'])
-                    top5_count(res['top5_count'])
 
-                }
-            });
        function expense_type(count_type) {
            var chartDom2 = document.getElementById('main3');
         var myChart3 = echarts.init(chartDom2, 'dark');

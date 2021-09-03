@@ -98,20 +98,7 @@ def chart():
     # 近一个月支出次数最高得类型
     order_by_type_s = func.count('*').label('total')
     high_count = db.session.query(Income.count_type_s, func.count('*').label('total')).group_by(Income.count_type_s).order_by(desc(order_by_type_s)).first()
-    # 消费总计
-    res = db.session.query(func.sum(Income.money).label('total_money'),
-        extract('month', Income.deal_date).label('month'),extract('year', Income.deal_date).label('year')
-        ).filter(Income.income_expense=='支出').group_by(extract('month', Income.deal_date).label('month')).order_by(asc(Income.deal_date))
 
-    consume = arrange(res)
-    del res
-    res1 = db.session.query(func.count(Income.money).label('total_money'),
-                            extract('month', Income.deal_date).label('month'),
-                            extract('year', Income.deal_date).label('year')).filter(
-        Income.income_expense == '支出').group_by(extract('month', Income.deal_date).label('month')).order_by(asc(Income.deal_date))
-    consume_count = arrange(res1)
-
-    del res1
     # 收入支出比
     res2 = db.session.query(func.sum(Income.money).label('total_money'),
                             extract('month', Income.deal_date).label('month'), Income.income_expense).filter(
@@ -122,8 +109,7 @@ def chart():
     income_rate['存储'] = [round(income_rate['收入'][i] - income_rate['支出'][i], 2) for i in range(len(income_rate['支出']))]
     del res2
     return render_template('graph_chartjs.html', storage=storage, expand=expand, high_money=high_money,
-                           high_count=high_count, consume=json.dumps(consume), consume_count=json.dumps(consume_count),
-                           income_rate=json.dumps(income_rate))
+                           high_count=high_count,income_rate=json.dumps(income_rate))
 
 
 @admin_bp.route('/chart_type', methods=['GET'])
@@ -162,7 +148,25 @@ def chart_type():
         desc(Income.count_type_f))
     top5_count = [{'value': i[0], 'name': i[1]} for i in res2]
 
-    return {'top5_type': top5_type, 'consume_type': consume_type, 'top5_count': top5_count}
+    # 消费总计
+    res = db.session.query(func.sum(Income.money).label('total_money'),
+                           extract('month', Income.deal_date).label('month'),
+                           extract('year', Income.deal_date).label('year')
+                           ).filter(Income.income_expense == '支出').group_by(
+        extract('month', Income.deal_date).label('month')).order_by(asc(Income.deal_date))
+
+    consume = arrange(res)
+    del res
+    res1 = db.session.query(func.count(Income.money).label('total_money'),
+                            extract('month', Income.deal_date).label('month'),
+                            extract('year', Income.deal_date).label('year')).filter(
+        Income.income_expense == '支出').group_by(extract('month', Income.deal_date).label('month')).order_by(
+        asc(Income.deal_date))
+    consume_count = arrange(res1)
+
+    del res1
+
+    return {'top5_type': top5_type, 'consume_type': consume_type, 'top5_count': top5_count,'consume':consume,'consume_count':consume_count}
 
 
 @admin_bp.route('/data', methods=['GET', 'POST'])
