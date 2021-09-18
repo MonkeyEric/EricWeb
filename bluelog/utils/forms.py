@@ -18,7 +18,7 @@ class SettingForm(FlaskForm):
     name = StringField('name', validators=[DataRequired(), Length(1, 20)])
     password = PasswordField('Password', validators=[DataRequired(), Length(1, 128)])
     my_title = StringField('Blog Title', validators=[DataRequired(), Length(1, 60)])
-    blog_sub_title = StringField('Blog Sub Title', validators=[DataRequired(), Length(1, 100)])
+    role = StringField('Role', validators=[DataRequired(), Length(1, 10)])
     about = StringField('About Page', validators=[DataRequired()])
     submit = SubmitField()
 

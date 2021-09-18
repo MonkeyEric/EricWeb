@@ -10,6 +10,8 @@ from bluelog.utils.utils import redirect_back, generate_random_code
 from bluelog.utils.extensions import github, db
 from werkzeug.security import generate_password_hash
 
+from sqlalchemy import or_
+
 user_bp = Blueprint('user', __name__)
 
 
@@ -23,9 +25,9 @@ def login():
         password = form.password.data
         remember = form.remember.data
 
-        admin = Admin.query.filter_by(email=email)
-        if admin.count():
-            if email == admin[0].email and admin[0].validate_password(password):
+        admin = db.session.query(Admin).filter(or_(Admin.email == email, Admin.name == email)).all()
+        if len(admin):
+            if (email == admin[0].email or email.lower() == admin[0].name) and admin[0].validate_password(password):
                 login_user(admin[0], remember)
                 flash('Welcome back,', 'Eric')
                 return redirect_back()
@@ -78,20 +80,20 @@ def register():
     form = SettingForm()
     if request.method == 'POST':
         email = form.email.data
-        if Admin.email == email:
-            return render_template('register.html', message='用户已经存在，请重新注册')
+        search_res = db.session.query(Admin).filter(or_(Admin.email == email, Admin.name == email)).all()
+        if search_res:
+            return render_template('register.html', message='用户已经存在，请重新注册', form=form)
         my_title = form.my_title.data
-        blog_sub_title = form.blog_sub_title.data
         name = form.name.data
+        role = form.role.data
         about = form.about.data
         password = form.password.data
         admin = Admin(
             email=email,
             my_title=my_title,
-            blog_sub_title=blog_sub_title,
             name=name,
             about=about,
-            role=1
+            role=role
         )
         admin.set_password(password)
         db.session.add(admin)

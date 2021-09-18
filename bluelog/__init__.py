@@ -104,7 +104,7 @@ def register_user_info_(app):
                 is_login = True
                 user = g.user
                 username = user.name
-                role = '一级管理员'
+                role = user.role
         user_info = dict(is_login=is_login, avatar=avatar, username=username, role=role)
         return dict(user_info=user_info)
 

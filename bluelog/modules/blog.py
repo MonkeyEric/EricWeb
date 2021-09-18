@@ -12,12 +12,12 @@ from flask_login import UserMixin
 class Admin(db.Model, UserMixin):
     types_choices = (
         (1, '管理员'),
-        (2, '一级用户'),
-        (3, '二级用户'),
-        (4, '三级用户'),
+        (2, '特殊用户'),
+        (3, '普通用户'),
+        (4, '访客用户'),
     )
     id = db.Column(db.Integer, primary_key=True)
-    role = ChoiceType(types_choices)
+    role = db.Column(db.String(10))
     email = db.Column(db.String(50))
     password_hash = db.Column(db.String(128))
     my_title = db.Column(db.String(60))
