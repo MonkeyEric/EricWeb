@@ -8,6 +8,8 @@ from flask_moment import Moment
 from flask_github import GitHub
 from flask_login import LoginManager
 from flask_wtf.csrf import CSRFProtect
+from flask_sockets import Sockets
+from flask_socketio import SocketIO
 
 bootstrap = Bootstrap()
 db = SQLAlchemy()
@@ -17,6 +19,8 @@ mail = Mail()
 github = GitHub()
 login_manager = LoginManager()
 csrf = CSRFProtect()
+sockets = Sockets()
+socketio = SocketIO()
 
 
 @login_manager.user_loader

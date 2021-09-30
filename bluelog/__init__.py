@@ -11,7 +11,7 @@ from bluelog.blueprints.user_github import github_bp
 from flask import Flask, render_template, g
 from flask_login import current_user
 
-from bluelog.utils.extensions import bootstrap, db, ckeditor, mail, moment, github, login_manager, csrf
+from bluelog.utils.extensions import bootstrap, db, ckeditor, mail, moment, github, login_manager, csrf, socketio
 from bluelog.settings import config
 
 from dotenv import find_dotenv, load_dotenv
@@ -53,7 +53,17 @@ def create_app(config_name=None):
     register_shell_context(app)  # 注册shell上下文处理函数
     register_template_context(app)  # 注册模板上下文处理函数
     register_user_info_(app)
+    # web_socket_(app)
     return app
+
+
+def web_socket_(app):
+    from gevent import pywsgi
+    from geventwebsocket.handler import WebSocketHandler
+
+    server = pywsgi.WSGIServer(('127.0.0.1', 5002), app, handler_class=WebSocketHandler)
+    print('web server start……')
+    server.serve_forever()
 
 
 def register_logging(app):
@@ -76,6 +86,7 @@ def register_extensions(app):
     mail.init_app(app)
     login_manager.init_app(app)
     csrf.init_app(app)
+    socketio.init_app(app)
 
 
 def register_shell_context(app):

@@ -1,281 +1,144 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <title>ws测试</title>
+    <style>
+
+        #content{
+            width:100%;
+            height:400px;
+            border:1px solid black;
+        }
+
+    </style>
 </head>
 <body>
-<div id="main" style="width: 500px; height: 350px;"></div>
-<div style="height: 50px;"></div>
-<div id="main2" style="width: 500px; height: 350px;"></div>
-<div style="height: 50px;"></div>
-<div id="main3" style="width: 500px; height: 350px;"></div>
-<div style="height: 50px;"></div>
-<div id="main4" style="width: 500px; height: 350px;"></div>
-</body>
-<script src="../static/js/echarts.js"></script>
-<script src="../static/js/jquery-3.1.1.min.js"></script>
+<main>
+
+    <div id="content">1</div>
+
+    <div class="bottom">
+        <input type="text" id="name" placeholder="昵称">
+        <button id="button-open">进入聊天室</button>
+        <button id="button-close">退出聊天室</button>
+        <input type="text" id="text">
+        <button id="button-send">发送</button>
+    </div>
+
+
+</main>
+<!--<script>-->
+<!--var ws = null;-->
+
+<!--function setup_logined(is_login){-->
+<!--    if (is_login){-->
+<!--        document.getElementById('button-open').style.display = 'none';-->
+<!--        document.getElementById('button-close').style.display = 'inline-block';-->
+<!--        document.getElementById('name').readOnly='readOnly';-->
+
+<!--    }else{-->
+<!--        document.getElementById('button-open').style.display = 'inline-block';-->
+<!--        document.getElementById('button-close').style.display = 'none';-->
+<!--        document.getElementById('name').readOnly='';-->
+<!--    }-->
+<!--}-->
+
+<!--setup_logined(false);-->
+
+
+
+
+
+
+<!--document.getElementById('button-open').onclick = function(event){-->
+<!--    if (ws){-->
+<!--        return;-->
+<!--    }-->
+<!--    ws = new WebSocket('ws://127.0.0.1:5002/echo');-->
+<!--    setup_logined(true)-->
+
+<!--    var name = document.getElementById('name').value;-->
+
+<!--    ws.onopen = function(){-->
+<!--        console.log('web socket 已连接');-->
+<!--        ws.send( JSON.stringify({'type':'open', 'data':{'name':name}}));-->
+<!--    }-->
+<!--    ws.onmessage = function (event){-->
+<!--        var r_data = event.data; //接收到的数据-->
+<!--        show_message(r_data);-->
+<!--    }-->
+<!--    ws.onclose = function(){-->
+<!--        //alert('连接已关闭...');-->
+<!--    }-->
+<!--}-->
+<!--document.getElementById('button-close').onclick = function(event){-->
+<!--    ws.close();-->
+<!--    ws=null;-->
+<!--    setup_logined(false);-->
+<!--}-->
+
+
+<!--function show_message(json_string){-->
+<!--    var json = JSON.parse(json_string);-->
+<!--    var type = json.type;-->
+<!--    var data = json.data;-->
+<!--    var html = '';-->
+<!--    if(type==='enter'){-->
+<!--        html='<div style="color:green;">' + data.name + ' 进来了！</div>';-->
+<!--    }else if(type==='leave'){-->
+<!--        html='<div style="color:red;">' + data.name + ' 黯然离去！</div>';-->
+<!--    }else  if(type==='say'){-->
+<!--        console.log(data)-->
+<!--        html='<div>'+ data.name + ' 说：'+data.content+'</div>';-->
+<!--    }-->
+
+<!--    document.getElementById('content').innerHTML+= html  ;-->
+<!--}-->
+
+
+<!--function send_message(){-->
+<!--    if (!ws){-->
+<!--        alert('请先进入聊天室');-->
+<!--        return;-->
+<!--    }-->
+<!--    var text =  document.getElementById('text').value ;-->
+<!--    ws.send( JSON.stringify({'type':'say', 'data':{'content':text}}));-->
+<!--    document.getElementById('content').innerHTML += '<div>我: ' + text +'</div>';-->
+<!--}-->
+
+<!--document.getElementById('button-send').onclick = function(event){-->
+<!--    send_message();-->
+<!--}-->
+<!--document.getElementById('text').onkeypress = function(event){-->
+<!--    if ((event.which||e.keyCode)==13){-->
+<!--        send_message();-->
+<!--        event.preventDefault();-->
+<!--    }-->
+
+<!--}-->
+
+
+<!--</script>-->
+<script src="../static/js/jquery-2.1.1.js"></script>
+<script src="../static/js/socket.io.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.1/socket.io.js"></script>-->
+<script src="../static/js/sockjs.min.js"></script>
 <script type="text/javascript">
-   $(function (){
-        // 每个月的收入指出比
-        var chartDom1 = document.getElementById('main');
-        var myChart1 = echarts.init(chartDom1, 'dark');
-        var option1;
-
-        option1 = {
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-            }
-        },
-        legend: {
-            data: ['利润', '支出', '收入']
-        },
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-        },
-        xAxis: [
-            {
-                type: 'value'
-            }
-        ],
-        yAxis: [
-            {
-                type: 'category',
-                axisTick: {
-                    show: false
-                },
-                data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-            }
-        ],
-        series: [
-            {
-                name: '利润',
-                type: 'bar',
-                label: {
-                    show: true,
-                    position: 'inside'
-                },
-                emphasis: {
-                    focus: 'series'
-                },
-                data: [200, 170, 240, 244, 200, 220, 210]
-            },
-            {
-                name: '收入',
-                type: 'bar',
-                stack: '总量',
-                label: {
-                    show: true
-                },
-                emphasis: {
-                    focus: 'series'
-                },
-                data: [320, 302, 341, 374, 390, 450, 420]
-            },
-            {
-                name: '支出',
-                type: 'bar',
-                stack: '总量',
-                label: {
-                    show: true,
-                    position: 'left'
-                },
-                emphasis: {
-                    focus: 'series'
-                },
-                data: [-120, -132, -101, -134, -190, -230, -210]
-            }
-        ]
-        };
-
-        option1 && myChart1.setOption(option1);
-
-       //每个月的
-        var chartDom = document.getElementById('main2');
-        var myChart = echarts.init(chartDom, 'dark');
-        var option;
-
-        option = {
-        tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'cross',
-            crossStyle: {
-                color: '#999'
-            }
-        }
-        },
-        toolbox: {
-        feature: {
-            dataView: {show: true, readOnly: false},
-            magicType: {show: true, type: ['line', 'bar']},
-            restore: {show: true},
-            saveAsImage: {show: true}
-        }
-        },
-        legend: {
-        data: ['蒸发量', '降水量', '平均温度']
-        },
-        xAxis: [
-        {
-            type: 'category',
-            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-            axisPointer: {
-                type: 'shadow'
-            }
-        }
-        ],
-        yAxis: [
-        {
-            type: 'value',
-            name: '水量',
-            min: 0,
-            max: 250,
-            interval: 50,
-            axisLabel: {
-                formatter: '{value} ml'
-            }
-        },
-        {
-            type: 'value',
-            name: '温度',
-            min: 0,
-            max: 25,
-            interval: 5,
-            axisLabel: {
-                formatter: '{value} °C'
-            }
-        }
-        ],
-        series: [
-        {
-            name: '蒸发量',
-            type: 'bar',
-            data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
-        },
-        {
-            name: '降水量',
-            type: 'bar',
-            data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
-        },
-        {
-            name: '平均温度',
-            type: 'line',
-            yAxisIndex: 1,
-            data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
-        }
-        ]
-        };
-
-        option && myChart.setOption(option);
-
-
-        //消费类型
-
-        var chartDom2 = document.getElementById('main3');
-        var myChart3 = echarts.init(chartDom2, 'dark');
-        var option3;
-
-        option3 = {
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: {            // Use axis to trigger tooltip
-                type: 'shadow'        // 'shadow' as default; can also be 'line' or 'shadow'
-            }
-        },
-        legend: {
-            data: ['Direct', 'Mail Ad', 'Affiliate Ad', 'Video Ad', 'Search Engine']
-        },
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-        },
-        xAxis: {
-            type: 'value'
-        },
-        yAxis: {
-            type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        series: [
-            {
-                name: 'Direct',
-                type: 'bar',
-                stack: 'total',
-                label: {
-                    show: true
-                },
-                emphasis: {
-                    focus: 'series'
-                },
-                data: [320, 302, 301, 334, 390, 330, 320]
-            },
-            {
-                name: 'Mail Ad',
-                type: 'bar',
-                stack: 'total',
-                label: {
-                    show: true
-                },
-                emphasis: {
-                    focus: 'series'
-                },
-                data: [120, 132, 101, 134, 90, 230, 210]
-            },
-            {
-                name: 'Affiliate Ad',
-                type: 'bar',
-                stack: 'total',
-                label: {
-                    show: true
-                },
-                emphasis: {
-                    focus: 'series'
-                },
-                data: [220, 182, 191, 234, 290, 330, 310]
-            },
-            {
-                name: 'Video Ad',
-                type: 'bar',
-                stack: 'total',
-                label: {
-                    show: true
-                },
-                emphasis: {
-                    focus: 'series'
-                },
-                data: [150, 212, 201, 154, 190, 330, 410]
-            },
-            {
-                name: 'Search Engine',
-                type: 'bar',
-                stack: 'total',
-                label: {
-                    show: true
-                },
-                emphasis: {
-                    focus: 'series'
-                },
-                data: [820, 832, 901, 934, 1290, 1330, 1320]
-            }
-        ]
-        };
-
-        option3 && myChart3.setOption(option3);
-
-
-        //类型次数占比
-
-        })
-
-
-
+    $(document).ready(function(){
+    var socket = io.connect('http://' + document.domain + ':' + location.port + '/test');
+    socket.on('my response', function(msg) {
+        $('#log').append('<p>Received: ' + msg.data + '</p>');
+    });
+    $('form#emit').submit(function(event) {
+        socket.emit('my event', {data: $('#emit_data').val()});
+        return false;
+    });
+    $('form#broadcast').submit(function(event) {
+        socket.emit('my broadcast event', {data: $('#broadcast_data').val()});
+        return false;
+    });
+});
 </script>
+</body>
 </html>
