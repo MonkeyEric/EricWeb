@@ -64,28 +64,6 @@ def before_request():
 
 
 @admin_bp.route('/', methods=['GET'])
-def test():
-    return render_template('test.html')
-
-
-@socketio.on('my event', namespace='/test')
-def test_message(message):
-    emit('my response', {'data': message['data']})
-
-@socketio.on('my broadcast event', namespace='/test')
-def test_message(message):
-    emit('my response', {'data': message['data']}, broadcast=True)
-
-@socketio.on('connect', namespace='/test')
-def test_connect():
-    emit('my response', {'data': 'Connected'})
-
-@socketio.on('disconnect', namespace='/test')
-def test_disconnect():
-    print('Client disconnected')
-
-
-# @admin_bp.route('/', methods=['GET'])
 @admin_bp.route('/index', methods=['GET'])
 def index():
     page = request.args.get('page', 1, type=int)
