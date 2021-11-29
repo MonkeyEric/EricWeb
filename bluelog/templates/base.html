@@ -257,13 +257,17 @@
         </div>
             {%endblock%}
             {%block footer%}
-            <div class="footer">
+            <div class="footer aligncenter">
+<!--                <div class="float-right">-->
+<!--                    10GB of <strong>250GB</strong> Free.-->
+<!--                </div>-->
+                <div class="float-left">
+                            <strong><a href="http://beian.miit.gov.cn/" target="_blank"> 津ICP备2021007299号</a></strong>
+                </div>
                 <div class="float-right">
-                    10GB of <strong>250GB</strong> Free.
+                        <img alt="image"  class="rounded-circle" style="width: 20px;height: 20px;"  src="{{url_for('static',filename='img/wiki_favicon.png')}}">    <strong><a href="http://wiki.choumaomi.com" target="_blank"> 个人wiki</a></strong>
                 </div>
-                <div>
-                            <strong>Copyright</strong> inspinia 2.9.2 &copy; 2017-2018
-                </div>
+
             </div>
             {% endblock%}
 

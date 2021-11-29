@@ -1,4 +1,10 @@
 # coding:utf-8
+"""
+配置文件：
+1. 基础配置文件
+2. 开发环境
+3. 生产环境配置
+"""
 import os
 import sys
 

@@ -1,4 +1,7 @@
 # coding:utf-8
+"""
+启动入口
+"""
 import os
 from dotenv import load_dotenv
 from bluelog import create_app
