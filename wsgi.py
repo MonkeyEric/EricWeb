@@ -7,4 +7,6 @@ if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 
 app = create_app()
+if __name__ == "__main__":
+    app.run("127.0.0.1",5001,debug = True)
 
