@@ -1,5 +1,9 @@
 .env
+.flaskenv
 .idea/*
  bluelog/__pycache__/*
+ bluelog/static/.idea/*
+ classify_learn/.idea/*
  __pycache__/*
  bluelog/utils/__pycache__/*
+logs/*
