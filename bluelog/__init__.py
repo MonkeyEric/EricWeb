@@ -31,7 +31,8 @@ def create_app(config_name=None):
     # 初始化app和manage.py文件夹
     app = Flask('blue_log', static_folder=static_dir,template_folder=templates_dir)
     app.config.from_object(config[config_name])
-    app.config['UPLOAD_PATH'] = os.path.join(app.root_path, 'bluelog/file')
+    app.config['UPLOAD_PATH'] = os.path.join(app.root_path, 'bluelog/static/file')
+    app.config['IMG_PATH'] = os.path.join(app.root_path, 'bluelog/static/file/img')
     app.config.update(
         GITHUB_CLIENT_ID=os.getenv('GITHUB_CLIENT_ID'),
         GITHUB_CLIENT_SECRET=os.getenv('GITHUB_CLIENT_SECRET'),

@@ -62,15 +62,32 @@ class Category(db.Model):
         db.session.commit()
 
 
+class Label(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), unique=True)
+    posts = db.relationship('Post', back_populates='label')
+
+    def delete(self):
+        default_label = Label.query.get(1)
+        posts = self.posts[:]
+        for post in posts:
+            post.label = default_label
+        db.session.delete(self)
+        db.session.commit()
+
+
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80))
-    body = db.Column(db.Text)
+    body_html = db.Column(db.Text)
+    body_md = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)
     can_comment = db.Column(db.Boolean, default=True)
 
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    label_id = db.Column(db.Integer, db.ForeignKey('label.id'))
     category = db.relationship('Category', back_populates='posts')
+    label = db.relationship('Label', back_populates='posts')
 
     comments = db.relationship('Comment', back_populates='post', cascade='all, delete-orphan')
 
@@ -97,15 +114,6 @@ class Link(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
     url = db.Column(db.String(255))
-
-
-class Wiki(db.Model):
-    # 这个到开发的时候，可以根据情况存储到本地md文件中
-    id = db.Column(db.Integer, primary_key=True)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)
-    title = db.Column(db.String(80))
-    tag = db.Column(db.String(80))
-    body = db.Column(db.Text)
 
 
 class Favorite(db.Model):

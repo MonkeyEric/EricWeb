@@ -7,6 +7,10 @@ from bluelog.modules.user_github import GithubUser
 from flask_login import current_user
 from sqlalchemy import desc
 
+import os
+import json
+import uuid
+
 blog_bp = Blueprint('blog', __name__)
 
 
@@ -23,14 +27,26 @@ def before_request():
             g.db = 'admin'
 
 
-@blog_bp.route('/', methods=['GET'])
-def blog_get():
-    page = request.args.get('page', 1, type=int)
-    per_page = 30
-    pagination = Post.query.order_by(desc(Post.timestamp)).paginate(page, per_page=per_page)
-    posts = pagination.items
+@blog_bp.route('/', methods=['GET','POST'])
+def blog_index():
+    if request.method == 'GET':
+        page = request.args.get('page', 1, type=int)
+        per_page = 30
+        pagination = Post.query.order_by(desc(Post.timestamp)).paginate(page, per_page=per_page)
+        posts = pagination.items
 
-    return render_template('blog_list.html', pagination=pagination, posts=posts)
+        return render_template('blog_list.html', pagination=pagination, posts=posts)
+    if request.method == 'POST':
+        response = json.loads(request.data.decode('utf-8'))
+        post = Post()
+        post.title = response.get('title')
+        post.body_html = response.get('body_html')
+        post.body_md = response.get('body_md')
+        post.category_id = response.get('category_id','')
+        post.label_id = response.get('label_id', '')
+        db.session.add(post)
+        db.session.commit()
+        return {'code': '100000', 'msg': '博客上传成功'}
 
 
 @blog_bp.route('/category/<int:category_id>', methods=['GET'])
@@ -46,6 +62,9 @@ def show_category(category_id):
 
 @blog_bp.route('/post/<int:post_id>', methods=['GET', 'POST'])
 def show_post(post_id):
+    """
+    发表评论
+    """
     post = Post.query.get_or_404(post_id)
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BLOG_POST_PER_PAGE']
@@ -57,7 +76,7 @@ def show_post(post_id):
         form = AdminCommentFrom()
         form.author.data = current_user.name
         form.email.data = current_app.config['WEB_EMAIL']
-        form.site.data = url_for('blog.blog_get')
+        form.site.data = url_for('blog.blog_index')
         from_admin = True
         reviewed = True
     else:
@@ -103,3 +122,16 @@ def github():
 @blog_bp.route('/code_editor', methods=['GET'])
 def code_editor():
     return render_template('form_markdown.html')
+
+
+@blog_bp.route('/upload', methods=['POST'])
+def img_upload():
+    guid = request.args.get('guid')
+    img_data = request.files.get('editormd-image-file')
+    if not guid:
+        return {"success": 0, "message": "上传失败"}
+    if img_data.filename.split('.')[-1].lower() in [".jpg", ".jpeg", ".gif", ".png", ".bmp", ".webp"]:
+        file_path = os.path.join(current_app.config['IMG_PATH'], guid + img_data.filename)
+    img_data.save(file_path)
+    url = '/static/file/img/' + guid + img_data.filename
+    return {"success": 1, "message": "上传成功", "url": url}

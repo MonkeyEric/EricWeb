@@ -40,7 +40,8 @@ def fake_posts(count=50):
     for i in range(count):
         post = Post(
             title=fake.sentence(),
-            body=fake.text(2000),
+            body_html=fake.text(2000),
+            body_md=fake.text(2000),
             category=Category.query.get(random.randint(1, Category.query.count())),
             timestamp=fake.date_time_this_year()
         )

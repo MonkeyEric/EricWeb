@@ -2,6 +2,7 @@
 {% block title %}Markdown编辑{% endblock %}
 {% block head %}
 <link rel="stylesheet" href="{{url_for('static',filename='editormd/css/editormd.css')}}">
+
 {% endblock %}
 
 <body>
@@ -10,16 +11,16 @@
 {{ self.pheader() }}
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10">
-            <h2>Markdown</h2>
+            <h2>写博客</h2>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <a href="{{url_for('admin.index')}}">主页</a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a>表单</a>
+                    <a href="{{url_for('blog.blog_index')}}">博客列表</a>
                 </li>
                 <li class="breadcrumb-item active">
-                    <a href="{{url_for('blog.code_editor')}}"> <strong>Markdown</strong></a>
+                    <a href="{{url_for('blog.code_editor')}}"> <strong>写博客</strong></a>
                 </li>
             </ol>
         </div>
@@ -31,17 +32,35 @@
             <div class="col-lg-12">
                 <div class="ibox ">
                     <div class="ibox-title">
-                        <h5>Bootstrap markdown <small>http://www.codingdrama.com/bootstrap-markdown/</small></h5>
+                        <label>
+                            <input class="h5" type="text" placeholder="请输入博客标题" name="title" style="padding: 2px;border: none; outline:none;width: 70%" >
+                        </label>
+
                         <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
+                            <input class="btn btn-primary" type="button" name="submit" value="提交博客" style="">
+                        </div>
+
+                    </div>
+                    <div class="ibox-title">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">分类</label>
+                                        <div class="col-sm-10">
+                                            <select class="form-control m-b" name="account">
+                                            <option>选项 1</option>
+                                            <option>选项 2</option>
+                                            <option>选项 3</option>
+                                            <option>选项 4</option>
+                                            </select>
+                                        </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="ibox-content" id="test-editor">
 
-<!--                           <form method="post" action="#">-->
-                                <textarea style="display:none;" placeholder="请输入内容">[TOC]
+                        <label for="my-editormd-markdown-doc"></label><textarea id="my-editormd-markdown-doc" name="my-editormd-markdown-doc" style="display:none;">[TOC]
 
 #### Disabled options
 
@@ -73,11 +92,16 @@
 <!-- 繁體中文 -->
 <script src="../dist/js/languages/zh-tw.js"></script>
 ```
+</textarea>
+                    <!-- 注意：name属性的值-->
+                        <label for="my-editormd-html-code"></label><textarea id="my-editormd-html-code" name="my-editormd-html-code" style="display:none;"></textarea>
 
-                                </textarea>
-<!--                                <input type="submit" name="submit" value="提交表单 Submit" style="padding: 5px;">-->
+<!--                           <form method="post" action="#">-->
 
-<!--                           </form>-->
+
+<!--
+
+           </form>-->
 
                     </div>
                 </div>
@@ -90,31 +114,37 @@
 {%block script%}
     <!-- Bootstrap markdown -->
 <script src="{{url_for('static',filename='editormd/editormd.min.js')}}"></script>
-
+<!-- Chosen -->
+<script src="{{url_for('static',filename='js/plugins/chosen/chosen.jquery.js')}}"></script>
 <script type="text/javascript">
     $(function() {
-        var testEditor = editormd("test-editor", {
+        const testEditor = editormd("test-editor", {
             // width  : "100%",
             // height : "100%",
-            path   : '/static/editormd/lib/',
+            path: '/static/editormd/lib/',
             flowChart: true,
-            placeholder : "此处开始编写您要发布的内容...",
+            placeholder: "此处开始编写您要发布的内容...",
             emoji: true,
             taskList: true,
             sequenceDiagram: true,       // 开启时序/序列图支持，默认关闭,
             delay: 0,
-            saveHTMLToTextarea : true, // 保存 HTML 到 Textarea
-            toolbarAutoFixed:false,//工具栏自动固定定位的开启与禁用
+            tocm: true,
+            saveHTMLToTextarea: true, // 保存 HTML 到 Textarea
+            toolbarAutoFixed: false,//工具栏自动固定定位的开启与禁用
             syncScrolling: "single",
             watch: true,
-
+            codeFold: true,
+            /**上传图片相关配置如下*/
+            imageUpload: true,
+            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL: "/blog/upload",//注意你后端的上传图片服务地址
             // 工具栏添加一个自定义方法
-            toolbarIcons: function() {
+            toolbarIcons: function () {
                 // 给工具栏full模式添加一个自定义方法
                 return editormd.toolbarModes.full.concat(["customIcon"]);
             },
 
-            // 自定义方法的图标 指定一个FontAawsome的图标类
+            // 自定义方法的图标 指定一个FontAwesome的图标类
             toolbarIconsClass: {
                 customIcon: "fa-paste"
             },
@@ -130,20 +160,60 @@
             },
             // 自定义工具栏按钮的事件处理
             toolbarHandlers: {
-                customIcon: function(){
+                customIcon: function () {
                     // 读取缓存内容
                     testEditor.CodeAutoSaveGetCache();
                 }
             },
             // 自定义工具栏按钮的事件处理
-            onload: function() {
+            onload: function () {
                 // 引入插件 执行监听方法
-                editormd.loadPlugin("../static/code-auto-save/code-auto-save", function() {
+                editormd.loadPlugin("../static/code-auto-save/code-auto-save", function () {
                     // 初始化插件 实现监听
                     testEditor.CodeAutoSave();
                 });
-            }
+                //console.log('onload', this);
+                //this.fullscreen();
+                //this.unwatch();
+                //this.watch().fullscreen();
+                //this.width("100%");
+                //this.height(480);
+                //this.resize("100%", 640);
+            },
+            /**设置主题颜色*/
+            // editorTheme: "pastel-on-dark",
+            // theme: "gray",
+            // previewTheme: "dark"
         });
+        // testEditor.getMarkdown();
+        $('#submit').bind('click', function() {
+
+        setTimeout(function(){
+            const title =  $("input[name='title']").val()
+            $.ajax({
+            url:"{{ url_for('blog.blog_index') }}",
+            type:"post",
+            dataType: 'json',
+            contentType: 'application/json;charset=utf-8',//请求数据类型必须有
+            data:JSON.stringify({'title':title,'body_md':testEditor.getMarkdown(),'body_html':testEditor.getHTML()}),
+            async: true,//异步
+            success:function(data){
+                console.log(data)
+                if(data['code'] ==='100000'){
+                    alert(data['msg'])
+                }
+            },
+            error:function(e){
+                    alert("error");
+            }
+        })
+        },500);
+
+          });
+
+
+        // testEditor.getHTML();           // 获取 Textarea 保存的 HTML 源码
+        // testEditor.getPreviewedHTML();  // 获取预览窗口里的 HTML，在开启 watch 且没有开启 saveHTMLToTextarea 时使用
         /********以下方法需要在插件初始化完成后方可调用********/
             // // 删除缓存
             // testEditor.CodeAutoSaveDelCache();
