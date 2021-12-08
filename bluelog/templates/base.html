@@ -251,16 +251,15 @@
         </div>
             {%endblock%}
             {%block footer%}
-            <div class="footer aligncenter">
-<!--                <div class="float-right">-->
-<!--                    10GB of <strong>250GB</strong> Free.-->
-<!--                </div>-->
-                <div class="float-left">
+            <div class="footer row">
+                <div class="col-md-4"></div>
+                <div class="col-md-2">
                             <strong><a href="https://beian.miit.gov.cn/" target="_blank"> 津ICP备2021007299号</a></strong>
                 </div>
-                <div class="float-right">
+                <div class="col-md-2">
                         <img alt="image"  class="rounded-circle" style="width: 20px;height: 20px;"  src="{{url_for('static',filename='img/wiki_favicon.png')}}">    <strong><a href="http://wiki.choumaomi.com" target="_blank"> 个人wiki</a></strong>
                 </div>
+                <div class="col-md-4"></div>
 
             </div>
             {% endblock%}
