@@ -1,7 +1,7 @@
 import os
 
 import click
-from bluelog.modules.blog import Admin, Category, Link, Comment
+from bluelog.modules.blog import Admin, Category, Link, Comment, Tag
 from bluelog.modules.user_github import GithubUser
 
 from bluelog.blueprints.user import user_bp
@@ -125,11 +125,12 @@ def register_user_info_(app):
         admin = Admin.query.first()
         categories = Category.query.order_by(Category.name).all()
         links = Link.query.order_by(Link.name).all()
+        tags = Tag.query.order_by(Tag.name).all()
         if current_user.is_authenticated:
             unread_comments = Comment.query.filter_by(reviewed=False).count()
         else:
             unread_comments = None
-        return dict(admin=admin, categories=categories, links=links, unread_comments=unread_comments)
+        return dict(admin=admin, categories=categories, links=links, unread_comments=unread_comments,tags=tags)
 
 
 def register_template_context(app):
@@ -153,11 +154,12 @@ def register_errors(app):
 def register_commands(app):
     @app.cli.command()
     @click.option('--category', default=10, help='Quantity of categories,default is 10.')
+    @click.option('--tag', default=10, help='Quantity of categories,default is 10.')
     @click.option('--post', default=50, help='Quantity of posts,default is 50.')
     @click.option('--comment', default=500, help='Quantity of comments,default is 500.')
-    def forge(category, post, comment):
+    def forge(category, tag, post, comment):
         """generate the fake categories,posts,comments"""
-        from bluelog.utils.fakes import fake_admin, fake_categories, fake_posts, fake_comments
+        from bluelog.utils.fakes import fake_admin, fake_categories, fake_posts, fake_comments, fake_tag, fake_tag_post_table
         db.drop_all()
         db.create_all()
         click.echo('Generating the administrator……')
@@ -166,8 +168,14 @@ def register_commands(app):
         click.echo('Generating %d categories……' % category)
         fake_categories(category)
 
+        click.echo('Generating %d tags……' % tag)
+        fake_tag(tag)
+
         click.echo('Generating %d posts……' % post)
         fake_posts(post)
+
+        click.echo('Generating tag_post_table……')
+        fake_tag_post_table()
 
         click.echo('Generating %d comments……' % comment)
         fake_comments(comment)

@@ -39,12 +39,18 @@ def blog_index():
     if request.method == 'POST':
         response = json.loads(request.data.decode('utf-8'))
         post = Post()
-        post.title = response.get('title')
+        post.title = response.get('title', '默认题目'+str(datetime.now()))
         post.body_html = response.get('body_html')
         post.body_md = response.get('body_md')
-        post.category_id = response.get('category_id','')
-        post.label_id = response.get('label_id', '')
+        post.category_id = response.get('category_id', '')
         db.session.add(post)
+
+        for oid in response.get('label_id', []):
+            tag_post = TagPost()
+            tag_post.tag_id = oid
+            tag_post.post_id = post.id
+            db.session.add(tag_post)
+
         db.session.commit()
         return {'code': '100000', 'msg': '博客上传成功'}
 
@@ -55,6 +61,17 @@ def show_category(category_id):
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BLOG_POST_PER_PAGE']
     pagination = Post.query.with_parent(category).order_by(desc(Post.timestamp)).paginate(page, per_page)
+    posts = pagination.items
+
+    return render_template('blog.html', pagination=pagination, posts=posts)
+
+
+@blog_bp.route('/tag/<int:tag_id>', methods=['GET'])
+def show_tag(tag_id):
+    tag = Tag.query.get_or_404(tag_id)
+    page = request.args.get('page', 1, type=int)
+    per_page = current_app.config['BLOG_POST_PER_PAGE']
+    pagination = Post.query.with_parent(tag).order_by(desc(Post.timestamp)).paginate(page, per_page)
     posts = pagination.items
 
     return render_template('blog.html', pagination=pagination, posts=posts)
@@ -121,7 +138,20 @@ def github():
 
 @blog_bp.route('/code_editor', methods=['GET'])
 def code_editor():
-    return render_template('form_markdown.html')
+    post_id = request.args.get('post_id', '')
+    tag_list = []
+    if post_id:
+        post = db.session.query(Post).filter_by(id=post_id).first()
+        post_md = post.body_md
+        category_id = post.category_id
+
+        tag = db.session.query(TagPost).filter_by(post_id=post_id).all()
+        for oid in tag:
+            tag_list.append(oid)
+    else:
+        post_md = ''
+        category_id = ''
+    return render_template('form_markdown.html', body=post_md, category_id=category_id, tag_list=tag_list)
 
 
 @blog_bp.route('/upload', methods=['POST'])
@@ -130,8 +160,7 @@ def img_upload():
     img_data = request.files.get('editormd-image-file')
     if not guid:
         return {"success": 0, "message": "上传失败"}
-    if img_data.filename.split('.')[-1].lower() in [".jpg", ".jpeg", ".gif", ".png", ".bmp", ".webp"]:
-        file_path = os.path.join(current_app.config['IMG_PATH'], guid + img_data.filename)
+    file_path = os.path.join(current_app.config['IMG_PATH'], guid + img_data.filename)
     img_data.save(file_path)
     url = '/static/file/img/' + guid + img_data.filename
     return {"success": 1, "message": "上传成功", "url": url}

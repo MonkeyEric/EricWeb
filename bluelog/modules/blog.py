@@ -52,6 +52,7 @@ class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), unique=True)
     posts = db.relationship('Post', back_populates='category')
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)
 
     def delete(self):
         default_category = Category.query.get(1)
@@ -62,16 +63,31 @@ class Category(db.Model):
         db.session.commit()
 
 
-class Label(db.Model):
+class TagPost(db.Model):
+    """
+        多对多
+    """
+    __tablename__ = 'tag_post'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+
+
+class Tag(db.Model):
+    """
+    多对一
+    """
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), unique=True)
-    posts = db.relationship('Post', back_populates='label')
+    posts = db.relationship('Post', secondary='tag_post', back_populates='tag')
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)
 
     def delete(self):
-        default_label = Label.query.get(1)
+        default_category = Category.query.get(1)
         posts = self.posts[:]
         for post in posts:
-            post.label = default_label
+            post.category = default_category
         db.session.delete(self)
         db.session.commit()
 
@@ -79,15 +95,17 @@ class Label(db.Model):
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80))
+    author = db.Column(db.String(80), default='Eric')
     body_html = db.Column(db.Text)
     body_md = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)
     can_comment = db.Column(db.Boolean, default=True)
+    read_count = db.Column(db.Integer)
+    like_count = db.Column(db.Integer)
 
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
-    label_id = db.Column(db.Integer, db.ForeignKey('label.id'))
     category = db.relationship('Category', back_populates='posts')
-    label = db.relationship('Label', back_populates='posts')
+    tag = db.relationship('Tag', back_populates='posts', secondary='tag_post')
 
     comments = db.relationship('Comment', back_populates='post', cascade='all, delete-orphan')
 

@@ -13,10 +13,9 @@
                         <div class="small m-b-xs">
                             <strong>火星一号</strong> <span class="text-muted"><i class="fa fa-clock-o"></i>&nbsp;&nbsp;{{ moment(post.timestamp).format('lll')}}</span>
                         </div>
-                        <p>
-                            {{post.body|striptags|truncate}}
+                            {{post.body_html|truncate}}
                              <small><a  href="{{ url_for('blog.show_post', post_id=post.id) }}">更多</a></small>
-                        </p>
+
                         <div class="row">
                             <div class="col-md-7">
                                     <button class="btn btn-white btn-xs" type="button"><a href="{{ url_for('blog.show_category', category_id=post.category.id) }}">{{ post.category.name }}</a></button>

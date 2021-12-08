@@ -1,5 +1,5 @@
 # coding:utf-8
-from bluelog.modules.blog import Admin, Category, Post, Comment
+from bluelog.modules.blog import Admin, Category, Post, Comment, Tag, TagPost
 from bluelog.utils.extensions import db
 from faker import Faker
 import random
@@ -24,14 +24,24 @@ fake = Faker()
 
 
 def fake_categories(count=10):
-    category = Category(name='Default')
-    db.session.add(category)
     for i in range(count):
         category = Category(name=fake.word())
         db.session.add(category)
         try:
             db.session.commit()
         except InterruptedError:
+            db.session.rollback()
+
+
+def fake_tag(count=10):
+    for i in range(count):
+        tag = Tag(name=fake.word())
+        db.session.add(tag)
+        try:
+            db.session.commit()
+        # except InterruptedError:
+        except Exception as e:
+            print(e)
             db.session.rollback()
 
 
@@ -47,6 +57,21 @@ def fake_posts(count=50):
         )
         db.session.add(post)
     db.session.commit()
+
+
+# 用于生成文章得标签
+def fake_tag_post_table():
+    post = Post.query.all()
+    tag = Tag.query.all()
+    if tag:
+        tag_ids = [j.id for j in tag]
+        for i in post:
+            tag_post = TagPost(
+                post_id=i.id,
+                tag_id=random.choice(tag_ids)
+            )
+            db.session.add(tag_post)
+        db.session.commit()
 
 
 # 用于生成虚拟评论的fake_comments()函数代码

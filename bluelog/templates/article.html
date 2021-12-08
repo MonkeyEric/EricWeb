@@ -1,5 +1,11 @@
 ﻿{% extends "base.html" %}
 {% block title%}文章{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{url_for('static',filename='css/plugins/chosen/bootstrap-chosen.css')}}">
+<!-- editor.md-->
+<link rel="stylesheet" href="{{url_for('static',filename='editormd/css/editormd.css')}}">
+{% endblock %}
+
 {% block wrapper%}
 <div id="page-wrapper" class="gray-bg">
     {{ self.pheader() }}
@@ -24,36 +30,67 @@
     <div class="wrapper wrapper-content  animated fadeInRight article">
     <div class="row justify-content-md-center">
         <div class="col-lg-9">
-
             <div class="ibox">
-                <div class="ibox-content">
-                    <div class="float-right">
-                        <button class="btn btn-outline btn-primary  dim " type="button"><i class="fa fa-star"></i></button>
-                        <button class="btn btn-outline btn-danger  dim " type="button"><i class="fa fa-heart"></i></button>
-                        <button class="btn btn-outline btn-success  dim " type="button"><i class="fa fa-share-alt"></i></button>
-                    </div>
-                    <div class="article-title">
+                <div class="ibox-title">
 
-                        <h1 class="text-center">
+                    <h1 class="text-center">
                             {{ post.title }}
-                        </h1>
-                        <span class="text-muted"><i class="fa fa-clock-o"></i> &nbsp;&nbsp;{{ moment(post.timestamp).format('LLL')}}</span>
+                    </h1>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user" x-placement="bottom-start" style="position: absolute; top: 17px; left: 26px; will-change: top, left;">
+                            <li><a href="{{url_for('blog.code_editor',post_id=post.id)}}" class="dropdown-item">编辑文章</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
                     </div>
+                    <div class="row text-center">
 
-                    {{post.body|safe}}
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h4>标签</h4>
-                                <button class="btn btn-white btn-xs" type="button"><a href="{{ url_for('.show_category', category_id=post.category.id) }}">{{ post.category.name }}</a></button>
+                                <div class="col-md-2">
+                                    <label>分类：</label>
+                                    <button class="btn btn-white btn-xs" type="button"><a href="{{ url_for('.show_category', category_id=post.category.id) }}">{{ post.category.name }}</a></button>
+                                </div>
+                        <div class="col-md-5">
+                            <label>标签：</label>
+                                    <button class="btn btn-white btn-xs" type="button"><a href="{{ url_for('.show_category', category_id=post.category.id) }}">{{ post.category.name }}</a></button>
+                            <button class="btn btn-white btn-xs" type="button"><a href="{{ url_for('.show_category', category_id=post.category.id) }}">{{ post.category.name }}</a></button>
+                            <button class="btn btn-white btn-xs" type="button"><a href="{{ url_for('.show_category', category_id=post.category.id) }}">{{ post.category.name }}</a></button>
+                            <button class="btn btn-white btn-xs" type="button"><a href="{{ url_for('.show_category', category_id=post.category.id) }}">{{ post.category.name }}</a></button>
+                            <button class="btn btn-white btn-xs" type="button"><a href="{{ url_for('.show_category', category_id=post.category.id) }}">{{ post.category.name }}</a></button>
+
+                                </div>
+                        <span class="col-md-3 text-muted"><i class="fa fa-clock-o"></i> &nbsp;&nbsp;{{ moment(post.timestamp).format('LLL')}}</span>
+                        <div class="col-md-2 align-right">
+                            <label>作者：</label>{{post.author}}
                         </div>
-                        <div class="col-md-6">
 
-                            <div class="small text-right">
+                        </div>
+                </div>
+                <div class="ibox-content">
+
+                    <div id="my-content">
+
+                    </div>
+                    <div id="doc-content">
+                        <textarea style="display:none;">{{post.body_md}}
+                        </textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6">
+                            <div class="h6 text-right">
                                 <div>
-                                        <h4>统计</h4>
+
                                         <i class="fa fa-comments-o"> </i>
-                                        <a href="{{ url_for('blog.show_post', post_id=post.id) }}#comments">{{ post.comments|length}} 评论 </a>&nbsp;&nbsp;
-                                        <i class="fa fa-eye"> </i> 144 浏览 &nbsp;&nbsp;
+                                        <a href="#comment">{{ post.comments|length}} 评论 </a>&nbsp;&nbsp;
+                                        <i class="fa fa-eye"> </i><a href="#"> 144 浏览 &nbsp;&nbsp;</a>
                                         <i class="fa fa-thumbs-up"> </i>
                                         <a href="#"> 23 点赞 </a>
                                     </div>
@@ -61,71 +98,77 @@
                         </div>
                     </div>
 
+                </div>
+            </div>
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h2 class="text-left">评论: <small>请<a href="#">登录</a>发表评论</small></h2>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" id="comment">
                     <div class="row">
-                        <div class="col-lg-12">
-
-                            <h2>评论:</h2>
-                            {% if comments %}
-                            {% for comment in comments %}
-                            <div class="social-feed-box">
-                                <div class="social-avatar">
-                                    <a href="" class="float-left">
-                                        <img alt="image" src="{{url_for('static',filename='img/a7.jpg')}}">
-                                    </a>
-                                    <div class="media-body">
-                                        <a href="{% if comment.site %}{{ comment.site }}{% else %}#{% endif %}" target="_blank">
-                                             {% if comment.from_admin %}
-                                                {{ admin.name }}
-                                            {% else %}
-                                                {{ comment.author }}
-                                            {% endif %}
-                                        </a>
-                                        {% if comment.from_admin %}
-                                            <span class="badge badge-primary">Author</span>{% endif %}
-                                        {% if comment.replied %}<span class="badge badge-light">Reply</span>{% endif %}
-                                        <small class="text-muted" data-timestamp="{{ comment.timestamp.strftime('%Y-%m-%dT%H:%M:%SZ') }}">{{ moment(comment.timestamp).fromNow() }}</small>
+                            <div class="col-lg-12">
+                                    {% if comments %}
+                                    {% for comment in comments %}
+                                    <div class="social-feed-box">
+                                        <div class="social-avatar">
+                                            <a href="" class="float-left">
+                                                <img alt="image" src="{{url_for('static',filename='img/a7.jpg')}}">
+                                            </a>
+                                            <div class="media-body">
+                                                <a href="{% if comment.site %}{{ comment.site }}{% else %}#{% endif %}" target="_blank">
+                                                     {% if comment.from_admin %}
+                                                        {{ admin.name }}
+                                                    {% else %}
+                                                        {{ comment.author }}
+                                                    {% endif %}
+                                                </a>
+                                                {% if comment.from_admin %}
+                                                    <span class="badge badge-primary">Author</span>{% endif %}
+                                                {% if comment.replied %}<span class="badge badge-light">Reply</span>{% endif %}
+                                                <small class="text-muted" data-timestamp="{{ comment.timestamp.strftime('%Y-%m-%dT%H:%M:%SZ') }}">{{ moment(comment.timestamp).fromNow() }}</small>
+                                            </div>
+                                        </div>
+                                        <div class="social-body">
+                                            {% if comment.replied %}
+                                            <p class="alert alert-dark reply-body">{{ comment.replied.author }}:
+                                                <br>{{ comment.replied.body }}
+                                            </p>
+                                            {%- endif -%}
+                                            <p>
+                                                {{ comment.body }}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="social-body">
-                                    {% if comment.replied %}
-                                    <p class="alert alert-dark reply-body">{{ comment.replied.author }}:
-                                        <br>{{ comment.replied.body }}
-                                    </p>
-                                    {%- endif -%}
-                                    <p>
-                                        {{ comment.body }}
-                                    </p>
-                                </div>
+                                    {% endfor %}
+                                    {% endif %}
                             </div>
-                            {% endfor %}
-                            {% endif %}
-                        </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-10">
-                            <div class="ibox ">
-                                <div class="ibox-content">
-                                    <div class="row">
-                                        <div class="col-md-10">
-                                            <p>请输入以下信息发表您的评论</p>
-                                            <form role="form">
-                                                <div class="form-group"><label>电子邮件</label> <input type="text" placeholder="输入你的昵称" name="author" class="form-control"></div>
-                                                <div class="form-group"><label>密码</label> <input type="email" placeholder="输入你的邮箱" name="email" class="form-control"></div>
-                                                <div class="form-group"><label>评论</label> <input type="text" placeholder="输入你的网址" name="site" class="form-control"></div>
-                                                 <div class="form-group"><label>评论</label>
-                                                    <textarea class="form-control" id="body" name="body" required=""></textarea>
-                                                 </div>
-                                                <div>
-                                                    <button class="btn btn-sm btn-primary float-right m-t-n-xs" type="submit"><strong>发表</strong></button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
+
+                            <p>请输入以下信息发表您的评论</p>
+                            <form role="form">
+                                <div class="form-group"><label>电子邮件</label> <input type="text" placeholder="输入你的昵称" name="author" class="form-control"></div>
+                                <div class="form-group"><label>密码</label> <input type="email" placeholder="输入你的邮箱" name="email" class="form-control"></div>
+                                <div class="form-group"><label>评论</label> <input type="text" placeholder="输入你的网址" name="site" class="form-control"></div>
+                                 <div class="form-group"><label>评论</label>
+                                    <textarea class="form-control" id="body" name="body" required=""></textarea>
+                                 </div>
+                                <div>
+                                    <button class="btn btn-sm btn-primary float-right m-t-n-xs" type="submit"><strong>发表</strong></button>
                                 </div>
-                            </div>
+                            </form>
+
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -144,4 +187,30 @@
 {{ super() }}
 {{ moment.include_moment() }}
 {{moment.locale('zh-cn')}}
+<!-- 预览时需要引入marked.js，否则报错 [ ReferenceError: marked is not defined ] -->
+<script src="{{url_for('static',filename='editormd/lib/marked.min.js')}}"></script>
+<!-- 预览时需要引入prettify.js，否则报错 [ ReferenceError: prettyPrint is not defined ] -->
+<script src="{{url_for('static',filename='editormd/lib/prettify.min.js')}}"></script>
+<script src="{{url_for('static',filename='editormd//lib/flowchart.min.js')}}"></script>
+<script src="{{url_for('static',filename='editormd/editormd.min.js')}}"></script>
+<script type="text/javascript">
+    $(function () {
+         var body_= "${post.body_html }";
+         var rulemodeid= "${post.body_html }";
+         document.getElementById("my-content").innerHTML= rulemodeid
+        setTimeout(function(){
+            const testEditor = editormd.markdownToHTML("doc-content", {//注意：这里是上面DIV的id
+             htmlDecode: "style,script,iframe",
+             path: '/static/editormd/lib/',
+             emoji: true,
+             taskList: true,
+             tex: true, // 默认不解析
+             flowChart: true, // 默认不解析
+             sequenceDiagram: true, // 默认不解析
+             codeFold: true,
+         })
+        },500);
+    })
+
+</script>
 {% endblock %}

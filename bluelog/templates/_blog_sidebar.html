@@ -2,7 +2,7 @@
   {% if links %}
   <div class="ibox">
       <div class="ibox-content">
-          <h2>链接</h2>
+          <h2>链&nbsp;接</h2>
           <ul class="list-group clear-list m-t">
             {% for link in links %}
             <li class="list-group-item fist-item">
@@ -16,7 +16,7 @@
   {% if categories %}
   <div class="ibox">
       <div class="ibox-content">
-          <h2>标签</h2>
+          <h2>分&nbsp;类</h2>
           <ul class="list-group clear-list m-t">
             {% for category in categories %}
                   <li class="list-group-item fist-item">
@@ -24,6 +24,25 @@
                         <h4>{{ category.posts|length }}</h4>
                     </span>
                     <h3><a href="{{ url_for('blog.show_category', category_id=category.id) }}" >{{ category.name }}</a></h3>
+                  </li>
+            {% endfor %}
+          </ul>
+      </div>
+  </div>
+
+{% endif %}
+
+{% if tags %}
+  <div class="ibox">
+      <div class="ibox-content float-e-margins">
+          <h2>标&nbsp;签</h2>
+          <ul class="list-group clear-list m-t">
+            {% for tag in tags %}
+                  <li class="list-group-item fist-item">
+                    <span class="float-right">
+                        <h4>{{ tag.posts|length }}</h4>
+                    </span>
+                    <h3><a href="{{ url_for('blog.show_tag', tag_id=tag.id) }}" >{{ tag.name }}</a></h3>
                   </li>
             {% endfor %}
           </ul>

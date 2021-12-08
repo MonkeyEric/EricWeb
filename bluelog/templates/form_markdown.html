@@ -1,8 +1,8 @@
 ﻿{% extends "base.html" %}
 {% block title %}Markdown编辑{% endblock %}
 {% block head %}
+<link rel="stylesheet" href="{{url_for('static',filename='css/plugins/chosen/bootstrap-chosen.css')}}">
 <link rel="stylesheet" href="{{url_for('static',filename='editormd/css/editormd.css')}}">
-
 {% endblock %}
 
 <body>
@@ -29,79 +29,52 @@
     <div class="wrapper wrapper-content">
 
         <div class="row">
-            <div class="col-lg-12">
-                <div class="ibox ">
+
+            <div class="col-md-12" >
+                <div class="ibox " style="height: 900px">
                     <div class="ibox-title">
-                        <label>
+                        <label class="h5">题目:&nbsp;&nbsp;&nbsp;</label>
+
                             <input class="h5" type="text" placeholder="请输入博客标题" name="title" style="padding: 2px;border: none; outline:none;width: 70%" >
-                        </label>
+
 
                         <div class="ibox-tools">
-                            <input class="btn btn-primary" type="button" name="submit" value="提交博客" style="">
+                            <input class="btn btn-primary" type="button" name="submit" value="提交博客" style="" id="submit">
                         </div>
-
-                    </div>
-                    <div class="ibox-title">
-                        <div class="row">
-                            <div class="col-sm-3">
+                        <div class="row" style="padding-bottom: 0;font-weight: bolder;">
+                            <div class="col-md-4">
                                 <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label">分类</label>
-                                        <div class="col-sm-10">
-                                            <select class="form-control m-b" name="account">
-                                            <option>选项 1</option>
-                                            <option>选项 2</option>
-                                            <option>选项 3</option>
-                                            <option>选项 4</option>
-                                            </select>
-                                        </div>
+                                    <label class="col-lg-2 col-form-label" for="category">分&nbsp;类</label>
+                                    <div class="col-lg-10">
+                                        <select data-placeholder="请选择博客类别" class="chosen-select" tabindex="-1" style="display: none;" id="category">
+                                            {% for category in categories %}
+                                            <option value="{{ category.id }}">{{ category.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-8">
+                                <div class="form-group row">
+                                    <label class="col-lg-1 col-form-label" for="tag">标&nbsp;签</label>
+                                    <div class="col-lg-11">
+                                        <select data-placeholder="请选择博客标签" class="chosen-select" multiple="" style="width: 60%; display: none;" tabindex="-1" id="tag">
+                                            {% for tag in tags %}
+                                            <option value="{{ tag.id }}">{{ tag.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
-                    <div class="ibox-content" id="test-editor">
-
-                        <label for="my-editormd-markdown-doc"></label><textarea id="my-editormd-markdown-doc" name="my-editormd-markdown-doc" style="display:none;">[TOC]
-
-#### Disabled options
-
-- TeX (Based on KaTeX);
-- Emoji;
-- Task lists;
-- HTML tags decode;
-- Flowchart and Sequence Diagram;
-
-#### Editor.md directory
-
-    editor.md/
-            lib/
-            css/
-            scss/
-            tests/
-            fonts/
-            images/
-            plugins/
-            examples/
-            languages/
-            editormd.js
-            ...
-
-```html
-<!-- English -->
-<script src="../dist/js/languages/en.js"></script>
-
-<!-- 繁體中文 -->
-<script src="../dist/js/languages/zh-tw.js"></script>
-```
-</textarea>
-                    <!-- 注意：name属性的值-->
-                        <label for="my-editormd-html-code"></label><textarea id="my-editormd-html-code" name="my-editormd-html-code" style="display:none;"></textarea>
-
-<!--                           <form method="post" action="#">-->
-
-
-<!--
-
-           </form>-->
+                    <div class="ibox-content">
+                        <div id="test-editor">
+                            <label for="my-editormd-markdown-doc"></label><textarea id="my-editormd-markdown-doc" name="my-editormd-markdown-doc" style="display:none;">{{body}}</textarea>
+                        <!-- 注意：name属性的值-->
+                            <label for="my-editormd-html-code"></label><textarea id="my-editormd-html-code" name="my-editormd-html-code" style="display:none;"></textarea>
+                        </div>
 
                     </div>
                 </div>
@@ -118,9 +91,29 @@
 <script src="{{url_for('static',filename='js/plugins/chosen/chosen.jquery.js')}}"></script>
 <script type="text/javascript">
     $(function() {
+        $('.chosen-select').chosen({width: "100%"});
+        $("#tag").chosen('destroy').chosen({max_selected_options:4});
+        $("#tag").bind("chosen:maxselected",function (e) {
+            alert("标签最多只能选择4个！");
+            return;
+        });
+
+
+        const category_id = '{{ category_id|tojson }}';
+        $("#category").val(category_id);
+        $("#category").trigger("chosen:updated");
+
+        const tags_id = '{{ tag_list|tojson }}';
+        console.log(tags_id)
+          for (var i = 0; i < tags_id.length; i++) {
+               $("#tag").val(tags_id[i]);
+                $("#tag").trigger("chosen:updated");
+             }
+
+
         const testEditor = editormd("test-editor", {
             // width  : "100%",
-            // height : "100%",
+            height : "80%",
             path: '/static/editormd/lib/',
             flowChart: true,
             placeholder: "此处开始编写您要发布的内容...",
@@ -186,19 +179,32 @@
             // previewTheme: "dark"
         });
         // testEditor.getMarkdown();
+
         $('#submit').bind('click', function() {
 
         setTimeout(function(){
+            const tagArray=[];
             const title =  $("input[name='title']").val()
+            if(title === ''){
+                alert("标题不能为空");
+                return;
+            }
+            const category = $('#category option:selected').val();
+            // const tag = $('#tag option:selected').val();
+            $("#tag option:selected").each(function () {
+                 const txt = $(this).val(); //获取option值
+                 if (txt !== '') {
+                     tagArray.push(txt);
+                 }
+            })
             $.ajax({
             url:"{{ url_for('blog.blog_index') }}",
             type:"post",
             dataType: 'json',
             contentType: 'application/json;charset=utf-8',//请求数据类型必须有
-            data:JSON.stringify({'title':title,'body_md':testEditor.getMarkdown(),'body_html':testEditor.getHTML()}),
+            data:JSON.stringify({'title':title,'body_md':testEditor.getMarkdown(),'body_html':testEditor.getHTML(),'category_id':category,'label_id':tagArray}),
             async: true,//异步
             success:function(data){
-                console.log(data)
                 if(data['code'] ==='100000'){
                     alert(data['msg'])
                 }
