@@ -1,21 +1,14 @@
-﻿<!--
-*
-*  INSPINIA - Responsive Admin Theme
-*  version 2.9.2
-*
--->
-
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/html">
+﻿<!DOCTYPE html>
+<html lang="zh">
 
 <head>
 
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="keywords" content="猫大侠博客" />
-    <meta name="Description" content="由个人开发的猫大侠博客,用来积累自己的开发经验" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="个人博客" />
+    <meta name="Description" content="由个人开发的博客,用来积累自己的开发经验" />
 
-    <title>{% block title %}{% endblock %} | 猫大侠Blog</title>
+    <title>{% block title %}Smelly Cat's Blog{% endblock %}</title>
 
     <link href="{{url_for('static',filename='css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{url_for('static',filename='font-awesome/css/font-awesome.css')}}" rel="stylesheet">
@@ -30,11 +23,11 @@
     {% endblock %}
 </head>
 {%block body%}
-<body>
-
+<body class="canvas-menu">
     <div id="wrapper">
-        <nav class="navbar-default navbar-static-side" role="navigation">
+    <nav class="navbar-default navbar-static-side" role="navigation">
             <div class="sidebar-collapse">
+                <a class="close-canvas-menu"><i class="fa fa-times"></i></a>
                 <ul class="nav metismenu" id="side-menu">
                     <li class="nav-header">
 
@@ -135,9 +128,9 @@
                             <span class="fa arrow"></span>
                         </a>
                         <ul class="nav nav-second-level collapse">
-                            <li id="nine"><a href="{{url_for('admin.chart')}}">可视化</a></li>
-                            <li id="ten"><a href="{{url_for('admin.table_data')}}">数据展示</a></li>
-                            <li id="eleven"><a href="{{url_for('admin.upload')}}">数据录入</a></li>
+                            <li id="nine"><a href="{{url_for('admin.chart')}}">收支可视化</a></li>
+                            <li id="ten"><a href="{{url_for('admin.table_data')}}">收支表格</a></li>
+                            <li id="eleven"><a href="{{url_for('admin.upload')}}">收支数据录入</a></li>
                         </ul>
                      </li>
                     <li id="twelve">
@@ -153,7 +146,6 @@
         </nav>
         {% block wrapper %}
         <div id="page-wrapper" class="gray-bg">
-
             <!--页眉-->
             {%block pheader%}
             <div class="row border-bottom" id="pheader">
@@ -255,6 +247,7 @@
                     </li>
                 </ul>
             </nav>
+
         </div>
             {%endblock%}
             {%block footer%}
@@ -263,7 +256,7 @@
 <!--                    10GB of <strong>250GB</strong> Free.-->
 <!--                </div>-->
                 <div class="float-left">
-                            <strong><a href="http://beian.miit.gov.cn/" target="_blank"> 津ICP备2021007299号</a></strong>
+                            <strong><a href="https://beian.miit.gov.cn/" target="_blank"> 津ICP备2021007299号</a></strong>
                 </div>
                 <div class="float-right">
                         <img alt="image"  class="rounded-circle" style="width: 20px;height: 20px;"  src="{{url_for('static',filename='img/wiki_favicon.png')}}">    <strong><a href="http://wiki.choumaomi.com" target="_blank"> 个人wiki</a></strong>
@@ -292,9 +285,7 @@
     <script src="{{url_for('static',filename='js/plugins/flot/jquery.flot.resize.js')}}"></script>
     <script src="{{url_for('static',filename='js/plugins/flot/jquery.flot.pie.js')}}"></script>
 
-    <!-- Peity -->
-    <script src="{{url_for('static',filename='js/plugins/peity/jquery.peity.min.js')}}"></script>
-    <script src="{{url_for('static',filename='js/demo/peity-demo.js')}}"></script>
+
 
 <!--     Custom and plugin javascript -->
     <script src="{{url_for('static',filename='js/inspinia.js')}}"></script>
@@ -312,7 +303,7 @@
     <!-- Sparkline demo data  -->
     <script src="{{url_for('static',filename='js/demo/sparkline-demo.js')}}"></script>
 
-    <!-- Toastr -->
+    <!--通知插件 Toastr -->
     <script src="{{url_for('static',filename='js/plugins/toastr/toastr.min.js')}}"></script>
     <!-- ChartJS-->
     <script src="{{url_for('static',filename='js/plugins/chartJs/Chart.min.js')}}"></script>
@@ -350,123 +341,20 @@
                         </div>
                     </div>
                 </div>
-                <div class="setings-item">
-                    <span>
-                        固定侧边栏
-                    </span>
 
-                    <div class="switch">
-                        <div class="onoffswitch">
-                            <input type="checkbox" name="fixedsidebar" class="onoffswitch-checkbox" id="fixedsidebar">
-                            <label class="onoffswitch-label" for="fixedsidebar">
-                                <span class="onoffswitch-inner"></span>
-                                <span class="onoffswitch-switch"></span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="setings-item">
-                    <span>
-                        顶级导航栏
-                    </span>
-
-                    <div class="switch">
-                        <div class="onoffswitch">
-                            <input type="checkbox" name="fixednavbar" class="onoffswitch-checkbox" id="fixednavbar">
-                            <label class="onoffswitch-label" for="fixednavbar">
-                                <span class="onoffswitch-inner"></span>
-                                <span class="onoffswitch-switch"></span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
 
             </div>
         </div>
     </div>
     <script>
         // Enable/disable fixed top navbar
-        $('#fixednavbar').click(function () {
-            if ($('#fixednavbar').is(':checked')) {
-                $(".navbar-static-top").removeClass('navbar-static-top').addClass('navbar-fixed-top');
-                $("body").removeClass('boxed-layout');
-                $("body").addClass('fixed-nav');
-                $('#boxedlayout').prop('checked', false);
 
-                if (localStorageSupport) {
-                    localStorage.setItem("boxedlayout", 'off');
-                }
-
-                if (localStorageSupport) {
-                    localStorage.setItem("fixednavbar", 'on');
-                }
-            } else {
-                $(".navbar-fixed-top").removeClass('navbar-fixed-top').addClass('navbar-static-top');
-                $("body").removeClass('fixed-nav');
-                $("body").removeClass('fixed-nav-basic');
-                $('#fixednavbar2').prop('checked', false);
-
-                if (localStorageSupport) {
-                    localStorage.setItem("fixednavbar", 'off');
-                }
-
-                if (localStorageSupport) {
-                    localStorage.setItem("fixednavbar2", 'off');
-                }
-            }
-        });
 
         // Enable/disable fixed top navbar
-        $('#fixednavbar2').click(function () {
-            if ($('#fixednavbar2').is(':checked')) {
-                $(".navbar-static-top").removeClass('navbar-static-top').addClass('navbar-fixed-top');
-                $("body").removeClass('boxed-layout');
-                $("body").addClass('fixed-nav').addClass('fixed-nav-basic');
-                $('#boxedlayout').prop('checked', false);
 
-                if (localStorageSupport) {
-                    localStorage.setItem("boxedlayout", 'off');
-                }
-
-                if (localStorageSupport) {
-                    localStorage.setItem("fixednavbar2", 'on');
-                }
-            } else {
-                $(".navbar-fixed-top").removeClass('navbar-fixed-top').addClass('navbar-static-top');
-                $("body").removeClass('fixed-nav').removeClass('fixed-nav-basic');
-                $('#fixednavbar').prop('checked', false);
-
-                if (localStorageSupport) {
-                    localStorage.setItem("fixednavbar2", 'off');
-                }
-                if (localStorageSupport) {
-                    localStorage.setItem("fixednavbar", 'off');
-                }
-            }
-        });
 
         // Enable/disable fixed sidebar
-        $('#fixedsidebar').click(function () {
-            if ($('#fixedsidebar').is(':checked')) {
-                $("body").addClass('fixed-sidebar');
-                $('.sidebar-collapse').slimScroll({
-                    height: '100%',
-                    railOpacity: 0.9
-                });
 
-                if (localStorageSupport) {
-                    localStorage.setItem("fixedsidebar", 'on');
-                }
-            } else {
-                $('.sidebar-collapse').slimscroll({ destroy: true });
-                $('.sidebar-collapse').attr('style', '');
-                $("body").removeClass('fixed-sidebar');
-
-                if (localStorageSupport) {
-                    localStorage.setItem("fixedsidebar", 'off');
-                }
-            }
-        });
 
         // Enable/disable collapse menu
         $('#collapsemenu').click(function () {
@@ -488,124 +376,16 @@
             }
         });
 
-        // Enable/disable boxed layout
-        $('#boxedlayout').click(function () {
-            if ($('#boxedlayout').is(':checked')) {
-                $("body").addClass('boxed-layout');
-                $('#fixednavbar').prop('checked', false);
-                $('#fixednavbar2').prop('checked', false);
-                $(".navbar-fixed-top").removeClass('navbar-fixed-top').addClass('navbar-static-top');
-                $("body").removeClass('fixed-nav');
-                $("body").removeClass('fixed-nav-basic');
-                $(".footer").removeClass('fixed');
-                $('#fixedfooter').prop('checked', false);
-
-                if (localStorageSupport) {
-                    localStorage.setItem("fixednavbar", 'off');
-                }
-
-                if (localStorageSupport) {
-                    localStorage.setItem("fixednavbar2", 'off');
-                }
-
-                if (localStorageSupport) {
-                    localStorage.setItem("fixedfooter", 'off');
-                }
-
-
-                if (localStorageSupport) {
-                    localStorage.setItem("boxedlayout", 'on');
-                }
-            } else {
-                $("body").removeClass('boxed-layout');
-
-                if (localStorageSupport) {
-                    localStorage.setItem("boxedlayout", 'off');
-                }
-            }
-        });
-
-        // Enable/disable fixed footer
-        $('#fixedfooter').click(function () {
-            if ($('#fixedfooter').is(':checked')) {
-                $('#boxedlayout').prop('checked', false);
-                $("body").removeClass('boxed-layout');
-                $(".footer").addClass('fixed');
-
-                if (localStorageSupport) {
-                    localStorage.setItem("boxedlayout", 'off');
-                }
-
-                if (localStorageSupport) {
-                    localStorage.setItem("fixedfooter", 'on');
-                }
-            } else {
-                $(".footer").removeClass('fixed');
-
-                if (localStorageSupport) {
-                    localStorage.setItem("fixedfooter", 'off');
-                }
-            }
-        });
-
         // SKIN Select
         $('.spin-icon').click(function () {
             $(".theme-config-box").toggleClass("show");
         });
 
-        // Default skin
-        $('.s-skin-0').click(function () {
-            $("body").removeClass("skin-1");
-            $("body").removeClass("skin-2");
-            $("body").removeClass("skin-3");
-        });
-
-        // Blue skin
-        $('.s-skin-1').click(function () {
-            $("body").removeClass("skin-2");
-            $("body").removeClass("skin-3");
-            $("body").addClass("skin-1");
-        });
-
-        // Inspinia ultra skin
-        $('.s-skin-2').click(function () {
-            $("body").removeClass("skin-1");
-            $("body").removeClass("skin-3");
-            $("body").addClass("skin-2");
-        });
-
-        // Yellow skin
-        $('.s-skin-3').click(function () {
-            $("body").removeClass("skin-1");
-            $("body").removeClass("skin-2");
-            $("body").addClass("skin-3");
-        });
 
         if (localStorageSupport) {
-            var collapse = localStorage.getItem("collapse_menu");
-            var fixedsidebar = localStorage.getItem("fixedsidebar");
-            var fixednavbar = localStorage.getItem("fixednavbar");
-            var fixednavbar2 = localStorage.getItem("fixednavbar2");
-            var boxedlayout = localStorage.getItem("boxedlayout");
-            var fixedfooter = localStorage.getItem("fixedfooter");
-
-            if (collapse == 'on') {
+            let collapse = localStorage.getItem("collapse_menu");
+            if (collapse === 'on') {
                 $('#collapsemenu').prop('checked', 'checked')
-            }
-            if (fixedsidebar == 'on') {
-                $('#fixedsidebar').prop('checked', 'checked')
-            }
-            if (fixednavbar == 'on') {
-                $('#fixednavbar').prop('checked', 'checked')
-            }
-            if (fixednavbar2 == 'on') {
-                $('#fixednavbar2').prop('checked', 'checked')
-            }
-            if (boxedlayout == 'on') {
-                $('#boxedlayout').prop('checked', 'checked')
-            }
-            if (fixedfooter == 'on') {
-                $('#fixedfooter').prop('checked', 'checked')
             }
         }
     </script>

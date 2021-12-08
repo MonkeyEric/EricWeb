@@ -1,5 +1,5 @@
 ﻿{% extends "base.html" %}
-{% block title%}文章{% endblock %}
+{% block title%}{{ post.title }}{% endblock %}
 {% block head %}
 <link rel="stylesheet" href="{{url_for('static',filename='css/plugins/chosen/bootstrap-chosen.css')}}">
 <!-- editor.md-->
@@ -59,12 +59,9 @@
                                 </div>
                         <div class="col-md-5">
                             <label>标签：</label>
-                                    <button class="btn btn-white btn-xs" type="button"><a href="{{ url_for('.show_category', category_id=post.category.id) }}">{{ post.category.name }}</a></button>
-                            <button class="btn btn-white btn-xs" type="button"><a href="{{ url_for('.show_category', category_id=post.category.id) }}">{{ post.category.name }}</a></button>
-                            <button class="btn btn-white btn-xs" type="button"><a href="{{ url_for('.show_category', category_id=post.category.id) }}">{{ post.category.name }}</a></button>
-                            <button class="btn btn-white btn-xs" type="button"><a href="{{ url_for('.show_category', category_id=post.category.id) }}">{{ post.category.name }}</a></button>
-                            <button class="btn btn-white btn-xs" type="button"><a href="{{ url_for('.show_category', category_id=post.category.id) }}">{{ post.category.name }}</a></button>
-
+                             {% for tag in tag_list %}
+                            <button class="btn btn-white btn-xs" type="button"><a href="{{ url_for('.show_tag', tag_id=tag.tag_id) }}">{{ tag.name }}</a></button>
+                            {% endfor %}
                                 </div>
                         <span class="col-md-3 text-muted"><i class="fa fa-clock-o"></i> &nbsp;&nbsp;{{ moment(post.timestamp).format('LLL')}}</span>
                         <div class="col-md-2 align-right">
@@ -75,12 +72,11 @@
                 </div>
                 <div class="ibox-content">
 
-                    <div id="my-content">
 
-                    </div>
                     <div id="doc-content">
-                        <textarea style="display:none;">{{post.body_md}}
+                        <textarea id="my-editormd-markdown-doc" name="my-editormd-markdown-doc" style="display:none;">{{post.body_md}}
                         </textarea>
+                        <label for="my-editormd-html-code"></label><textarea id="my-editormd-html-code" name="my-editormd-html-code" style="display:none;"></textarea>
                     </div>
                     <div class="row">
                         <div class="col-md-6"></div>
@@ -102,7 +98,7 @@
             </div>
             <div class="ibox">
                 <div class="ibox-title">
-                    <h2 class="text-left">评论: <small>请<a href="#">登录</a>发表评论</small></h2>
+                    <h2 class="text-left">评论: <small>请<a href="{{url_for('user.login')}}">登录</a>发表评论</small></h2>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
@@ -191,25 +187,28 @@
 <script src="{{url_for('static',filename='editormd/lib/marked.min.js')}}"></script>
 <!-- 预览时需要引入prettify.js，否则报错 [ ReferenceError: prettyPrint is not defined ] -->
 <script src="{{url_for('static',filename='editormd/lib/prettify.min.js')}}"></script>
-<script src="{{url_for('static',filename='editormd//lib/flowchart.min.js')}}"></script>
+<script src="{{url_for('static',filename='editormd/lib/flowchart.min.js')}}"></script>
 <script src="{{url_for('static',filename='editormd/editormd.min.js')}}"></script>
 <script type="text/javascript">
     $(function () {
-         var body_= "${post.body_html }";
-         var rulemodeid= "${post.body_html }";
-         document.getElementById("my-content").innerHTML= rulemodeid
-        setTimeout(function(){
-            const testEditor = editormd.markdownToHTML("doc-content", {//注意：这里是上面DIV的id
-             htmlDecode: "style,script,iframe",
-             path: '/static/editormd/lib/',
-             emoji: true,
-             taskList: true,
-             tex: true, // 默认不解析
-             flowChart: true, // 默认不解析
-             sequenceDiagram: true, // 默认不解析
-             codeFold: true,
-         })
-        },500);
+
+         var htmlContent= {{post.body_html|tojson }}
+         // document.getElementById("my-content").innerHTML= rulemodeid
+        $("#doc-content").addClass("markdown-body editormd-html-preview").append(htmlContent)
+
+         // var testEditor
+         // testEditor= editormd.markdownToHTML("doc-content", {//注意：这里是上面DIV的id
+         //
+         //     htmlDecode: "style,script,iframe",
+         //     tocm: true,
+         //     emoji: true,
+         //     taskList: true,
+         //     tex: true, // 默认不解析
+         //     flowChart: true, // 默认不解析
+         //     sequenceDiagram: true, // 默认不解析
+         //     codeFold: true,
+         // })
+         //  console.log("返回一个 jQuery 实例 =>", testEditor);
     })
 
 </script>

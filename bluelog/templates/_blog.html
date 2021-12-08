@@ -1,5 +1,5 @@
 <div class="wrapper wrapper-content  animated fadeInRight blog" id="blog">
-        <div class="row">
+        <div class="row row justify-content-md-center">
             <div class="col-md-8">
                 {% if posts %}
                 {% for post in posts %}
@@ -11,9 +11,10 @@
                             </h2>
                         </a>
                         <div class="small m-b-xs">
-                            <strong>火星一号</strong> <span class="text-muted"><i class="fa fa-clock-o"></i>&nbsp;&nbsp;{{ moment(post.timestamp).format('lll')}}</span>
+                            <strong>{{post.author}}</strong> <span class="text-muted"><i class="fa fa-clock-o"></i>&nbsp;&nbsp;{{ moment(post.timestamp).format('lll')}}</span>
                         </div>
-                            {{post.body_html|truncate}}
+                        {{post.body_text|truncate}}
+
                              <small><a  href="{{ url_for('blog.show_post', post_id=post.id) }}">更多</a></small>
 
                         <div class="row">

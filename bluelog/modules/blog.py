@@ -98,6 +98,7 @@ class Post(db.Model):
     author = db.Column(db.String(80), default='Eric')
     body_html = db.Column(db.Text)
     body_md = db.Column(db.Text)
+    body_text = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)
     can_comment = db.Column(db.Boolean, default=True)
     read_count = db.Column(db.Integer)

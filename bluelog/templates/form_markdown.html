@@ -34,8 +34,8 @@
                 <div class="ibox " style="height: 900px">
                     <div class="ibox-title">
                         <label class="h5">题目:&nbsp;&nbsp;&nbsp;</label>
-
-                            <input class="h5" type="text" placeholder="请输入博客标题" name="title" style="padding: 2px;border: none; outline:none;width: 70%" >
+                            <input id="p_id" value="{{post_id}}" style="display: none">
+                            <input class="h5" type="text" placeholder="请输入博客标题" name="title" value="{{title}}" style="padding: 2px;border: none; outline:none;width: 70%" >
 
 
                         <div class="ibox-tools">
@@ -98,18 +98,23 @@
             return;
         });
 
-
+        //单选，直接赋值
         const category_id = '{{ category_id|tojson }}';
         $("#category").val(category_id);
         $("#category").trigger("chosen:updated");
 
-        const tags_id = '{{ tag_list|tojson }}';
-        console.log(tags_id)
-          for (var i = 0; i < tags_id.length; i++) {
-               $("#tag").val(tags_id[i]);
-                $("#tag").trigger("chosen:updated");
-             }
-
+        //多选，赋值
+        function chosen_multi_select_platformCode(select, arr) {
+            const length = arr.length;
+            let value = '';
+            for (i = 0; i < length; i++) {
+                value = arr[i];
+                $(select + " option[value='" + value + "']").attr('selected', 'selected');
+            }
+        $(select).trigger("chosen:updated");
+         }
+         const tag_list = {{ tag_list|tojson }}
+         chosen_multi_select_platformCode('#tag',tag_list)
 
         const testEditor = editormd("test-editor", {
             // width  : "100%",
@@ -184,6 +189,7 @@
 
         setTimeout(function(){
             const tagArray=[];
+            const post_id = $("#p_id").val()
             const title =  $("input[name='title']").val()
             if(title === ''){
                 alert("标题不能为空");
@@ -202,7 +208,7 @@
             type:"post",
             dataType: 'json',
             contentType: 'application/json;charset=utf-8',//请求数据类型必须有
-            data:JSON.stringify({'title':title,'body_md':testEditor.getMarkdown(),'body_html':testEditor.getHTML(),'category_id':category,'label_id':tagArray}),
+            data:JSON.stringify({'post_id':post_id,'title':title,'body_md':testEditor.getMarkdown(),'body_html':testEditor.getHTML(),'category_id':category,'label_id':tagArray}),
             async: true,//异步
             success:function(data){
                 if(data['code'] ==='100000'){

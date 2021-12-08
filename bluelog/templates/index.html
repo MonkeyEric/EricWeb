@@ -1,6 +1,5 @@
 ﻿{% import "_macros.html" as macros %}
 {% extends "base.html" %}
-{% block title%}首页{% endblock%}
 {% block head %}
 {{ super() }}
 {{ moment.include_moment() }}
@@ -9,7 +8,7 @@
 <div id="page-wrapper" class="gray-bg">
     <!--            base的主内容-->
     {{ self.pheader() }}
-    <div class="row  dashboard-header">
+    <div class="row justify-content-md-center">
         <div class="col-md-11">
             <div class="ibox">
                 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="padding-top: 10px">
