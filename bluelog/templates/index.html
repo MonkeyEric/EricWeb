@@ -8,10 +8,13 @@
 <div id="page-wrapper" class="gray-bg">
     <!--            base的主内容-->
     {{ self.pheader() }}
+    <div class="wrapper wrapper-content animated fadeInRight blog" id="blog">
     <div class="row justify-content-md-center">
-        <div class="col-md-11">
+
+        <div class="col-md-8">
             <div class="ibox">
-                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="padding-top: 10px">
+
+                    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                         <ol class="carousel-indicators">
                             <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
                             <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
@@ -46,9 +49,49 @@
                             <span class="sr-only">Next</span>
                         </a>
                 </div>
+
             </div>
         </div>
+        <div class="col-md-2">
+            <div class="ibox">
+                        <div class="nav-header p-lg text-center">
+                            <div class="m-b-md" style="color: white">
+                            <h2 class="font-bold no-margins" >
+                                王宇
+                            </h2>
+                                <small>inspinia 2.9.2创始人</small>
+                            </div>
+                            <img src="/static/img/profile_small.jpg" class="rounded-circle  m-b-md" alt="profile" style="width: 80px;height: 80px;">
+                            <div>
+                                <span><a href="#">Star 100</a></span> |
+                                <span><a href="#">Fork 350</a></span> |
+                                <span><a href="#">电子邮件</a></span>
+                            </div>
+                        </div>
+                        <div class="">
+
+                        </div>
+                        <div class="widget-text-box feed-element">
+                            <a class="float-left" href="profile.html">
+                                <img alt="image" class="rounded-circle" src="/static/img/famous/liening.jpeg">
+                            </a>
+                            <div class="media-body ">
+                                <small class="float-right"><a href="#"><i class="fa fa-refresh"></i>&nbsp;换一句</a></small>
+                                <h4 class="media-heading">列宁:</h4>
+                                <strong>思想的巨人，行动的矮子</strong><br>
+                            </div>
+
+
+                        </div>
+
+
+            </div>
+        </div>
+
+
+
         {% include '_blog.html' %}
+    </div>
     </div>
     {{self.footer()}}
 </div>

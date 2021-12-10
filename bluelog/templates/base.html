@@ -18,6 +18,11 @@
     <link href="{{url_for('static',filename='css/plugins/toastr/toastr.min.css')}}" rel="stylesheet">
     <!-- Gritter -->
     <link href="{{url_for('static',filename='js/plugins/gritter/jquery.gritter.css')}}" rel="stylesheet">
+    <style type="text/css">
+        a.popup{position:relative;}
+        a.popup span{display:none;position:absolute;top:-40px;left:2px;z-index: 99;border: 1px solid; padding:4px;width:100px;}
+        a.popup:hover span{display:block;}
+    </style>
 
     {%block head%}
     {% endblock %}
