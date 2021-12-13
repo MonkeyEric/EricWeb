@@ -11,7 +11,7 @@ from bluelog.modules.blog import *
 from bluelog.modules.income_expense import Income
 from bluelog.utils.forms import IncomeExpenseForm, FavoriteForm
 from bluelog.utils.csv_tools import read_csv, save_to_db
-from bluelog import config_dict
+from bluelog.money_excel_model import *
 from bluelog.utils.extensions import socketio
 from flask_socketio import emit
 
@@ -69,7 +69,6 @@ def index():
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BLOG_POST_PER_PAGE']
     pagination = Post.query.order_by(desc(Post.timestamp)).paginate(page, per_page=per_page)
-    print(type(pagination.items))
     posts = pagination.items
     return render_template('index.html', pagination=pagination, posts=posts)
 
@@ -88,19 +87,29 @@ def arrange(res, li_len=13):
 @admin_bp.route('/chart', methods=['GET'])
 def chart():
     # 存储
-    storage = round(db.session.query(func.sum(Income.amount)).scalar(), 2)
+    storage = db.session.query(func.sum(Income.amount)).scalar()
+    if '-' in str(storage):
+        storage = round(float(str(storage)[1:]), 2)
     # 上个月支出
     now = datetime.now()
     last_month = now.replace(month=now.month - 1)
-    expand = round(
-        db.session.query(func.sum(Income.money)).filter(Income.income_expense == "支出", Income.deal_date >= last_month,Income.deal_date < now).scalar(), 2)
+    expand = db.session.query(func.sum(Income.money)).filter(Income.income_expense == "支出",
+                                                             Income.deal_date >= last_month,
+                                                             Income.deal_date < now).scalar()
+    if '-' in str(expand):
+        expand = round(float(expand[1:]), 2)
+
     # 近一个月支出最高得类型
     high_money_count_type_s = Income.query.filter(Income.deal_date >= now - timedelta(days=30)).order_by(
         desc(Income.money)).first()
-    high_money = {'count_type_s': high_money_count_type_s.count_type_s, 'money': high_money_count_type_s.money}
+    if high_money_count_type_s:
+        high_money = {'count_type_s': high_money_count_type_s.count_type_s, 'money': high_money_count_type_s.money}
+    else:
+        high_money = {'count_type_s': '', 'money': ''}
     # 近一个月支出次数最高得类型
     order_by_type_s = func.count('*').label('total')
-    high_count = db.session.query(Income.count_type_s, func.count('*').label('total')).group_by(Income.count_type_s).order_by(desc(order_by_type_s)).first()
+    high_count = db.session.query(Income.count_type_s, func.count('*').label('total')).group_by(
+        Income.count_type_s).order_by(desc(order_by_type_s)).first()
 
     # 收入支出比
     res2 = db.session.query(func.sum(Income.money).label('total_money'),
@@ -109,11 +118,12 @@ def chart():
         Income.income_expense != '/').group_by(
         Income.income_expense, extract('month', Income.deal_date).label('month')).order_by(asc(Income.deal_date))
     income_rate = arrange(res2)
-    if income_rate.get('收入','') and income_rate.get('支出',''):
-        income_rate['存储'] = [round(income_rate['收入'][i] - income_rate['支出'][i], 2) for i in range(len(income_rate['支出']))]
+    if income_rate.get('收入', '') and income_rate.get('支出', ''):
+        income_rate['存储'] = [round(income_rate['收入'][i] - income_rate['支出'][i], 2) for i in
+                             range(len(income_rate['支出']))]
     del res2
     return render_template('graph_chartjs.html', storage=storage, expand=expand, high_money=high_money,
-                           high_count=high_count,income_rate=json.dumps(income_rate))
+                           high_count=high_count, income_rate=json.dumps(income_rate))
 
 
 @admin_bp.route('/chart_type', methods=['GET'])
@@ -170,17 +180,18 @@ def chart_type():
 
     del res1
 
-    return {'top5_type': top5_type, 'consume_type': consume_type, 'top5_count': top5_count,'consume':consume,'consume_count':consume_count}
+    return {'top5_type': top5_type, 'consume_type': consume_type, 'top5_count': top5_count, 'consume': consume,
+            'consume_count': consume_count}
 
 
 @admin_bp.route('/data', methods=['GET', 'POST'])
 def table_data():
     son = []
-    for key, value in config_dict.Expense_type.items():
+    for key, value in expense_type.items():
         son.append('——%s——' % key)
         for j in value:
             son.append(j)
-    return render_template('table.html', fathers=list(config_dict.Expense_type.keys()), sons=son, table='/table')
+    return render_template('table.html', fathers=list(expense_type.keys()), sons=son, table='/table')
 
 
 @admin_bp.route('/table', methods=['GET', 'POST'])
@@ -235,14 +246,15 @@ def table():
 @admin_bp.route('/upload', methods=['GET', 'POST'], strict_slashes=False)
 def upload():
     form = IncomeExpenseForm(CombinedMultiDict([request.form, request.files]))
-    if form.validate_on_submit():
+    if request.method == 'POST':
         csv_file = form.file_csv.data
         desc_ = form.desc.data
         filename = secure_filename(csv_file.filename)
         file_path = os.path.join(current_app.config['UPLOAD_PATH'], filename)
         csv_file.save(file_path)
         data_json = read_csv(file_path, desc_)
-        save_to_db(data_json)
+        owner_id = session.get('_user_id')
+        save_to_db(data_json, owner_id)
         return redirect(url_for('admin.table_data'))
     return render_template('form_file_upload.html', form=form)
 
@@ -313,7 +325,6 @@ def favourite():
 
 @admin_bp.route('/img', methods=['POST'])
 def img_save():
-
     return render_template('profile.html')
 
 

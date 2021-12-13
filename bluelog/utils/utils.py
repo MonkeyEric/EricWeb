@@ -31,3 +31,13 @@ def generate_random_code():
     random = Random()
     x = random.sample(chars, 4)
     return "".join(x)
+
+
+def cache_login(userdata):
+    user_key = lambda x: "eric_web_%s" % x
+    key = user_key(userdata.get('id'))
+
+    session['user_cache'] = key
+    del userdata['password']
+    session.cache = userdata
+    # redis.set(key, dumps(userdata, cls=JsonRespEncoder))

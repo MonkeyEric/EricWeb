@@ -6,7 +6,7 @@ from bluelog.modules.blog import Admin
 
 from bluelog.utils.emails import send_subscribe_mail
 from bluelog.utils.forms import LoginForm, SettingForm
-from bluelog.utils.utils import redirect_back, generate_random_code
+from bluelog.utils.utils import redirect_back, generate_random_code, cache_login
 from bluelog.utils.extensions import github, db
 from werkzeug.security import generate_password_hash
 

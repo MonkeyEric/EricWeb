@@ -36,7 +36,7 @@
     </div>
 
     <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
+    <div class="row justify-content-md-center">
         <div class="col-lg-6">
             <div class="ibox ">
                 <div class="ibox-title">
@@ -197,7 +197,7 @@
         $('.spin-icon').click(function () {
             $(".theme-config-box").toggleClass("show");
         });
-    var now = new Date();
+    let now = new Date();
     year_select.value=new Date().getFullYear();
 
    $(function (){
@@ -217,11 +217,11 @@
        })
 
        // 每个月的收入支出比
-        var chartDom1 = document.getElementById('main');
-        var myChart1 = echarts.init(chartDom1, 'dark');
-        var option1;
-        var myDate = new Date();
-        var rate =  JSON.parse({{income_rate | tojson}})
+        let chartDom1 = document.getElementById('main');
+        let myChart1 = echarts.init(chartDom1, 'dark');
+        let option1;
+        let myDate = new Date();
+        let rate =  JSON.parse({{income_rate | tojson}})
         option1 = {
             title:{
                 text:myDate.getFullYear()+'年收入支出比'
@@ -305,14 +305,6 @@
         };
 
         option1 && myChart1.setOption(option1);
-
-
-
-
-
-
-
-
         //消费类型
        $.ajax({
                 type: "GET",
@@ -332,19 +324,19 @@
 
        //每个月的
         function each_month(consume,consume_count) {
-            var chartDom = document.getElementById('main2');
-            var myChart = echarts.init(chartDom, 'dark');
-            var option;
+            let chartDom = document.getElementById('main2');
+            let myChart = echarts.init(chartDom, 'dark');
+            let option;
 
-            var dataMap = {};
+            let dataMap = {};
             function dataFormatter(obj) {
-            var pList = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
-            var temp;
-            for (var year = 2018; year <= 2023; year++) {
-                var max = 0;
-                var sum = 0;
+            let pList = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+            let temp;
+            for (let year = 2018; year <= 2023; year++) {
+                let max = 0;
+                let sum = 0;
                 temp = obj[year];
-                for (var i = 0, l = temp.length; i < l; i++) {
+                for (let i = 0, l = temp.length; i < l; i++) {
                     max = Math.max(max, temp[i]);
                     sum += temp[i];
                     obj[year][i] = {
@@ -507,17 +499,17 @@
 
 
        function expense_type(count_type) {
-           var chartDom2 = document.getElementById('main3');
-        var myChart3 = echarts.init(chartDom2, 'dark');
-        var option3;
+           let chartDom2 = document.getElementById('main3');
+           let myChart3 = echarts.init(chartDom2, 'dark');
+           let option3;
 
-        var dataMap2 = {};
+        let dataMap2 = {};
         function dataFormatter2(obj) {
-            var pList = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
-            var temp;
-            for (var year = 2018; year <= 2023; year++) {
-                var max = 0;
-                var sum = 0;
+            let pList = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+            let temp;
+            for (let year = 2018; year <= 2023; year++) {
+                let max = 0;
+                let sum = 0;
                 temp = obj[year];
                 for (var i = 0, l = temp.length; i < l; i++) {
                     max = Math.max(max, temp[i]);
@@ -688,10 +680,10 @@
 
         // top3的费用情况
        function top5_type(res) {
-                var series = []
-                var chartDom4 = document.getElementById('main4');
-                var myChart4 = echarts.init(chartDom4, 'dark');
-                var option4;
+                let series = []
+                let chartDom4 = document.getElementById('main4');
+                let myChart4 = echarts.init(chartDom4, 'dark');
+                let option4;
 
 
                 for(let key in res){
@@ -751,9 +743,9 @@
 
            function top5_count(res) {
                 //top3
-                var chartDom5 = document.getElementById('main5');
-                var myChart5 = echarts.init(chartDom5, 'dark');
-                var option5;
+                let chartDom5 = document.getElementById('main5');
+                let myChart5 = echarts.init(chartDom5, 'dark');
+                let option5;
 
                 option5 = {
 

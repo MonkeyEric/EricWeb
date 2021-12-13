@@ -9,6 +9,7 @@ from bluelog.utils.extensions import db
 
 class Income(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    owner_id = db.Column(db.Integer)
     deal_number = db.Column(db.String(200))
     income_expense = db.Column(db.String(20))
     logic1=db.Column(db.Integer)

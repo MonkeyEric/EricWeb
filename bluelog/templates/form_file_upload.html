@@ -28,37 +28,39 @@
 
             </div>
             <div class="wrapper wrapper-content animated fadeIn">
-            <div class="row">
+            <div class="row justify-content-md-center">
                 <div class="col-lg-8">
                     <div class="ibox ">
                         <div class="ibox-title">
                             <h3>输入组示例</h3>
+                            <small style="color: red;">注意: 支付宝、微信方式说直接从官网下载下来的，将表格中的格式进行统一，不能出现标红的部分</small>
                         </div>
                         <div class="ibox-content">
                             <form method="post" action="{{url_for('admin.upload')}}" enctype="multipart/form-data">
                                 {{form.csrf_token}}
-                                    <div class="form-group row">
-                                        <label class="col-lg-2 col-form-label">数据类型</label>
-                                        <div class="col-lg-6">
-                                            <input class="form-control m-b" id="type" type="text" list="typelist" placeholder="请选择" name="desc">
-                                            <datalist  id="typelist">
-                                                <option>收支表-支付宝</option>
-                                                <option>收支表-微信</option>
-                                                <option>明细汇总</option>
-                                            </datalist>
-                                        </div>
+                                <div class="row">
+                                    <label class="col-md-2">数据类型：</label>
+                                    <div class="col-md-2">
+                                        <input class="form-control m-b" id="type" type="text" list="typelist" placeholder="请选择" name="desc">
+                                        <datalist  id="typelist">
+                                            <option>支付宝</option>
+                                            <option>微信</option>
+                                            <option>明细汇总</option>
+                                        </datalist>
                                     </div>
-                                    <div class="custom-file">
+                                    <label class="col-md-2 col-form-label">上传文件：</label>
+                                    <div class="custom-file col-md-6">
 <!--                                        {{form.file_csv}}-->
                                         <input id="file" type="file" class="custom-file-input" name="file_csv">
                                         <label for="file" class="custom-file-label">选择文件...</label>
 
                                     </div>
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="col-lg-5"></div>
-                                    <div class="col-lg-3">
-                                            <input class="btn btn-sm btn-primary col-lg-4" type="submit" name="submit">
-                                    </div>
+
+
+                                </div>
+
+                                <input class="btn btn-sm btn-primary" type="submit" name="submit">
+
                             </form>
                         </div>
                     </div>
@@ -67,23 +69,20 @@
                 <div class="col-lg-2">
                     <div class="ibox ">
                         <div class="ibox-title">
-                            <h3>模板下载</h3>
+                             <h3>模板下载</h3>
                         </div>
                         <div class="ibox-content">
-                            <ul class="list-group clear-list m-t">
-                                <li class="list-group-item fist-item">
+                            <div class="col-lg-12">
+                                <h4><a class="btn btn-outline btn-link" href="{{url_for('admin.download',filetype='wechat.csv')}}" >微信模板</a></h4>
+                            </div>
+                            <div class="col-lg-12">
+                                <h4><a class="btn btn-outline btn-link" href="{{url_for('admin.download',filetype='alipay.csv')}}" >支付宝模板</a></h4>
+                            </div>
 
-                                <h4><a href="{{url_for('admin.download',filetype='wechat.csv')}}" >微信模板</a></h4>
-                                </li>
-                                <li class="list-group-item fist-item">
-
-                                <h4><a href="{{url_for('admin.download',filetype='alipay.csv')}}" >支付宝模板</a></h4>
-                                </li>
-                            </ul>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-8">
+                <div class="col-lg-10">
                     <div class="ibox ">
                         <div class="ibox-title">
                             <h3>个人记账方法</h3>
