@@ -309,7 +309,6 @@ layui.use(['table','dropdown','form'],function() {
         elem: '#demo'
 		,url: '/table_show' //数据接口
 		,title: '用户表'
-        ,height:700
 		,page: true //开启分页
 		,method: 'post'
 		,contentType:'application/json'
@@ -325,7 +324,7 @@ layui.use(['table','dropdown','form'],function() {
             ,{field: 'deal_date', title: '交易时间', width: 170, sort: true, totalRowText: '合计：'}
 			,{field: 'counterparty', title: '交易对方', sort: true}
 			,{field: 'income_expense', title: '收支', width: 80, sort: true}
-			,{field: 'count_type_f', title: '父类', width: 160, sort: true, templet: "#table_father"}
+			,{field: 'count_type_f', title: '父类', width: 160, sort: true, templet: "#"}
 			,{field: 'count_type_s', title: '子类', width: 160, sort: true, templet: function (res){
 			     //数据转换显示示例
 			    let s_html = ''

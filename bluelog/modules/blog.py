@@ -7,6 +7,21 @@ from bluelog.utils.extensions import db
 from sqlalchemy_utils import ChoiceType
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+import json
+
+
+def to_json(inst, cls):
+    '''
+    获取表里面的列并存到字典里面
+    :param inst:
+    :param cls:
+    :return:
+    '''
+    d = dict()
+    for c in cls.__table__.columns:
+        v = getattr(inst, c.name)
+        d[c.name] = v
+        return json.dumps(d)
 
 
 class Admin(db.Model, UserMixin):
@@ -17,7 +32,7 @@ class Admin(db.Model, UserMixin):
         (4, '访客用户'),
     )
     id = db.Column(db.Integer, primary_key=True)
-    role = db.Column(db.String(10))
+    role = db.Column(ChoiceType(types_choices,db.Integer()))
     email = db.Column(db.String(50))
     password_hash = db.Column(db.String(128))
     my_title = db.Column(db.String(60))
@@ -144,3 +159,10 @@ class Favorite(db.Model):
     thumb_down = db.Column(db.Integer)
     category = db.Column(db.String(30))
     thumb_up = db.Column(db.Integer)
+
+
+class Famous(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    avatar = db.Column(db.String(150))  # 图片地址
+    content = db.Column(db.String(150))
+    writer = db.Column(db.String(150))

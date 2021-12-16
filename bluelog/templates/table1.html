@@ -13,9 +13,6 @@
         text-overflow:inherit;
         white-space:normal;
     }
-    [data-field='count_type_f'] .layui-table-cell{
-        overflow: visible !important;
-    }
 </style>
 
 {% endblock %}
@@ -144,10 +141,13 @@
         <option name="count_type_f" value="{{father}}">{{father}}</option>
         {% endfor %}
     </select>
+
 </script>
 
 <script type="text/html" id="table_son">
+    <select name="editStateS2" lay-filter="edit_select" id="editStateS2" >
 
+    </select>
 </script>
 
 
@@ -255,7 +255,7 @@ layui.use(['table','dropdown','form'],function() {
     function payment_s_load(data){
         let proHtml = '';
         for (let i = 0; i < data.length; i++) {
-                proHtml += '<option name="count_type_s" value=\"' + data[i]  + '\">' + data[i] + '</option>';
+                proHtml += '<option name="count_type_s" value="' + data[i]  + '">' + data[i] + '</option>';
             }
         return proHtml
     }
@@ -267,14 +267,6 @@ layui.use(['table','dropdown','form'],function() {
 	//下拉框动态加载演示
 	dropdown.render({
 		elem: '.payment'
-		,data: [{title: '全部',id: -1}, {title: '收入',id: 1}, {title: '支出',id: 2}]
-        ,click: function(obj){
-		    this.elem.val(obj.id);
-			$("#selectTxt").text(obj.title);
-		}
-	});
-    dropdown.render({
-		elem: '#editStateS'
 		,data: [{title: '全部',id: -1}, {title: '收入',id: 1}, {title: '支出',id: 2}]
         ,click: function(obj){
 		    this.elem.val(obj.id);
@@ -309,7 +301,6 @@ layui.use(['table','dropdown','form'],function() {
         elem: '#demo'
 		,url: '/table_show' //数据接口
 		,title: '用户表'
-        ,height:700
 		,page: true //开启分页
 		,method: 'post'
 		,contentType:'application/json'
@@ -324,28 +315,18 @@ layui.use(['table','dropdown','form'],function() {
 		    {checkbox:true, fixed: true}
             ,{field: 'deal_date', title: '交易时间', width: 170, sort: true, totalRowText: '合计：'}
 			,{field: 'counterparty', title: '交易对方', sort: true}
-			,{field: 'income_expense', title: '收支', width: 80, sort: true}
+			,{field: 'income_expense', title: '收支', width: 80, sort: true,templet:function(res){
+			    //数据转换显示示例
+                if (res.income_expense === '收入'){return '赚的钱'}else if (res.income_expense ==='支出'){return '花的钱'}else{return '未知'}}}
 			,{field: 'count_type_f', title: '父类', width: 160, sort: true, templet: "#table_father"}
-			,{field: 'count_type_s', title: '子类', width: 160, sort: true, templet: function (res){
-			     //数据转换显示示例
-			    let s_html = ''
-                if (typeof(payment[res.count_type_f]) !== "undefined"){
-                    payment[res.count_type_f].forEach(function (val, index) {
-                        if(val===res.count_type_s){
-                            s_html += '<option name="count_type_s" selected="selected" value=\"' + val  + '\">' + val + '</option>';
-                        }else{
-                            s_html += '<option name="count_type_s" value=\"' + val  + '\">' + val + '</option>';
-                        }
-                    })
-                }
-                return '<select name="editStateS2" lay-filter="edit_select" id="editStateS2" >' + s_html + '</select>'
-			}}
+			,{field: 'count_type_s', title: '子类', width: 160, sort: true, templet: "#table_son"}
 			,{field: 'amount', title: '金额', width: 150, sort: true, totalRow: true}
 			,{field: 'goods', title: '商品', sort: true}
-			// ,{field:'right', title: '操作', width:300,toolbar:"#barDemo"}
+			,{field:'right', title: '操作', width:300,toolbar:"#barDemo"}
 		]]
 		,id:'testReload'
 		,done: function () {
+
 			//实现数据同步
 			let divForm = $("#demo").next();                                    // 获取表格，tableId是表格的id
 			let tableCache = layui.table.cache['testReload'];                   // 获取表格缓存数据，tableCacheId也是表格的id
@@ -374,6 +355,9 @@ layui.use(['table','dropdown','form'],function() {
                     dataIndex = parseInt(data.othis.parents('tr').attr('data-index')),  // 获得变化的下拉列表所在的行index
                     lineDate = tableCache[dataIndex];                           // 获得数据表格中该行的缓存数据
                 if(field==='count_type_f'){
+
+                    console.log($(data.elem).parents("tr").siblings())
+                    console.log($(data.elem).parents("tr").find("select[name='editStateS2']"))
                    $(data.elem).parents("tr").find("select[name='editStateS2']")[0].innerHTML= payment_s_load(payment[value]);
 
                 }
@@ -397,7 +381,6 @@ layui.use(['table','dropdown','form'],function() {
 								layer.msg('修改数据失败')
 							}}
 					});
-					layui.form.render('select');
 					// tableCache[dataIndex][field] = value;  // 将修改后的数据更新到数据表格的缓存数据中
 				}
 			});

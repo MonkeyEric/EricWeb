@@ -54,12 +54,13 @@
         </div>
         <div class="col-md-2">
             <div class="ibox">
+
                         <div class="nav-header p-lg text-center">
                             <div class="m-b-md" style="color: white">
                             <h2 class="font-bold no-margins" >
-                                王宇
+                                {{user_info.username}}
                             </h2>
-                                <small>inspinia 2.9.2创始人</small>
+                                <small style="font-size: initial;color: slategray;">{{user_info.role}}</small>
                             </div>
                             <img src="/static/img/profile_small.jpg" class="rounded-circle  m-b-md" alt="profile" style="width: 80px;height: 80px;">
                             <div>
@@ -68,17 +69,49 @@
                                 <span><a href="#">电子邮件</a></span>
                             </div>
                         </div>
-                        <div class="">
+                        <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content animated fadeIn">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                                            <i class="fa fa-clock-o modal-icon"></i>
+                                            <h4 class="modal-title">添加名人名句</h4>
+                                            <small>历史可以明鉴 哲学使人明智</small>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form role="form" method="post" action="{{url_for('admin.famous')}}" enctype="multipart/form-data">
+                                                <div class="form-group">
+                                                    <label>名人姓名</label>
+                                                    <input type="text" name="writer" placeholder="请输入……" class="form-control">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>内容</label>
+                                                    <input type="text" name="content" placeholder="请输入……" class="form-control">
+                                                </div>
+                                                <div class="form-group custom-file">
+                                                    <input id="logo" type="file" class="custom-file-input" name="file">
+                                                    <label for="logo" class="custom-file-label">上传名人头像...</label>
+                                                </div>
+                                                <button class="btn btn-sm btn-primary float-right m-t-n-xs" type="submit"><strong>登录</strong></button>
+                                            </form>
+                                        </div>
 
-                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         <div class="widget-text-box feed-element">
+
                             <a class="float-left" href="profile.html">
-                                <img alt="image" class="rounded-circle" src="/static/img/famous/liening.jpeg">
+                                <img alt="image" class="rounded-circle" src="" id="change_img">
                             </a>
                             <div class="media-body ">
-                                <small class="float-right"><a href="#"><i class="fa fa-refresh"></i>&nbsp;换一句</a></small>
-                                <h4 class="media-heading">列宁:</h4>
-                                <strong>思想的巨人，行动的矮子</strong><br>
+                                <small class="float-right">
+                                    <a href="#" id="change_famous"><i class="fa fa-refresh"></i>&nbsp;</a>
+                                    <a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus"></i></a>
+
+                                </small>
+                                <h4 class="media-heading" id="change_writer"></h4>
+                                <strong id="change_content"></strong><br>
                             </div>
 
 
@@ -103,10 +136,25 @@
 {{moment.locale('zh-cn')}}
 
     <script>
+        $('.custom-file-input').on('change', function() {
+   let fileName = $(this).val().split('\\').pop();
+   $(this).next('.custom-file-label').addClass("selected").html(fileName);
+});
+        $(document).on('click','#change_famous',function(){
+            $.ajax({
+                    url: "/famous",
+                    type: "get",
+                    success: function(data){
+                        let fixed_path = "/static/file/famous/"+data['data']['avatar']
+                        $("#change_writer").html(data['data']['writer']+"：")
+                        $("#change_content").html(data['data']['content'])
+                        $("#change_img").attr('src',fixed_path);
+                    }
+                });
+        })
+
         $(document).ready(function () {
-
-
-          $("#one").addClass("active")
+            $("#one").addClass("active")
             setTimeout(function () {
                 toastr.options = {
                     closeButton: true,
@@ -119,8 +167,10 @@
                     name = ''
                 }
                 toastr.success('猫大侠Blog用户 ≧◉◡◉≦ ', '欢迎您' + name);
-
             }, 1300);
+             $("#change_famous").trigger("click");
+
+
         })
 
 

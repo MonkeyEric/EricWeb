@@ -201,13 +201,13 @@
     year_select.value=new Date().getFullYear();
 
    $(function (){
-        var chartsArr=[];
+        let chartsArr=[];
         //菜单栏点击状态
         $("#income a").click()
         $("#nine").addClass('active')
 
        layui.use('laydate', function(){
-           var laydate = layui.laydate;
+           let laydate = layui.laydate;
            //年选择器
           laydate.render({
             elem: '#year_select'
@@ -223,88 +223,37 @@
         let myDate = new Date();
         let rate =  JSON.parse({{income_rate | tojson}})
         option1 = {
-            title:{
-                text:myDate.getFullYear()+'年收入支出比'
-            },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-                }
-            },
-            legend: {
-                data: ['存储', '支出', '收入']
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            xAxis: [
-                {
-                    type: 'value'
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'category',
-                    axisTick: {
-                        show: false
-                    },
-                    data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
-                }
-            ],
-            dataZoom: [
-                    {
-                        type: 'slider',
-                        show: true,
-                        yAxisIndex: [0,3],
-                        left: '93%',
-                        start: 1,
-                        end: 45
-                    },
-                ],
+            title:{text:myDate.getFullYear()+'年收入支出比'},
+            tooltip: {trigger: 'axis',axisPointer: {type: 'shadow'}},
+            legend: {data: ['存储', '支出', '收入']},
+            grid: {left: '3%', right: '4%', bottom: '3%', containLabel: true},
+            xAxis: [{type: 'value'}],
+            yAxis: [{type: 'category', axisTick: {show: false}, data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']}],
+            dataZoom: [{type: 'slider', show: true, yAxisIndex: [0,3], left: '93%', start: 1, end: 45},],
             series: [
-                {
-                    name: '存储',
-                    type: 'bar',
-                    label: {
-                        show: true,
-                        position: 'inside'
-                    },
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    data:rate['存储']
-                },
-                {
-                    name: '收入',
-                    type: 'bar',
-                    label: {
-                        show: true
-                    },
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    data: rate['收入']
-                },
-                {
-                    name: '支出',
-                    type: 'bar',
-                    label: {
-                        show: true,
-                        position: 'left'
-                    },
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    data: rate['支出']
-                }
+                {name: '存储', type: 'bar', label: {show: true, position: 'inside'}, emphasis: {focus: 'series'}, data:rate['存储']},
+                {name: '收入', type: 'bar', label: {show: true}, emphasis: {focus: 'series'}, data: rate['收入']},
+                {name: '支出', type: 'bar', label: {show: true, position: 'left'}, emphasis: {focus: 'series'}, data: rate['支出']}
             ]
         };
 
         option1 && myChart1.setOption(option1);
+        function time_line_(start_year,end_year){
+            let model = '-01-01'
+            let time_line = []
+            for(let year = start_year; year <= end_year; year++){
+                if(year===end_year){
+                    time_line.push({value: year+model, tooltip: {formatter: '{b} 达到自己的目标'}, symbol: 'diamond', symbolSize: 16})
+                }
+                else{
+                time_line.push(year+model)
+                }
+
+            }
+            return time_line
+        }
+
+
         //消费类型
        $.ajax({
                 type: "GET",
@@ -314,25 +263,27 @@
                 async: true,//异步
                 success: function(res) {
                     // data = jQuery.parseJSON(data);  //dataType指明了返回数据为json类型，故不需要再反序列化
-                    expense_type(res['consume_type'])
-                    top5_type(res['top5_type'])
+                    console.log('res_____',res)
+                    let res_time_line = time_line_(res['start_year'],res['end_year'])
+                    expense_type(res['consume_type'],res['keys'],res['start_year'],res['end_year'],res_time_line)
+                    top5_type(res['top5_type'],res['keys'])
                     top5_count(res['top5_count'])
-                    each_month(res['consume'],res['consume_count'])
+                    each_month(res['consume'],res['consume_count'],res['start_year'],res['end_year'],res_time_line)
 
                 }
             });
 
-       //每个月的
-        function each_month(consume,consume_count) {
+        //每个月的
+        function each_month(consume,consume_count,start_year,end_year,res_time_line) {
             let chartDom = document.getElementById('main2');
             let myChart = echarts.init(chartDom, 'dark');
             let option;
 
             let dataMap = {};
-            function dataFormatter(obj) {
+            function dataFormatter(obj,y_max) {
             let pList = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
             let temp;
-            for (let year = 2018; year <= 2023; year++) {
+            for (let year = start_year; year <= end_year; year++) {
                 let max = 0;
                 let sum = 0;
                 temp = obj[year];
@@ -346,11 +297,21 @@
                 }
                 obj[year + 'max'] = Math.floor(max / 100) * 100;
                 obj[year + 'sum'] = sum;
+                y_max.push(obj[year + 'max'])
             }
+            obj['y_max'] = y_max
             return obj;
         }
-        dataMap.databar = dataFormatter(consume);
-        dataMap.dataline = dataFormatter(consume_count);
+
+        dataMap.databar = dataFormatter(consume,[]);
+        let max_money_value = Math.max.apply(null,dataMap.databar['y_max']) + 1000
+        let value_interval = max_money_value/10
+        dataMap.dataline = dataFormatter(consume_count,[]);
+        let max_money_times = Math.max.apply(null,dataMap.dataline['y_max']) + 100
+        let option_bar =[]
+        for(let year = start_year; year <= end_year; year++) {
+        option_bar.push({title: {text: year+'年个人支出分析'}, series: [{data: dataMap.databar[year]}, {data: dataMap.dataline[year]},]},)
+        }
 
 
         option = {
@@ -358,147 +319,33 @@
             timeline: {
                 axisType: 'category',
                 autoPlay: true,
-                playInterval: 1000,
-                data: [
-                    '2018-01-01','2019-01-01','2020-01-01',
-                    {
-                        value: '2021-01-01',
-                        tooltip: {
-                            formatter: '{b} 达到自己的目标'
-                        },
-                        symbol: 'diamond',
-                        symbolSize: 16
-                    },
-                    '2022-01-01', '2023-01-01'
-                ],
-                label: {
-                    formatter : function(s) {
-                        return (new Date(s)).getFullYear();
-                    }
-                }
+                playInterval: 3000,
+                data: res_time_line,
+                label: {formatter : function(s) {return (new Date(s)).getFullYear();}}
             },
-            title: {
-                subtext: '数据来自真实案例'
-            },
-            legend: {
-                left: 'center',
-                top:20,
-                data: ['金额', '次数'],
-            },
+            title: {subtext: '数据来自真实案例'},
+            legend: {left: 'center', top:20, data: ['金额', '次数'],},
             calculable : true,
-            grid: {
-                top: 80,
-                bottom: 100
-            },
-            xAxis: [
-                {
-                    'type':'category',
-                    'axisLabel':{'interval':0},
-                    'data':[
-                        '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'
-                    ],
-                    splitLine: {show: false}
-                }
-            ],
+            grid: {top: 80, bottom: 100},
+            xAxis: [{'type':'category', 'axisLabel':{'interval':0}, 'data':['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'], splitLine: {show: false}}],
             yAxis: [
-                {
-                    type: 'value',
-                    name: '金额（元）',
-                    // max: 53500
-                    max: 3600,
-                    interval: 300
-                },
-                {
-                    type: 'value',
-                    name: '次数',
-                    position:'right',
-                    // max: 53500
-                    max: 120,
-                    interval: 10
-                }
+
+                {type: 'value', name: '金额（元）', max: max_money_value, interval: value_interval},
+                {type: 'value', name: '次数', position:'right', max: max_money_times, interval: 10}
             ],
             series: [
-                {
-                    name: '金额',
-                    type: 'bar',
-                    encode: { x: 'name', y: 'score' },
-                    datasetIndex: 1,
-                    label: {
-                    normal: {
-                        show: true,
-                        position: 'top'
-                    },
-                    formatter: '{@value}'
-                            }
-                },
-                {
-                    name: '次数',
-                    type: 'line',
-                    encode: { x: 'name', y: 'score' },
-                    datasetIndex: 1,
-                    label: {
-                    normal: {
-                        show: true,
-                        position: 'top'
-                    },
-                    formatter: '{@value}'
-                            },
-                    yAxisIndex: 1},
+                {name: '金额', type: 'bar', encode: { x: 'name', y: 'score' }, datasetIndex: 1, label: {normal: {show: true, position: 'top'}, formatter: '{@value}'}},
+                {name: '次数', type: 'line', encode: { x: 'name', y: 'score' }, datasetIndex: 1, label: {normal: {show: true, position: 'top'}, formatter: '{@value}'}, yAxisIndex: 1},
             ]
         },
 
-        options:[
-            {
-            title: {text: '2018年个人支出分析'},
-            series: [
-                {data: dataMap.databar['2018']},
-                {data: dataMap.dataline['2018']},
-            ]
-        },
-            {
-            title: {text: '2019年个人支出分析'},
-            series: [
-                {data: dataMap.databar['2019']},
-                {data: dataMap.dataline['2019']},
-            ]
-        },
-            {
-            title: {text: '2020年个人支出分析'},
-            series: [
-                {data: dataMap.databar['2020']},
-                {data: dataMap.dataline['2020']},
-            ]
-        },
-            {
-            title: {text: '2021年个人支出分析'},
-            series: [
-                {data: dataMap.databar['2021']},
-                {data: dataMap.dataline['2021']},
-            ]
-        },
-            {
-            title: {text: '2022年个人支出分析'},
-            series: [
-                {data: dataMap.databar['2022']},
-                {data: dataMap.dataline['2022']},
-            ]
-        },
-            {
-            title: {text: '2023年个人支出分析'},
-            series: [
-                {data: dataMap.databar['2023']},
-                {data: dataMap.dataline['2023']},
-            ]
-        },
-        ],
+        options:option_bar,
         };
 
         option && myChart.setOption(option);
+        chartsArr.push(myChart)
         }
-
-
-
-       function expense_type(count_type) {
+        function expense_type(count_type,keys,start_year, end_year,res_time_line) {
            let chartDom2 = document.getElementById('main3');
            let myChart3 = echarts.init(chartDom2, 'dark');
            let option3;
@@ -507,7 +354,7 @@
         function dataFormatter2(obj) {
             let pList = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
             let temp;
-            for (let year = 2018; year <= 2023; year++) {
+            for (let year = start_year; year <= end_year; year++) {
                 let max = 0;
                 let sum = 0;
                 temp = obj[year];
@@ -524,270 +371,105 @@
             }
             return obj;
         }
+        let index_ = 1
+        let keys_year = []
+        for (let key in count_type) {
+            let item = count_type[key];
+            let map_attr = "databar"+index_
+            dataMap2[map_attr] = dataFormatter2(item);
+            keys.push(key)
+            keys_year.push({'name':key,'index_':map_attr})
+            index_+=1
 
-        dataMap2.databar1 = dataFormatter2(count_type['餐饮']);
-        dataMap2.databar2 = dataFormatter2(count_type['购物']);
-        dataMap2.databar3 = dataFormatter2(count_type['交通']);
-        dataMap2.databar4 = dataFormatter2(count_type['通讯']);
-        dataMap2.databar5 = dataFormatter2(count_type['非必需品']);
-        dataMap2.databar6 = dataFormatter2(count_type['生活']);
-        dataMap2.databar7 = dataFormatter2(count_type['家人/朋友']);
-        // dataMap2.databar8 = dataFormatter2(count_type['家人/朋友']);
-        // dataMap2.databar9 = dataFormatter2(count_type['第三方平台']);
-        // dataMap2.databar10 = dataFormatter2(count_type['家人/朋友']);
-
-
-
+        }
+        console.log(keys_year)
+        let option_char = []
+        for (let year = start_year; year <= end_year; year++) {
+            let series = []
+            let i = 0, len = keys_year.length;
+            for(; i < len; i++){
+                let map_index = keys_year[i]['index_']
+                series.push({name: keys_year[i]['name'], type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2[map_index][year]})
+            }
+            option_char.push({
+                'title':{text:year+'年类别分析'},
+                'series':series
+            })
+        }
         option3 = {
             baseOption: {
-                timeline: {
-                    axisType: 'category',
-                    autoPlay: true,
-                    playInterval: 1000,
-                    data: [
-                        '2018-01-01','2019-01-01','2020-01-01',
-                        {
-                            value: '2021-01-01',
-                            tooltip: {
-                                formatter: '{b} 达到自己的目标'
-                            },
-                            symbol: 'diamond',
-                            symbolSize: 16
-                        },
-                        '2022-01-01', '2023-01-01'
-                    ],
-                    label: {
-                        formatter : function(s) {
-                            return (new Date(s)).getFullYear();
-                        }
-                    }
+                timeline: {axisType: 'category', autoPlay: true, playInterval: 3000, data: res_time_line,
+                    label: {formatter : function(s) {return (new Date(s)).getFullYear();}}
                 },
-                title: {
-                    subtext: '数据来自真实案例'
+                title: {subtext: '数据来自真实案例'},
+                tooltip: {trigger: 'axis', axisPointer: {type: 'shadow'}},
+                legend: {data: keys, left:'center', top:20},
+                grid: {top: 80, bottom: 90},
+                xAxis: [{type: 'value',}],
+                yAxis: [{type: 'category', data: [ '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']},],
                 },
-                tooltip: {
-                        trigger: 'axis',
-                        axisPointer: {            // Use axis to trigger tooltip
-                            type: 'shadow'        // 'shadow' as default; can also be 'line' or 'shadow'
-                        }
-                    },
-                legend: {
-                    data: ['餐饮', '女朋友', '购物', '交通', '学习', '娱乐', '生活', '通讯', '第三方平台', '家人/朋友'],
-                    left:'center',
-                    top:20
-                        },
-
-                grid: {
-                     top: 80,
-                     bottom: 90
-                },
-                xAxis: [
-                    {
-                         type: 'value',
-                      
-                    }
-                ],
-                yAxis: [
-                    {
-                       type: 'category',
-                    data: [ '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
-                    },],
-                },
-            options:[
-            {
-                title: {text: '2018年类别分析'},
-                series: [
-                    {name: '餐饮', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar1['2018']},
-                    {name: '购物', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar2['2018']},
-                    {name: '交通', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar3['2018']},
-                    {name: '通讯', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar4['2018']},
-                    {name: '非必需品', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar5['2018']},
-                    {name: '生活', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar6['2018']},
-                    {name: '家人/朋友', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar7['2018']},
-                    // {name: '学习', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar8['2018']},
-                    // {name: 'Video Ad', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar9['2018']},
-                    // {name: 'Video Ad', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar10['2018']},
-            ]
-        },
-            {
-            title: {text: '2019年类别分析'},
-            series: [
-               {name: '餐饮', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar1['2019']},
-                {name: '购物', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar2['2019']},
-                {name: '交通', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar3['2019']},
-                {name: '通讯', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar4['2019']},
-                {name: '非必需品', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar5['2019']},
-                {name: '生活', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar6['2019']},
-                {name: '家人/朋友', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar7['2019']},
-            ]
-        },
-            {
-            title: {text: '2020年类别分析'},
-            series: [
-               {name: '餐饮', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar1['2020']},
-                {name: '购物', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar2['2020']},
-                {name: '交通', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar3['2020']},
-                {name: '通讯', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar4['2020']},
-                {name: '非必需品', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar5['2020']},
-                {name: '生活', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar6['2020']},
-                {name: '家人/朋友', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar7['2020']},
-            ]
-        },
-            {
-            title: {text: '2021年类别分析'},
-            series: [
-               {name: '餐饮', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar1['2021']},
-                    {name: '购物', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar2['2021']},
-                    {name: '交通', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar3['2021']},
-                    {name: '通讯', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar4['2021']},
-                    {name: '非必需品', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar5['2021']},
-                    {name: '生活', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar6['2021']},
-                    {name: '家人/朋友', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar7['2021']},
-            ]
-        },
-            {
-            title: {text: '2022年类别分析'},
-            series: [
-                {name: '餐饮', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar1['2022']},
-                    {name: '购物', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar2['2022']},
-                    {name: '交通', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar3['2022']},
-                    {name: '通讯', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar4['2022']},
-                    {name: '非必需品', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar5['2022']},
-                    {name: '生活', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar6['2022']},
-                    {name: '家人/朋友', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar7['2022']},
-            ]
-        },
-            {
-            title: {text: '2023年类别分析'},
-            series: [
-               {name: '餐饮', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar1['2023']},
-                {name: '购物', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar2['2023']},
-                {name: '交通', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar3['2023']},
-                {name: '通讯', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar4['2023']},
-                {name: '非必需品', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar5['2023']},
-                {name: '生活', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar6['2023']},
-                {name: '家人/朋友', type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2.databar7['2023']},
-            ]
-        },
-        ],
+            options: option_char,
         };
-
         option3 && myChart3.setOption(option3);
         chartsArr.push(myChart3)
 
        }
 
 
-        // top3的费用情况
-       function top5_type(res) {
-                let series = []
-                let chartDom4 = document.getElementById('main4');
-                let myChart4 = echarts.init(chartDom4, 'dark');
-                let option4;
+// top3的费用情
+function top5_type(res,keys) {
+        let series = []
+        let chartDom4 = document.getElementById('main4');
+        let myChart4 = echarts.init(chartDom4, 'dark');
+        let option4;
 
 
-                for(let key in res){
-                    series.push({
-                        name: key,
-                        type: 'line',
-                        stack: '总量',
-                        radius: '80%',
-                        data: res[key]
-                    });
-                }
+        for(let t_key in res){
+            series.push({name: t_key,type: 'line',stack: '总量',radius: '80%',data: res[t_key]});
+        }
+        option4 = {
+            tooltip: {trigger: 'axis'},
+            legend: {data: keys},
+            grid: {left: '3%', right: '4%',bottom: '3%',containLabel: true},
+            toolbox: {feature: {saveAsImage: {}}},
+            xAxis: {type: 'category', boundaryGap: false, data: [ '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']},
+            yAxis: {type: 'value'},
+            dataZoom: [
+                {type: 'slider',show: true,xAxisIndex: [0,3],left: 'center',start: 1,bottom:10,end: 75},
+            ],
+            series: series
+        };
+        option4 && myChart4.setOption(option4);
+        // 当页面发生变化的时候，重新修改echart图表的大小
+        chartsArr.push(myChart4)
+}
 
-                option4 = {
-                tooltip: {
-                trigger: 'axis'
-                },
-                legend: {
-                data: ['餐饮', '女朋友', '购物', '交通', '学习', '娱乐', '生活', '通讯', '第三方平台', '家人/朋友']
-                },
-                grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-                },
-                toolbox: {
-                feature: {
-                    saveAsImage: {}
-                }
-                },
-                xAxis: {
-                type: 'category',
-                boundaryGap: false,
-                data: [ '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
-                },
-                yAxis: {
-                type: 'value'
-                },
-                    dataZoom: [
-                    {
-                        type: 'slider',
-                        show: true,
-                        xAxisIndex: [0,3],
-                        left: 'center',
-                        start: 1,
-                        bottom:10,
-                        end: 75
-                    },
-                ],
-                series: series
-                };
+function top5_count(res) {
+    //top3
+    let chartDom5 = document.getElementById('main5');
+    let myChart5 = echarts.init(chartDom5, 'dark');
+    let option5;
 
-                option4 && myChart4.setOption(option4);
-                // 当页面发生变化的时候，重新修改echart图表的大小
-               chartsArr.push(myChart4)
-       }
+    option5 = {
+        tooltip: {trigger: 'item'},
+        legend: {top: '5%',orient: 'vertical',left: 'right'},
+        series: [
+            {name: '访问来源',type: 'pie',radius: '70%',data: res,emphasis: {itemStyle: {shadowBlur: 10,shadowOffsetX: 0,shadowColor: 'rgba(0, 0, 0, 0.5)'}}}
+        ]
+    };
+    option5 && myChart5.setOption(option5);
+    // 当页面发生变化的时候，重新修改echart图表的大小
+    chartsArr.push(myChart5)
+}
 
-           function top5_count(res) {
-                //top3
-                let chartDom5 = document.getElementById('main5');
-                let myChart5 = echarts.init(chartDom5, 'dark');
-                let option5;
+//调整echart图
 
-                option5 = {
-
-                tooltip: {
-                trigger: 'item'
-                },
-                legend: {
-                top: '5%',
-                orient: 'vertical',
-                left: 'right'
-                },
-                series: [
-                {
-                name: '访问来源',
-                type: 'pie',
-                radius: '70%',
-                data: res,
-                emphasis: {
-                    itemStyle: {
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    }
-                }
-                }
-                ]
-                };
-
-                option5 && myChart5.setOption(option5);
-
-                // 当页面发生变化的时候，重新修改echart图表的大小
-               chartsArr.push(myChart5)
-
-           }
-
-          chartsArr.push(myChart1);
-          chartsArr.push(myChart);
-           window.onresize=function(){
-              for(var i=0;i<chartsArr.length;i++){
-                  chartsArr[i].resize();
-                  }
-           }
+chartsArr.push(myChart1);
+window.onresize=function(){
+  for(let i=0;i<chartsArr.length;i++){
+      chartsArr[i].resize();
+      }
+}
         })
 
 

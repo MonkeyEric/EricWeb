@@ -1,4 +1,5 @@
 # coding:utf-8
+import bdb
 
 from flask import Blueprint, render_template, g, session, send_from_directory, request, current_app, redirect, url_for
 from flask_login import current_user
@@ -11,6 +12,7 @@ from bluelog.modules.blog import *
 from bluelog.modules.income_expense import Income
 from bluelog.utils.forms import IncomeExpenseForm, FavoriteForm
 from bluelog.utils.csv_tools import read_csv, save_to_db
+from bluelog.utils.query_dict import query_to_dict
 from bluelog.money_excel_model import *
 from bluelog.utils.extensions import socketio
 from flask_socketio import emit
@@ -19,8 +21,12 @@ from datetime import date, time, timedelta, datetime
 from sqlalchemy import DateTime, Date, Time, func, desc, extract, asc
 import json
 import os
+import random
 
 admin_bp = Blueprint('admin', __name__)
+
+chart_year_end = datetime.now().year
+chart_year_start = datetime.now().year - 5
 
 
 def find_datetime(value):
@@ -96,6 +102,8 @@ def chart():
     expand = db.session.query(func.sum(Income.money)).filter(Income.income_expense == "支出",
                                                              Income.deal_date >= last_month,
                                                              Income.deal_date < now).scalar()
+    if not expand:
+        expand = 0
     if '-' in str(expand):
         expand = round(float(expand[1:]), 2)
 
@@ -105,12 +113,15 @@ def chart():
     if high_money_count_type_s:
         high_money = {'count_type_s': high_money_count_type_s.count_type_s, 'money': high_money_count_type_s.money}
     else:
-        high_money = {'count_type_s': '', 'money': ''}
+        high_money = {'count_type_s': '暂无', 'money': '暂无'}
     # 近一个月支出次数最高得类型
     order_by_type_s = func.count('*').label('total')
-    high_count = db.session.query(Income.count_type_s, func.count('*').label('total')).group_by(
+    high_count_ = db.session.query(Income.count_type_s, func.count('*').label('total')).group_by(
         Income.count_type_s).order_by(desc(order_by_type_s)).first()
-
+    if high_count_:
+        high_count = {'count_type_s': high_count_[0], 'total': high_count_[1]}
+    else:
+        high_count = {'count_type_s': '暂无信息', 'total': '暂无数据'}
     # 收入支出比
     res2 = db.session.query(func.sum(Income.money).label('total_money'),
                             extract('month', Income.deal_date).label('month'), Income.income_expense).filter(
@@ -118,6 +129,8 @@ def chart():
         Income.income_expense != '/').group_by(
         Income.income_expense, extract('month', Income.deal_date).label('month')).order_by(asc(Income.deal_date))
     income_rate = arrange(res2)
+    if not income_rate:
+        income_rate = {'收入': 0, '支出': 0, '存储': 0}
     if income_rate.get('收入', '') and income_rate.get('支出', ''):
         income_rate['存储'] = [round(income_rate['收入'][i] - income_rate['支出'][i], 2) for i in
                              range(len(income_rate['支出']))]
@@ -131,18 +144,22 @@ def chart_type():
     res = db.session.query(Income.count_type_f, func.sum(Income.money).label('total_money'),
                            extract('month', Income.deal_date).label('month'),
                            extract('year', Income.deal_date).label('year')).filter(
-        Income.income_expense == '支出').group_by(Income.count_type_f).order_by(asc(Income.deal_date))
-    consume_type = {}
+        Income.income_expense == '支出').group_by(Income.count_type_f, extract('month', Income.deal_date)).order_by(
+        asc(Income.deal_date))
+    consume_type = {k: {} for k in expense_type.keys()}
     for i in res:
-        if not consume_type.get(i[1]):
-            consume_type[i[0]] = {}
+        key = i[0]
+        if key not in expense_type.keys():
+            key = '其他'
+        if not consume_type.get(key):
+            consume_type[key] = {}
 
-        if not consume_type[i[0]].get(i[3]):
-            consume_type[i[0]][i[3]] = {}
-        consume_type[i[0]][i[3]][i[2]] = i[1]
+        if not consume_type[key].get(i[3]):
+            consume_type[key][i[3]] = {}
+        consume_type[key][i[3]][i[2]] = i[1]
 
     for key, value in consume_type.items():
-        for j in range(2018, 2024):
+        for j in range(chart_year_start, chart_year_end + 1):
             if not value.get(j):
                 value[j] = {}
             value[j] = [round(value[j].get(i, 0), 2) for i in range(1, 13)]
@@ -177,64 +194,89 @@ def chart_type():
         Income.income_expense == '支出').group_by(extract('month', Income.deal_date).label('month')).order_by(
         asc(Income.deal_date))
     consume_count = arrange(res1)
+    for i in range(chart_year_start, chart_year_end + 1):
+        if i not in consume.keys():
+            consume[i] = []
+        if i not in consume_count.keys():
+            consume_count[i] = []
 
     del res1
 
     return {'top5_type': top5_type, 'consume_type': consume_type, 'top5_count': top5_count, 'consume': consume,
-            'consume_count': consume_count}
+            'consume_count': consume_count, "keys": list(expense_type.keys()), 'start_year': chart_year_start,
+            'end_year': chart_year_end}
 
 
 @admin_bp.route('/data', methods=['GET', 'POST'])
 def table_data():
-    son = []
-    for key, value in expense_type.items():
-        son.append('——%s——' % key)
-        for j in value:
-            son.append(j)
-    return render_template('table.html', fathers=list(expense_type.keys()), sons=son, table='/table')
+    return render_template('table.html', fathers=list(expense_type.keys()), father_son_map=expense_type)
 
 
-@admin_bp.route('/table', methods=['GET', 'POST'])
-def table():
-    if request.method == 'GET':
-        page = request.args.get('page', 1, type=int)
-        per_page = request.args.get('limit', 20, type=int)
-        son = request.args.get('son', '')
-        father = request.args.get('father', '')
-        c_type = request.args.get('type', '')
-        re_dict = {}
-        if son:
-            re_dict['count_type_s'] = son
-        if father:
-            re_dict['count_type_f'] = father
-        if c_type:
-            re_dict['income_expense'] = c_type
-        if re_dict:
-            pagination = Income.query.filter_by(**re_dict).order_by(
-                desc(Income.deal_date)).with_entities(Income.deal_date,
-                                                      Income.income_expense,
-                                                      Income.amount, Income.deal_number,
-                                                      Income.count_type_f,
-                                                      Income.count_type_s,
-                                                      Income.pay_status,
-                                                      Income.counterparty,
-                                                      Income.goods).paginate(page,
-                                                                             per_page=per_page)
+@admin_bp.route('/table_show', methods=['POST'])
+def table_show():
+    """
+    必选参数:page,limit
+    可选参数:son,father,
+    :return:
+    """
+    if request.method == 'POST':
+        payment_map = {-1: '全部', 1: '收入', 2: '支出'}
+        receive = request.json
+        page = receive.get('page', 1)
+        per_page = receive.get('limit', 20)
+        son = receive.get('son', '')
+        father = receive.get('father', '')
+        field = receive.get('field', 'deal_date')
+        order = receive.get('order', 'asc')
+        payment = receive.get('payment', '-1')
+        time_end = datetime.strptime(receive.get('time_end'), "%Y-%m") if receive.get('time_end') else ''
+        time_start = datetime.strptime(receive.get('time_start'), "%Y-%m") if receive.get('time_start') else ''
+        query_list = []
+        if order == 'desc':
+            orders = desc(getattr(Income, field))
         else:
-            pagination = Income.query.order_by(desc(Income.deal_date)).with_entities(Income.deal_date,
-                                                                                     Income.income_expense,
-                                                                                     Income.amount, Income.deal_number,
-                                                                                     Income.count_type_f,
-                                                                                     Income.count_type_s,
-                                                                                     Income.pay_status,
-                                                                                     Income.counterparty,
-                                                                                     Income.goods).paginate(
+            orders = asc(getattr(Income, field))
+        if son:
+            query_list.append(Income.count_type_s == son)
+        if father:
+            query_list.append(Income.count_type_f == father)
+        if payment in [-1, 1, 2]:
+            query_list.append(Income.income_expense == payment_map.get(payment))
+        if time_start:
+            query_list.append(Income.deal_date >= time_start)
+        if time_end:
+            query_list.append(Income.deal_date <= time_end)
+        if query_list:
+            pagination = Income.query.filter(*query_list).order_by(
+                orders).with_entities(Income.deal_date,
+                                      Income.income_expense,
+                                      Income.amount, Income.deal_number,
+                                      Income.count_type_f,
+                                      Income.count_type_s,
+                                      Income.pay_status,
+                                      Income.counterparty,
+                                      Income.goods).paginate(page,
+                                                             per_page=per_page)
+        else:
+            pagination = Income.query.order_by(orders).with_entities(Income.deal_date,
+                                                                     Income.income_expense,
+                                                                     Income.amount, Income.deal_number,
+                                                                     Income.count_type_f,
+                                                                     Income.count_type_s,
+                                                                     Income.pay_status,
+                                                                     Income.counterparty,
+                                                                     Income.goods).paginate(
                 page, per_page=per_page)
         income_result = [dict(zip(r.keys(), r)) for r in pagination.items]
         for r in income_result:
             find_datetime(r)
-        return json.dumps({'data': income_result, 'total': pagination.total, 'pages': pagination.pages})
-    elif request.method == 'POST':
+        return json.dumps(
+            {'code': 0, 'msg': '获取成功', 'data': income_result, 'total': pagination.total, 'pages': pagination.pages})
+
+
+@admin_bp.route('/table_operate', methods=['POST'])
+def table_operate():
+    if request.method == 'POST':
         response = json.loads(request.data.decode('utf-8'))
         deal_number = response['deal_number']
         response.pop('deal_number')
@@ -346,3 +388,31 @@ def about():
 @admin_bp.route('/file_manage', methods=['GET'])
 def file_manage():
     return render_template('file_manager.html')
+
+
+@admin_bp.route('/famous', methods=['GET', 'POST'])
+def famous():
+    if request.method == 'GET':
+        query = db.session.query(Famous)
+        row_count = int(query.count())
+        row = query.offset(int(row_count * random.random())).first()
+        if row:
+            result = query_to_dict(row)
+            return {"code": "100000", "msg": "获取成功", "data": result}
+        else:
+            return {"code": "100101", "msg": "无数据"}
+    if request.method == 'POST':
+        print(request.form)
+        print(request.files)
+        img_data = request.files['file']
+        file_path = os.path.join(current_app.config['FAMOUS_PATH'], img_data.filename)
+        img_data.save(file_path)
+        f = Famous()
+        f.writer = request.form.get("writer")
+        f.content = request.form.get("content")
+        f.avatar = img_data.filename
+        db.session.add(f)
+        db.session.commit()
+        return redirect(url_for('admin.index'))
+
+

@@ -33,6 +33,7 @@ def create_app(config_name=None):
     app.config.from_object(config[config_name])
     app.config['UPLOAD_PATH'] = os.path.join(app.root_path, 'bluelog/static/file')
     app.config['IMG_PATH'] = os.path.join(app.root_path, 'bluelog/static/file/img')
+    app.config['FAMOUS_PATH'] = os.path.join(app.root_path, 'bluelog/static/file/famous')
     app.config.update(
         GITHUB_CLIENT_ID=os.getenv('GITHUB_CLIENT_ID'),
         GITHUB_CLIENT_SECRET=os.getenv('GITHUB_CLIENT_SECRET'),
@@ -116,7 +117,8 @@ def register_user_info_(app):
                 is_login = True
                 user = g.user
                 username = user.name
-                role = user.role
+                role = user.role.value
+                print(user.role)
         user_info = dict(is_login=is_login, avatar=avatar, username=username, role=role)
         return dict(user_info=user_info)
 
