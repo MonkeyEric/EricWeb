@@ -69,6 +69,11 @@ def before_request():
             g.db = 'admin'
 
 
+@admin_bp.route('/favicon.ico')
+def favicon():
+    return current_app.send_static_file('img/favicon.ico')
+
+
 @admin_bp.route('/', methods=['GET'])
 @admin_bp.route('/index', methods=['GET'])
 def index():
