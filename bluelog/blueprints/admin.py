@@ -419,5 +419,3 @@ def famous():
         db.session.add(f)
         db.session.commit()
         return redirect(url_for('admin.index'))
-
-
