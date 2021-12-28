@@ -1,0 +1,187 @@
+﻿{% extends "base.html" %}
+{% block title %}时间轴{% endblock %}
+{% block wrapper%}
+<div id="page-wrapper" class="gray-bg">
+{{self.pheader()}}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>时间轴 - 左侧版本</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{{url_for('admin.index')}}">主页</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a>应用</a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <strong>时间轴</strong>
+                </li>
+            </ol>
+        </div>
+
+    </div>
+    <div class="wrapper wrapper-content">
+    <div class="row animated fadeInRight">
+        <div class="col-lg-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>基本左侧浮动时间轴</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-wrench"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#" class="dropdown-item">选项 1</a>
+                        </li>
+                        <li><a href="#" class="dropdown-item">选项 2</a>
+                        </li>
+                    </ul>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="ibox-content inspinia-timeline">
+
+                <div class="timeline-item">
+                    <div class="row">
+                        <div class="col-3 date">
+                            <i class="fa fa-briefcase"></i>
+                            6:00
+                            <br/>
+                            <small class="text-navy">2小时前</small>
+                        </div>
+                        <div class="col-7 content no-top-border">
+                            <p class="m-b-xs"><strong>欧文</strong></p>
+                            <p>真理惟一可靠的标准就是永远自相符合</p>
+
+                            <p><span data-diameter="40" class="updating-chart">5,3,9,6,5,9,7,3,5,2,5,3,9,6,5,9,4,7,3,2,9,8,7,4,5,1,2,9,5,4,7,2,7,7,3,5,2</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="row">
+                        <div class="col-3 date">
+                            <i class="fa fa-file-text"></i>
+                            7:00
+                            <br/>
+                            <small class="text-navy">3小时前</small>
+                        </div>
+                        <div class="col-7 content">
+                            <p class="m-b-xs"><strong>欧文</strong></p>
+                            <p>真理惟一可靠的标准就是永远自相符合</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="row">
+                        <div class="col-3 date">
+                            <i class="fa fa-coffee"></i>
+                            8:00 am
+                            <br/>
+                        </div>
+                        <div class="col-7 content">
+                            <p class="m-b-xs"><strong>欧文</strong></p>
+                            <p>真理惟一可靠的标准就是永远自相符合</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="row">
+                        <div class="col-3 date">
+                            <i class="fa fa-phone"></i>
+                            11:00
+                            <br/>
+                            <small class="text-navy">21小时前</small>
+                        </div>
+                        <div class="col-7 content">
+                            <p class="m-b-xs"><strong>欧文</strong></p>
+                            <p>真理惟一可靠的标准就是永远自相符合</p>
+                            Lorem Ipsum has been the industry's standard dummy text ever since.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="row">
+                        <div class="col-3 date">
+                            <i class="fa fa-user-md"></i>
+                            09:00
+                            <br/>
+                            <small>21小时前</small>
+                        </div>
+                        <div class="col-7 content">
+                            <p class="m-b-xs"><strong>欧文</strong></p>
+                            <p>真理惟一可靠的标准就是永远自相符合</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="row">
+                        <div class="col-3 date">
+                            <i class="fa fa-user-md"></i>
+                            11:10 pm
+                        </div>
+                        <div class="col-7 content">
+                            <p class="m-b-xs"><strong>欧文</strong></p>
+                            <p>真理惟一可靠的标准就是永远自相符合</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="row">
+                        <div class="col-3 date">
+                            <i class="fa fa-comments"></i>
+                            12:50 pm
+                            <br/>
+                            <small class="text-navy">48小时前</small>
+                        </div>
+                        <div class="col-7 content">
+                            <p class="m-b-xs"><strong>欧文</strong></p>
+                            <p>真理惟一可靠的标准就是永远自相符合</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="row">
+                        <div class="col-3 date">
+                            <i class="fa fa-phone"></i>
+                            08:50
+                            <br/>
+                            <small class="text-navy">68小时前</small>
+                        </div>
+                        <div class="col-7 content">
+                            <p class="m-b-xs"><strong>欧文</strong></p>
+                            <p>真理惟一可靠的标准就是永远自相符合</p>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="row">
+                        <div class="col-3 date">
+                            <i class="fa fa-file-text"></i>
+                            7:00 am
+                            <br/>
+                            <small class="text-navy">3小时前</small>
+                        </div>
+                        <div class="col-7 content">
+                            <p class="m-b-xs"><strong>欧文</strong></p>
+                            <p>真理惟一可靠的标准就是永远自相符合</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+{{self.footer()}}
+</div>
+{% endblock %}
+

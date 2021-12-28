@@ -1,0 +1,478 @@
+﻿{% extends "base.html" %}
+{% block title %}数据分析表{% endblock %}
+{% block head %}
+<link href="{{url_for('static',filename='layui/css/layui.css')}}" rel="stylesheet">
+<link href="{{url_for('static',filename='layui/css/modules/code.css')}}" rel="stylesheet">
+{% endblock %}
+{% block wrapper%}
+<div id="page-wrapper" class="gray-bg">
+    {{self.pheader()}}
+    <div class="row wrapper border-bottom white-bg page-heading" style="padding-top: 10px">
+        <div class="col-lg-10">
+            <h2>数据分析</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{{url_for('admin.index')}}">主页</a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <strong>echart分析</strong>
+                </li>
+            </ol>
+
+        </div>
+        <div class="col-lg-2">
+            <div style="padding-top: 15px">
+
+                <h2><strong>
+
+            <input type="text" style="border-style: none; width: 60px" id="year_select">年
+
+                </strong></h2><small style="color: darkgrey">数据日期</small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row justify-content-md-center">
+        <div class="col-lg-6">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>2021年Top5消费类型折线图</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link" href="">
+                            <i class="fa fa-chevron-down"></i>
+                        </a>
+                        <a class="close-link" href="">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+
+                </div>
+                <div class="ibox-content">
+                    <div class="text-center">
+                        <div id="main4" style="height: 370px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>2021年Top5商品支付次数</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link" href="">
+                            <i class="fa fa-chevron-down"></i>
+                        </a>
+                        <a class="close-link" href="">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+
+                </div>
+                <div class="ibox-content">
+                    <div class="text-center">
+                        <div id="main5" style="height: 370px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>消费总计</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link" href="">
+                            <i class="fa fa-chevron-down"></i>
+                        </a>
+                        <a class="close-link" href="">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                  <div id="main2" style="height: 500px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>消费类型总计</h5>
+                        <div class="ibox-tools">
+                        <a class="collapse-link" href="">
+                            <i class="fa fa-chevron-down"></i>
+                        </a>
+                        <a class="close-link" href="">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                    </div>
+                    <div class="ibox-content">
+                     <div id="main3" style="height: 520px"></div>
+                    </div>
+                </div>
+            </div>
+        <div class="col-lg-3">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5>存储</h5>
+                    <h2 class="no-margins">￥{{storage}}</h2>
+                    <div class="stat-percent font-bold text-navy">98% <i class="fa fa-bolt"></i></div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5>上个月支出</h5>
+                    <h2 class="no-margins">￥{{expand}}</h2>
+                    <div class="stat-percent font-bold text-navy">98% <i class="fa fa-bolt"></i></div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5>支出费用最高的类型</h5>
+                     <h2 class="no-margins">{{high_money.count_type_s}}</h2>
+                    <div class="stat-percent font-bold text-danger">{{high_money.money}}元 <i class="fa fa-level-down"></i></div>
+
+
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5>支出次数最高的类型</h5>
+                    <h2 class="no-margins">{{high_count.count_type_s}}</h2>
+                    <div class="stat-percent font-bold text-danger">{{high_count.total}}次 <i class="fa fa-level-down"></i></div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>收入支出比</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link" href="">
+                            <i class="fa fa-chevron-down"></i>
+                        </a>
+                        <a class="close-link" href="">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div id="main" style="height: 1000px"></div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+    </div>
+    {{self.footer()}}
+</div>
+{% endblock%}
+{%block script%}
+<script src="{{url_for('static',filename='js/echarts.js')}}"></script>
+<script src="{{url_for('static',filename='layui/layui.js')}}"></script>
+<script type="text/javascript">
+    // SKIN Select
+        $('.spin-icon').click(function () {
+            $(".theme-config-box").toggleClass("show");
+        });
+    let now = new Date();
+    year_select.value=new Date().getFullYear();
+
+   $(function (){
+        let chartsArr=[];
+        //菜单栏点击状态
+        $("#income a").click()
+        $("#nine").addClass('active')
+
+       layui.use('laydate', function(){
+           let laydate = layui.laydate;
+           //年选择器
+          laydate.render({
+            elem: '#year_select'
+            ,type: 'year'
+              ,theme:'#393D49'
+          });
+       })
+
+       // 每个月的收入支出比
+        let chartDom1 = document.getElementById('main');
+        let myChart1 = echarts.init(chartDom1, 'dark');
+        let option1;
+        let myDate = new Date();
+        let rate =  JSON.parse({{income_rate | tojson}})
+        option1 = {
+            title:{text:myDate.getFullYear()+'年收入支出比'},
+            tooltip: {trigger: 'axis',axisPointer: {type: 'shadow'}},
+            legend: {data: ['存储', '支出', '收入']},
+            grid: {left: '3%', right: '4%', bottom: '3%', containLabel: true},
+            xAxis: [{type: 'value'}],
+            yAxis: [{type: 'category', axisTick: {show: false}, data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']}],
+            dataZoom: [{type: 'slider', show: true, yAxisIndex: [0,3], left: '93%', start: 1, end: 45},],
+            series: [
+                {name: '存储', type: 'bar', label: {show: true, position: 'inside'}, emphasis: {focus: 'series'}, data:rate['存储']},
+                {name: '收入', type: 'bar', label: {show: true}, emphasis: {focus: 'series'}, data: rate['收入']},
+                {name: '支出', type: 'bar', label: {show: true, position: 'left'}, emphasis: {focus: 'series'}, data: rate['支出']}
+            ]
+        };
+
+        option1 && myChart1.setOption(option1);
+        function time_line_(start_year,end_year){
+            let model = '-01-01'
+            let time_line = []
+            for(let year = start_year; year <= end_year; year++){
+                if(year===end_year){
+                    time_line.push({value: year+model, tooltip: {formatter: '{b} 达到自己的目标'}, symbol: 'diamond', symbolSize: 16})
+                }
+                else{
+                time_line.push(year+model)
+                }
+
+            }
+            return time_line
+        }
+
+
+        //消费类型
+       $.ajax({
+                type: "GET",
+                url: "{{url_for('admin.chart_type')}}",
+                contentType: 'application/json;charset=utf-8',//请求数据类型必须有
+                dataType: "json",
+                async: true,//异步
+                success: function(res) {
+                    // data = jQuery.parseJSON(data);  //dataType指明了返回数据为json类型，故不需要再反序列化
+                    console.log('res_____',res)
+                    let res_time_line = time_line_(res['start_year'],res['end_year'])
+                    expense_type(res['consume_type'],res['keys'],res['start_year'],res['end_year'],res_time_line)
+                    top5_type(res['top5_type'],res['keys'])
+                    top5_count(res['top5_count'])
+                    each_month(res['consume'],res['consume_count'],res['start_year'],res['end_year'],res_time_line)
+
+                }
+            });
+
+        //每个月的
+        function each_month(consume,consume_count,start_year,end_year,res_time_line) {
+            let chartDom = document.getElementById('main2');
+            let myChart = echarts.init(chartDom, 'dark');
+            let option;
+
+            let dataMap = {};
+            function dataFormatter(obj,y_max) {
+            let pList = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+            let temp;
+            for (let year = start_year; year <= end_year; year++) {
+                let max = 0;
+                let sum = 0;
+                temp = obj[year];
+                for (let i = 0, l = temp.length; i < l; i++) {
+                    max = Math.max(max, temp[i]);
+                    sum += temp[i];
+                    obj[year][i] = {
+                        name : pList[i],
+                        value : temp[i]
+                    }
+                }
+                obj[year + 'max'] = Math.floor(max / 100) * 100;
+                obj[year + 'sum'] = sum;
+                y_max.push(obj[year + 'max'])
+            }
+            obj['y_max'] = y_max
+            return obj;
+        }
+
+        dataMap.databar = dataFormatter(consume,[]);
+        let max_money_value = Math.max.apply(null,dataMap.databar['y_max']) + 1000
+        let value_interval = max_money_value/10
+        dataMap.dataline = dataFormatter(consume_count,[]);
+        let max_money_times = Math.max.apply(null,dataMap.dataline['y_max']) + 100
+        let option_bar =[]
+        for(let year = start_year; year <= end_year; year++) {
+        option_bar.push({title: {text: year+'年个人支出分析'}, series: [{data: dataMap.databar[year]}, {data: dataMap.dataline[year]},]},)
+        }
+
+
+        option = {
+            baseOption: {
+            timeline: {
+                axisType: 'category',
+                autoPlay: true,
+                playInterval: 3000,
+                data: res_time_line,
+                label: {formatter : function(s) {return (new Date(s)).getFullYear();}}
+            },
+            title: {subtext: '数据来自真实案例'},
+            legend: {left: 'center', top:20, data: ['金额', '次数'],},
+            calculable : true,
+            grid: {top: 80, bottom: 100},
+            xAxis: [{'type':'category', 'axisLabel':{'interval':0}, 'data':['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'], splitLine: {show: false}}],
+            yAxis: [
+
+                {type: 'value', name: '金额（元）', max: max_money_value, interval: value_interval},
+                {type: 'value', name: '次数', position:'right', max: max_money_times, interval: 10}
+            ],
+            series: [
+                {name: '金额', type: 'bar', encode: { x: 'name', y: 'score' }, datasetIndex: 1, label: {normal: {show: true, position: 'top'}, formatter: '{@value}'}},
+                {name: '次数', type: 'line', encode: { x: 'name', y: 'score' }, datasetIndex: 1, label: {normal: {show: true, position: 'top'}, formatter: '{@value}'}, yAxisIndex: 1},
+            ]
+        },
+
+        options:option_bar,
+        };
+
+        option && myChart.setOption(option);
+        chartsArr.push(myChart)
+        }
+        function expense_type(count_type,keys,start_year, end_year,res_time_line) {
+           let chartDom2 = document.getElementById('main3');
+           let myChart3 = echarts.init(chartDom2, 'dark');
+           let option3;
+
+        let dataMap2 = {};
+        function dataFormatter2(obj) {
+            let pList = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+            let temp;
+            for (let year = start_year; year <= end_year; year++) {
+                let max = 0;
+                let sum = 0;
+                temp = obj[year];
+                for (var i = 0, l = temp.length; i < l; i++) {
+                    max = Math.max(max, temp[i]);
+                    sum += temp[i];
+                    obj[year][i] = {
+                        name : pList[i],
+                        value : temp[i]
+                    }
+                }
+                obj[year + 'max'] = Math.floor(max / 100) * 100;
+                obj[year + 'sum'] = sum;
+            }
+            return obj;
+        }
+        let index_ = 1
+        let keys_year = []
+        for (let key in count_type) {
+            let item = count_type[key];
+            let map_attr = "databar"+index_
+            dataMap2[map_attr] = dataFormatter2(item);
+            keys.push(key)
+            keys_year.push({'name':key,'index_':map_attr})
+            index_+=1
+
+        }
+        console.log(keys_year)
+        let option_char = []
+        for (let year = start_year; year <= end_year; year++) {
+            let series = []
+            let i = 0, len = keys_year.length;
+            for(; i < len; i++){
+                let map_index = keys_year[i]['index_']
+                series.push({name: keys_year[i]['name'], type: 'bar', stack: 'total', label: {show: true}, emphasis: {focus: 'series'}, data: dataMap2[map_index][year]})
+            }
+            option_char.push({
+                'title':{text:year+'年类别分析'},
+                'series':series
+            })
+        }
+        option3 = {
+            baseOption: {
+                timeline: {axisType: 'category', autoPlay: true, playInterval: 3000, data: res_time_line,
+                    label: {formatter : function(s) {return (new Date(s)).getFullYear();}}
+                },
+                title: {subtext: '数据来自真实案例'},
+                tooltip: {trigger: 'axis', axisPointer: {type: 'shadow'}},
+                legend: {data: keys, left:'center', top:20},
+                grid: {top: 80, bottom: 90},
+                xAxis: [{type: 'value',}],
+                yAxis: [{type: 'category', data: [ '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']},],
+                },
+            options: option_char,
+        };
+        option3 && myChart3.setOption(option3);
+        chartsArr.push(myChart3)
+
+       }
+
+
+// top3的费用情
+function top5_type(res,keys) {
+        let series = []
+        let chartDom4 = document.getElementById('main4');
+        let myChart4 = echarts.init(chartDom4, 'dark');
+        let option4;
+
+
+        for(let t_key in res){
+            series.push({name: t_key,type: 'line',stack: '总量',radius: '80%',data: res[t_key]});
+        }
+        option4 = {
+            tooltip: {trigger: 'axis'},
+            legend: {data: keys},
+            grid: {left: '3%', right: '4%',bottom: '3%',containLabel: true},
+            toolbox: {feature: {saveAsImage: {}}},
+            xAxis: {type: 'category', boundaryGap: false, data: [ '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']},
+            yAxis: {type: 'value'},
+            dataZoom: [
+                {type: 'slider',show: true,xAxisIndex: [0,3],left: 'center',start: 1,bottom:10,end: 75},
+            ],
+            series: series
+        };
+        option4 && myChart4.setOption(option4);
+        // 当页面发生变化的时候，重新修改echart图表的大小
+        chartsArr.push(myChart4)
+}
+
+function top5_count(res) {
+    //top3
+    let chartDom5 = document.getElementById('main5');
+    let myChart5 = echarts.init(chartDom5, 'dark');
+    let option5;
+
+    option5 = {
+        tooltip: {trigger: 'item'},
+        legend: {top: '5%',orient: 'vertical',left: 'right'},
+        series: [
+            {name: '访问来源',type: 'pie',radius: '70%',data: res,emphasis: {itemStyle: {shadowBlur: 10,shadowOffsetX: 0,shadowColor: 'rgba(0, 0, 0, 0.5)'}}}
+        ]
+    };
+    option5 && myChart5.setOption(option5);
+    // 当页面发生变化的时候，重新修改echart图表的大小
+    chartsArr.push(myChart5)
+}
+
+//调整echart图
+
+chartsArr.push(myChart1);
+window.onresize=function(){
+  for(let i=0;i<chartsArr.length;i++){
+      chartsArr[i].resize();
+      }
+}
+        })
+
+
+
+</script>
+{% endblock%}

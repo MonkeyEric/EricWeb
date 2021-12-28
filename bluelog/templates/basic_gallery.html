@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{%block title%}在线图库{% endblock%}
+{% block head %}
+    <link href="{{url_for('static',filename='css/plugins/blueimp/css/blueimp-gallery.min.css')}}" rel="stylesheet">
+{% endblock%}
+{% block wrapper%}
+<div id="page-wrapper" class="gray-bg">
+    {{ self.pheader() }}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>基本相册</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{{url_for('admin.index')}}">主页</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a>相册</a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <strong>基本相册</strong>
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2">
+
+        </div>
+    </div>
+    <div class="wrapper wrapper-content">
+        <div class="row">
+            <div class="col-lg-12">
+            <div class="ibox ">
+
+                <div class="ibox-content">
+
+                    <h2>基本相册</h2>
+                    <p>
+                        <strong>blueimp Gallery</strong> 是一款具有触控功能，响应灵敏且可自定义的图像和视频库，轮播和灯箱，针对移动和桌面网络浏览器进行了优化。它具有滑动，鼠标和键盘导航，过渡效果，幻灯片功能，全屏支持和按需内容加载，并可扩展为显示其他内容类型。完整的文档可以在以下: <a href="https://github.com/blueimp/Gallery/blob/master/README.md" target="_blank">https://github.com/blueimp/Gallery/blob/master/README.md</a>
+                    </p>
+
+                    <div class="lightBoxGallery">
+                        <a href="{{url_for('static',filename='img/gallery/1.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/1s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/2.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/2s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/3.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/3s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/4.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/4s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/5.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/5s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/6.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/6s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/7.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/7s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/8.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/8s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/9.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/9s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/10.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/10s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/12.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/12s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/4.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/4s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/5.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/5s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/6.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/6s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/7.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/7s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/2.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/2s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/3.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/3s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/1.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/1s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/9.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/9s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/10.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/10s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/11.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/11s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/12.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/12s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/4.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/4s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/5.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/5s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/4.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/4s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/5.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/5s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/6.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/6s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/12.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/12s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/4.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/4s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/5.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/5s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/10.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/10s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/1.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/1s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/2.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/2s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/3.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/3s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/4.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/4s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/5.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/5s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/6.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/6s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/7.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/7s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/8.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/8s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/9.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/9s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/10.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/10s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/11.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/11s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/12.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/12s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/4.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/4s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/5.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/5s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/6.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/6s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/7.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/7s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/2.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/2s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/3.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/3s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/1.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/1s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/9.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/9s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/10.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/10s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/11.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/11s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/12.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/12s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/4.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/4s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/7.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/7s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/8.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/8s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/9.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/9s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/10.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/10s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/11.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/11s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/12.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/12s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/4.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/4s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/5.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/5s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/5.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/5s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/4.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/4s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/5.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/5s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/6.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/6s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/12.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/12s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/4.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/4s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/5.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/5s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/10.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/10s.jpg')}}"></a>
+                        <a href="{{url_for('static',filename='img/gallery/11.jpg')}}" title="Image from Unsplash" data-gallery=""><img src="{{url_for('static',filename='img/gallery/11s.jpg')}}"></a>
+
+                        <!-- The Gallery as lightbox dialog, should be a child element of the document body -->
+                        <div id="blueimp-gallery" class="blueimp-gallery">
+                            <div class="slides"></div>
+                            <h3 class="title"></h3>
+                            <a class="prev">‹</a>
+                            <a class="next">›</a>
+                            <a class="close">×</a>
+                            <a class="play-pause"></a>
+                            <ol class="indicator"></ol>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </div>
+    {{ self.footer() }}
+</div>
+{% endblock %}
+{% block script%}
+<script src="{{url_for('static',filename='js/plugins/blueimp/jquery.blueimp-gallery.min.js')}}"></script>
+<script>
+    $(document).ready(function () {
+        $("#cat a").click()
+        $("#seven").addClass('active')
+    })
+</script>
+{% endblock %}

@@ -1,0 +1,76 @@
+﻿{% extends "base.html" %}
+{% block title %}注册{% endblock %}
+{% block head %}
+<style>
+        body{
+        background-image:url("../static/img/bg_login2.jpg");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+    }
+</style>
+{% endblock %}
+{%block body%}
+
+<body class="gray-bg">
+
+    <div class="middle-box loginscreen   animated fadeInDown">
+        <div>
+            <h3 class="text-light">注册平台账户</h3>
+            <p class="text-light">创建账户以查看更多好玩功能.例如：相册、个人收支分析等等</p>
+            <form class="m-t" role="form" action="{{url_for('user.register')}}" method="post">
+                {{form.csrf_token}}
+                <div class="form-group">
+                    <input type="email" class="form-control" placeholder="电子邮件" required="" name="email">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="用户名" required="" name="name">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="密码" required="" name="password">
+                </div>
+                <div class="form-group">
+                    <select class="form-control m-b" name="role">
+                                        <option value="1">管理员</option>
+                                        <option value="2">特殊用户</option>
+                                        <option value="3">普通用户</option>
+                                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="博客标题" required="" name="my_title">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="关于" required="" name="about">
+                </div>
+
+                <div class="form-group">
+                        <div class="checkbox i-checks">
+                        <small class="text-light">已经有一个帐户?&nbsp;&nbsp;&nbsp;</small><a class="text-light" href="{{url_for('user.login')}}">登录入口</a>
+                        </div>
+                </div>
+                <button type="submit" class="btn btn-primary block full-width m-b">注册</button>
+
+                <p class="text-muted"></p>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="../static/js/jquery-3.1.1.min.js"></script>
+    <script src="../static/js/popper.min.js"></script>
+    <script src="../static/js/bootstrap.js"></script>
+    <!-- iCheck -->
+    <script src="../static/js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+    </script>
+</body>
+
+{% endblock %}
+

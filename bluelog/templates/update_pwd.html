@@ -1,0 +1,59 @@
+﻿{% extends "base.html" %}
+{% block title %}修改密码{% endblock %}
+{% block head %}
+<style>
+        body{
+        background-image:url("../static/img/bg_update_pwd.jpeg");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+    }
+</style>
+{% endblock %}
+{%block body%}
+
+<body>
+
+    <div class="middle-box  loginscreen   animated fadeInDown ">
+        <div>
+            <div>
+
+                <strong class="text-info">欢迎来到猫大侠博客</strong>
+
+            </div>
+            <h3 class="text-light">修改密码</h3>
+            <p class="text-danger">一定要保存好自己的密码偶!!</p>
+            <form class="m-t" role="form" action="{{url_for('user.update_pwd')}}" method="post">
+                {{form.csrf_token}}
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="初始密码" required="" name="origin_password">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="新密码" required="" name="new_password1">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="再次输入新密码" required="" name="new_password2">
+                </div>
+                <button type="submit" class="btn btn-primary block full-width m-b">提交</button>
+
+            </form>
+        </div>
+    </div>
+    <!-- Mainly scripts -->
+    <script src="../static/js/jquery-3.1.1.min.js"></script>
+    <script src="../static/js/popper.min.js"></script>
+    <script src="../static/js/bootstrap.js"></script>
+    <!-- iCheck -->
+    <script src="../static/js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+    </script>
+</body>
+
+{% endblock %}
+

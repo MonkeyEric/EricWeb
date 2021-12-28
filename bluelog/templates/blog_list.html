@@ -1,0 +1,74 @@
+﻿{% import "_macros.html" as macros %}
+{% extends "base.html" %}
+{% block title %}时间轴{% endblock %}
+
+{% block wrapper%}
+<div id="page-wrapper" class="gray-bg">
+{{self.pheader()}}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>博客列表</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{{url_for('admin.index')}}">主页</a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <strong>博客时间线</strong>
+                </li>
+            </ol>
+        </div>
+
+    </div>
+    <div class="wrapper wrapper-content">
+        <div class="row animated fadeInRight">
+            <div class="col-lg-12">
+            <div class="ibox ">
+
+
+                <div class="ibox-content inspinia-timeline">
+                    {% if posts %}
+                    {% for post in posts %}
+                    <div class="timeline-item">
+                        <div class="row">
+                            <div class="col-3 date">
+                                <i class="fa fa-file-text"></i>
+
+                                {{moment(post.timestamp).format('lll')}}
+                                <br/>
+                                <h4 class="text-navy">{{ moment(post.timestamp).fromNow(refresh=True) }}</h4>
+                            </div>
+                            <div class="col-7 content no-top-border">
+                                <p class="m-b-xs">
+                                    <strong>作者:{{ post.author }}</strong>
+                                </p>
+                                <h3>{{ post.title }}</h3>
+                                <i class="fa fa-eye"> </i> 144 浏览
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+                {% if pagination %}
+                <div class="pagination">
+                    {{ macros.pagination_widget(pagination, 'blog.blog_index') }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{{self.footer()}}
+</div>
+{% endblock %}
+{% block script %}
+{{ super() }}
+{{ moment.include_moment() }}
+{{moment.locale('zh-cn')}}
+<script>
+    $(document).ready(function () {
+        $("#two").addClass("active")
+    })
+</script>
+{% endblock %}
+

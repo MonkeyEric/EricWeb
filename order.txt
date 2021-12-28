@@ -1,0 +1,10 @@
+gunicorn 启动命令
+gunicorn -b 127.0.0.1:5001  bluelog:app -c  gunicorn_conf.py --limit-request-line 0
+杀死命令
+ps -ef | grep weixin_qq_email_url_api | awk '{print $2}'|xargs kill -9
+查看进程
+ps -aux | grep gunicorn / gunicorn.pid
+
+# 启动gunicorn，后台运行的命令
+# 可先去掉D来进行查看
+gunicorn -D -w 2 -b 127.0.0.1:5001 wsgi:app

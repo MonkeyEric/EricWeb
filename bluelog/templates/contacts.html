@@ -1,0 +1,352 @@
+{% extends "base.html" %}
+{% block title %}名片{% endblock %}
+{% block wrapper%}
+<div id="page-wrapper" class="gray-bg">
+    {{ self.pheader() }}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-9">
+            <h2>名片</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{{url_for('admin.index')}}">主页</a>
+                    
+                </li>
+                <li class="breadcrumb-item">
+                    应用
+                </li>
+                <li class="breadcrumb-item active">
+                    <strong>名片</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <div class="wrapper wrapper-content animated fadeInRight">
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="contact-box">
+                    <a class="row" href="profile.html">
+                    <div class="col-4">
+                        <div class="text-center">
+                            <img alt="image" class="rounded-circle m-t-xs img-fluid" src="{{url_for('static',filename='img/a2.jpg')}}">
+                            <div class="m-t-xs font-bold">超级CEO</div>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <h3><strong>小红</strong></h3>
+                        <p><i class="fa fa-map-marker"></i> 中国.北京 123/123</p>
+                        <address>
+                            <strong>企鹅公司</strong><br>
+                            北京市朝阳区某区某街道<br>
+                            企鹅 100000 <br>
+                            手机 18900000000 <br>
+                            邮编 100020 <br>
+                        </address>
+                    </div>
+                        </a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="contact-box">
+                    <a class="row" href="profile.html">
+                    <div class="col-4">
+                        <div class="text-center">
+                            <img alt="image" class="rounded-circle m-t-xs img-fluid" src="{{url_for('static',filename='img/a1.jpg')}}">
+                            <div class="m-t-xs font-bold">超级CEO</div>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <h3><strong>小红</strong></h3>
+                        <p><i class="fa fa-map-marker"></i> 中国.北京 123/123</p>
+                        <address>
+                            <strong>企鹅公司</strong><br>
+                            北京市朝阳区某区某街道<br>
+                            企鹅 100000 <br>
+                            手机 18900000000 <br>
+                            邮编 100020 <br>
+                        </address>
+                    </div>
+                        </a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="contact-box">
+                    <a class="row" href="profile.html">
+                    <div class="col-4">
+                        <div class="text-center">
+                            <img alt="image" class="rounded-circle m-t-xs img-fluid" src="{{url_for('static',filename='img/a3.jpg')}}">
+                            <div class="m-t-xs font-bold">超级CEO</div>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <h3><strong>小红</strong></h3>
+                        <p><i class="fa fa-map-marker"></i> 中国.北京 123/123</p>
+                        <address>
+                            <strong>企鹅公司</strong><br>
+                            北京市朝阳区某区某街道<br>
+                            企鹅 100000 <br>
+                            手机 18900000000 <br>
+                            邮编 100020 <br>
+                        </address>
+                    </div>
+                        </a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="contact-box">
+                    <a class="row" href="profile.html">
+                    <div class="col-4">
+                        <div class="text-center">
+                            <img alt="image" class="rounded-circle m-t-xs img-fluid" src="{{url_for('static',filename='img/a4.jpg')}}">
+                            <div class="m-t-xs font-bold">超级CEO</div>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <h3><strong>小红</strong></h3>
+                        <p><i class="fa fa-map-marker"></i> 中国.北京 123/123</p>
+                        <address>
+                            <strong>企鹅公司</strong><br>
+                            北京市朝阳区某区某街道<br>
+                            企鹅 100000 <br>
+                            手机 18900000000 <br>
+                            邮编 100020 <br>
+                        </address>
+                    </div>
+                        </a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="contact-box">
+                    <a class="row" href="profile.html">
+                    <div class="col-4">
+                        <div class="text-center">
+                            <img alt="image" class="rounded-circle m-t-xs img-fluid" src="{{url_for('static',filename='img/a5.jpg')}}">
+                            <div class="m-t-xs font-bold">超级CEO</div>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <h3><strong>小红</strong></h3>
+                        <p><i class="fa fa-map-marker"></i> 中国.北京 123/123</p>
+                        <address>
+                            <strong>企鹅公司</strong><br>
+                            北京市朝阳区某区某街道<br>
+                            企鹅 100000 <br>
+                            手机 18900000000 <br>
+                            邮编 100020 <br>
+                        </address>
+                    </div>
+                        </a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="contact-box">
+                    <a class="row" href="profile.html">
+                    <div class="col-4">
+                        <div class="text-center">
+                            <img alt="image" class="rounded-circle m-t-xs img-fluid" src="{{url_for('static',filename='img/a6.jpg')}}">
+                            <div class="m-t-xs font-bold">超级CEO</div>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <h3><strong>小红</strong></h3>
+                        <p><i class="fa fa-map-marker"></i> 中国.北京 123/123</p>
+                        <address>
+                            <strong>企鹅公司</strong><br>
+                            北京市朝阳区某区某街道<br>
+                            企鹅 100000 <br>
+                            手机 18900000000 <br>
+                            邮编 100020 <br>
+                        </address>
+                    </div>
+                        </a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="contact-box">
+                    <a class="row" href="profile.html">
+                    <div class="col-4">
+                        <div class="text-center">
+                            <img alt="image" class="rounded-circle m-t-xs img-fluid" src="{{url_for('static',filename='img/a1.jpg')}}">
+                            <div class="m-t-xs font-bold">超级CEO</div>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <h3><strong>小红</strong></h3>
+                        <p><i class="fa fa-map-marker"></i> 中国.北京 123/123</p>
+                        <address>
+                            <strong>企鹅公司</strong><br>
+                            北京市朝阳区某区某街道<br>
+                            企鹅 100000 <br>
+                            手机 18900000000 <br>
+                            邮编 100020 <br>
+                        </address>
+                    </div>
+                        </a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="contact-box">
+                    <a class="row" href="profile.html">
+                    <div class="col-4">
+                        <div class="text-center">
+                            <img alt="image" class="rounded-circle m-t-xs img-fluid" src="{{url_for('static',filename='img/a2.jpg')}}">
+                            <div class="m-t-xs font-bold">超级CEO</div>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <h3><strong>小红</strong></h3>
+                        <p><i class="fa fa-map-marker"></i> 中国.北京 123/123</p>
+                        <address>
+                            <strong>企鹅公司</strong><br>
+                            北京市朝阳区某区某街道<br>
+                            企鹅 100000 <br>
+                            手机 18900000000 <br>
+                            邮编 100020 <br>
+                        </address>
+                    </div>
+                        </a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="contact-box">
+                    <a class="row" href="profile.html">
+                    <div class="col-4">
+                        <div class="text-center">
+                            <img alt="image" class="rounded-circle m-t-xs img-fluid" src="{{url_for('static',filename='img/a3.jpg')}}">
+                            <div class="m-t-xs font-bold">超级CEO</div>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <h3><strong>小红</strong></h3>
+                        <p><i class="fa fa-map-marker"></i> 中国.北京 123/123</p>
+                        <address>
+                            <strong>企鹅公司</strong><br>
+                            北京市朝阳区某区某街道<br>
+                            企鹅 100000 <br>
+                            手机 18900000000 <br>
+                            邮编 100020 <br>
+                        </address>
+                    </div>
+                        </a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="contact-box">
+                    <a class="row" href="profile.html">
+                    <div class="col-4">
+                        <div class="text-center">
+                            <img alt="image" class="rounded-circle m-t-xs img-fluid" src="{{url_for('static',filename='img/a4.jpg')}}">
+                            <div class="m-t-xs font-bold">超级CEO</div>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <h3><strong>小红</strong></h3>
+                        <p><i class="fa fa-map-marker"></i> 中国.北京 123/123</p>
+                        <address>
+                            <strong>企鹅公司</strong><br>
+                            北京市朝阳区某区某街道<br>
+                            企鹅 100000 <br>
+                            手机 18900000000 <br>
+                            邮编 100020 <br>
+                        </address>
+                    </div>
+                        </a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="contact-box">
+                    <a class="row" href="profile.html">
+                    <div class="col-4">
+                        <div class="text-center">
+                            <img alt="image" class="rounded-circle m-t-xs img-fluid" src="{{url_for('static',filename='img/a5.jpg')}}">
+                            <div class="m-t-xs font-bold">超级CEO</div>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <h3><strong>小红</strong></h3>
+                        <p><i class="fa fa-map-marker"></i> 中国.北京 123/123</p>
+                        <address>
+                            <strong>企鹅公司</strong><br>
+                            北京市朝阳区某区某街道<br>
+                            企鹅 100000 <br>
+                            手机 18900000000 <br>
+                            邮编 100020 <br>
+                        </address>
+                    </div>
+                        </a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="contact-box">
+                    <a class="row" href="profile.html">
+                    <div class="col-4">
+                        <div class="text-center">
+                            <img alt="image" class="rounded-circle m-t-xs img-fluid" src="{{url_for('static',filename='img/a6.jpg')}}">
+                            <div class="m-t-xs font-bold">超级CEO</div>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <h3><strong>小红</strong></h3>
+                        <p><i class="fa fa-map-marker"></i> 中国.北京 123/123</p>
+                        <address>
+                                                       <strong>企鹅公司</strong><br>
+                            北京市朝阳区某区某街道<br>
+                            企鹅 100000 <br>
+                            手机 18900000000 <br>
+                            邮编 100020 <br>
+                                                    </address>
+                    </div>
+                        </a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="contact-box">
+                    <a class="row" href="profile.html">
+                    <div class="col-4">
+                        <div class="text-center">
+                            <img alt="image" class="rounded-circle m-t-xs img-fluid" src="{{url_for('static',filename='img/a1.jpg')}}">
+                            <div class="m-t-xs font-bold">超级CEO</div>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <h3><strong>小红</strong></h3>
+                        <p><i class="fa fa-map-marker"></i> 中国.北京 123/123</p>
+                        <address>
+                            <strong>企鹅公司</strong><br>
+                            北京市朝阳区某区某街道<br>
+                            企鹅 100000 <br>
+                            手机 18900000000 <br>
+                            邮编 100020 <br>
+                        </address>
+                    </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="contact-box">
+                    <a class="row" href="profile.html">
+                    <div class="col-4">
+                        <div class="text-center">
+                            <img alt="image" class="rounded-circle m-t-xs img-fluid" src="{{url_for('static',filename='img/a2.jpg')}}">
+                            <div class="m-t-xs font-bold">超级CEO</div>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <h3><strong>小红</strong></h3>
+                        <p><i class="fa fa-map-marker"></i> 中国.北京 123/123</p>
+                        <address>
+                            <strong>企鹅公司</strong><br>
+                            北京市朝阳区某区某街道<br>
+                            企鹅 100000 <br>
+                            手机 18900000000 <br>
+                            邮编 100020 <br>
+                        </address>
+                    </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ self.footer() }}
+</div>
+{% endblock %}

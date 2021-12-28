@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+{% block title %}组件{% endblock %}
+{% block head %}
+    <!-- Local style only for demo purpose -->
+    <style>
+        .directive-list {
+            list-style: none;
+        }
+        .directive-list li {
+            background: #f3f3f4;
+            padding: 10px 20px;
+            margin: 4px;
+        }
+    </style>
+{% endblock %}
+
+{% block wrapper%}
+        <div id="page-wrapper" class="gray-bg">
+            {{self.pheader()}}
+            <div class="wrapper wrapper-content animated fadeInRight">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox">
+                            <div class="ibox-content">
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="text-center m-t-lg">
+                                            <img src="img/angular_logo.png" alt="AngularJS">
+                                        </div>
+                                        <div class="text-center m-t-lg">
+                                            <h1>Inspinia <span class="text-navy"> <br>AngularJs</span></h1>
+                                            <small>支持 AngularJs 版本</small>
+                                        </div>
+                                        <div>
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="text-center p-m">
+                                                <p>
+                                                    <strong>Inspinia <span class="text-navy">AngularJs</span></strong> 支持AngularJS版本的INSPINIA主题。<br>
+                                                    该版本包含一些专门用于支持角度框架的控制器和指令。
+                                                    <br>
+                                                    <strong>Angular版本是针对团队的意见AngularJS风格指南</strong>. (https://github.com/toddmotto/angularjs-styleguide).
+                                                    <br>
+                                                    在项目文件夹中你也可以找到 <strong class="text-navy">SeedProject</strong> 它是一个典型的AngularJS网络应用程序的应用程序框架。 你可以使用它
+                                                    快速引导你的角度
+                                                    webapp项目和这些项目的开发环境。
+                                                </p>
+
+                                                <p class="text-center m-t-md">
+                                                    <a target="_blank" href="Angular/" class="btn btn-primary">Live AngularJS version</a>
+                                                </p>
+                                            </div>
+                                            <div>
+
+                                                <div class="text-center">
+                                                    <small>如果您需要任何帮助，请随时给我们写信 support@webapplayers.com.
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="text-center m-t-lg">
+                                            <img src="img/mvc_logo.png" alt="MVC" style="width: 120px">
+                                        </div>
+                                        <div class="text-center m-t-lg">
+                                            <h1>Inspinia <span class="text-success"><br>ASP.NET MVC5,.NET Core 1.0</span></h1>
+                                            <small>支持的 ASP.NET MVC5 版本</small>
+                                        </div>
+                                        <div>
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="text-center p-m">
+                                                <p>
+                                                    <strong>Inspinia <span class="text-success">MVC5</span></strong> 支持ASP.NET MVC5版本的INSPINIA主题。<br>
+                                                    该版本包含一个ASP.NET MVC5项目，用Visual Studio 2013为.net开发人员编写。
+                                                    <br>
+                                                    Project已经实现了所有的插件，它是根据MVC5的惯例创建的。
+                                                    此外，此版本还有一个脚手架模板，可帮助您使用实体框架快速编写应用程序。
+                                                    这个版本也有 <strong class="text-success">SeedProject</strong>- 一个可帮助您轻松启动新项目的骨架应用程序。
+                                                </p>
+
+                                            </div>
+                                            <div>
+
+                                                <div class="text-center">
+                                                    <small>如果您需要任何帮助，请随时给我们写信 support@webapplayers.com.
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="text-center m-t-lg">
+                                            <img src="img/meteor_logo.png" alt="HTML" style="width: 200px;margin-top: 20px">
+                                        </div>
+
+                                        <div class="text-center m-t-lg">
+                                            <h1>Inspinia <span class="font-bold" style="color: black;"><br>流星</span></h1>
+                                            <small>Meteor.js 版本</small>
+                                        </div>
+                                        <div>
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="text-center p-m">
+                                                <p>
+                                                    <strong>Inspinia <span class="font-bold" style="color: black;">流星</span></strong> 支持流星版。 Meteor.js是
+                                                    一个基于Node和MongoDB的开源平台。<br>这个版本
+                                                    包含Meteor项目，其设计和组件形式为HTML / JS
+                                                    版。 项目已经实现了所有插件，并在其中创建
+                                                    按照流星结构的惯例。 代码是
+                                                    干净，所有的模板结构良好。 它使用Iron.Router
+                                                    路线管理。 像其他版本这个版本也有
+                                                    <strong style="color:black">SeedProject</strong> - 一个可以帮助您轻松启动新功能的骨架应用程序
+                                                    Meteor app.
+
+                                                </p>
+
+                                            </div>
+                                            <div>
+                                                <div class="text-center">
+                                                    <small>如果您需要任何帮助，请随时给我们写信 support@webapplayers.com.
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+
+
+                                    <div class="col-md-4">
+                                        <div class="text-center m-t-lg">
+                                            <img src="img/html_logo.png" alt="HTML" style="width: 100px">
+                                        </div>
+                                        <div class="text-center m-t-lg">
+                                            <h1>Inspinia <span class="text-danger"><br>静态 HTML/JS</span></h1>
+                                            <small>静态 HTML/JS 版本</small>
+                                        </div>
+                                        <div>
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="text-center p-m">
+                                                <p>
+                                                    <strong>Inspinia <span class="text-danger">HTML/JS</span></strong> 是INSPINIA主题的静态版本。<br>
+                                                    此版本包含使用严格的HTML和jQuery创建的所有组件和插件。
+                                                    <br>
+                                                    如果您是PHP或JAVA程序员，此版本是非常好的。
+                                                    由于每个页面都是单独创建的，因此可以通过包含所需的资源来快速实现项目。
+                                                    代码是干净和清晰的，所以你不应该有任何问题的实现。
+                                                    像所有的一样，也实现了30多个插件，可以让你给你的应用一个很好的新功能。
+                                                </p>
+
+                                                <p class="text-center m-t-md">
+                                                    <a target="_blank" href="index.html" class="btn btn-danger">Live HTML / JS版本</a>
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <div class="text-center">
+                                                    <small>如果您需要任何帮助，请随时给我们写信 support@webapplayers.com.
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="text-center m-t-lg">
+                                            <img src="img/rails_logo.png" alt="HTML" style="width: 80px">
+                                        </div>
+                                        <div class="text-center m-t-lg">
+                                            <h1>Inspinia <span class="text-warning"><br> Ruby on Rails</span></h1>
+                                            <small>Ruby on Rails版本</small>
+                                        </div>
+                                        <div>
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="text-center p-m">
+                                                <p>
+                                                    <strong>Inspinia <span class="text-warning">Rails</span></strong> 是Ruby on Rails版本的INSPINIA主题。<br>
+                                                    该版本包含Ruby on Rails项目，其中包含Inspinia静态版本的所有设计。
+                                                    <br>
+                                                    如果您是Ruby on Rails程序员，此版本是非常好的。
+                                                    它使用基本的Rails控制器来创建具有所有视图和组件的骨架Rails应用程序。
+                                                    像其他版本这个版本也有 <span class="text-warning"><strong>SeedProject</strong></span>  - 一个骨架应用程序，可以帮助您轻松启动新的Rails应用程序。
+                                                </p>
+
+                                            </div>
+                                            <div>
+                                                <div class="text-center">
+                                                    <small>如果您需要任何帮助，请随时给我们写信 support@webapplayers.com.
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="text-center m-t-lg">
+                                            <img src="img/starter_logo.jpg" alt="HTML">
+                                        </div>
+                                        <div class="text-center m-t-lg">
+                                            <h1>Inspinia <span class="text-info"><br> 启动项目</span></h1>
+                                            <small>特别启动项目</small>
+                                        </div>
+                                        <div>
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="text-center p-m">
+                                                <p>为了帮助您开始任何项目，我们为您提供了三个特殊的启动项目<strong><span class="text-info">ReactJS, Angular 2 and Laravel.</span></strong>  在将来所有这些框架都将拥有自己的完整版本的Inspinia。 但是如果你不想等待完整版本，并且想要跳转到代码并开始开发您的应用程序，您可以使用这三个 <strong><span class="text-info">特别启动项目</span></strong>.
+                                                     <br>它们应该为新框架的初始集成提供大量的工作。
+                                                </p>
+
+                                            </div>
+                                            <div>
+                                                <div class="text-center">
+                                                    <small>如果你需要任何帮助，请写信给我们 support@webapplayers.com.
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{self.footer()}}
+
+        </div>
+{% endblock %}

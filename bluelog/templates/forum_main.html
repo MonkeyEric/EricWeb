@@ -1,0 +1,344 @@
+﻿{% extends "base.html" %}
+{% block title %}论坛{% endblock %}
+
+<!--    <link href="css/bootstrap.min.css" rel="stylesheet">-->
+<!--    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">-->
+
+<!--    <link href="css/animate.css" rel="stylesheet">-->
+<!--    <link href="css/style.css" rel="stylesheet">-->
+{% block wrapper%}
+    <div id="page-wrapper" class="gray-bg">
+        {{self.pheader()}}
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-sm-4">
+                <h2>论坛</h2>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{{url_for('admin.index')}}">主页</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        <strong>论坛</strong>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <div class="ibox-content m-b-sm border-bottom">
+                        <div class="p-xs">
+                            <div class="float-left m-r-md">
+                                <i class="fa fa-globe text-navy mid-icon"></i>
+                            </div>
+                            <h2>欢迎来到灵感论坛</h2>
+                            <span>随意选择你感兴趣的话题。</span>
+                        </div>
+                    </div>
+
+                    <div class="ibox-content forum-container">
+
+                        <div class="forum-title">
+                            <div class="float-right forum-desc">
+                                <samll>帖子总数: 320,800</samll>
+                            </div>
+                            <h3>主要板块</h3>
+                        </div>
+
+                        <div class="forum-item active">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="forum-icon">
+                                        <i class="fa fa-shield"></i>
+                                    </div>
+                                    <a href="forum_post.html" class="forum-item-title">论坛分类</a>
+                                    <div class="forum-sub-title">论坛分类描述</div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        1216
+                                    </span>
+                                    <div>
+                                        <small>查看</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        368
+                                    </span>
+                                    <div>
+                                        <small>主题</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        140
+                                    </span>
+                                    <div>
+                                        <small>帖子</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="forum-item">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="forum-icon">
+                                        <i class="fa fa-bolt"></i>
+                                    </div>
+                                    <a href="forum_post.html" class="forum-item-title">论坛分类</a>
+                                    <div class="forum-sub-title">论坛分类描述</div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        890
+                                    </span>
+                                    <div>
+                                        <small>查看</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        120
+                                    </span>
+                                    <div>
+                                        <small>主题</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        154
+                                    </span>
+                                    <div>
+                                        <small>帖子</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="forum-item active">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="forum-icon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <a href="forum_post.html" class="forum-item-title">论坛分类</a>
+                                    <div class="forum-sub-title">论坛分类描述</div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        680
+                                    </span>
+                                    <div>
+                                        <small>查看</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        124
+                                    </span>
+                                    <div>
+                                        <small>主题</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        61
+                                    </span>
+                                    <div>
+                                        <small>帖子</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="forum-item">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="forum-icon">
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <a href="forum_post.html" class="forum-item-title">论坛分类</a>
+                                    <div class="forum-sub-title">论坛分类描述</div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        1450
+                                    </span>
+                                    <div>
+                                        <small>查看</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        652
+                                    </span>
+                                    <div>
+                                        <small>主题</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        572
+                                    </span>
+                                    <div>
+                                        <small>帖子</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="forum-title">
+                            <div class="float-right forum-desc">
+                                <samll>帖子总数: 17,800,600</samll>
+                            </div>
+                            <h3>其他板块</h3>
+                        </div>
+
+                        <div class="forum-item">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="forum-icon">
+                                        <i class="fa fa-clock-o"></i>
+                                    </div>
+                                    <a href="forum_post.html" class="forum-item-title">论坛分类</a>
+                                    <div class="forum-sub-title">论坛分类描述</div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        1516
+                                    </span>
+                                    <div>
+                                        <small>查看</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        238
+                                    </span>
+                                    <div>
+                                        <small>主题</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        180
+                                    </span>
+                                    <div>
+                                        <small>帖子</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="forum-item">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="forum-icon">
+                                        <i class="fa fa-bomb"></i>
+                                    </div>
+                                    <a href="forum_post.html" class="forum-item-title">论坛分类</a>
+                                    <div class="forum-sub-title">论坛分类描述</div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        1766
+                                    </span>
+                                    <div>
+                                        <small>查看</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        321
+                                    </span>
+                                    <div>
+                                        <small>主题</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        42
+                                    </span>
+                                    <div>
+                                        <small>帖子</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="forum-item">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="forum-icon">
+                                        <i class="fa fa-bookmark"></i>
+                                    </div>
+                                    <a href="forum_post.html" class="forum-item-title">论坛分类</a>
+                                    <div class="forum-sub-title">论坛分类描述</div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        765
+                                    </span>
+                                    <div>
+                                        <small>查看</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        90
+                                    </span>
+                                    <div>
+                                        <small>主题</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        11
+                                    </span>
+                                    <div>
+                                        <small>帖子</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="forum-item">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="forum-icon">
+                                        <i class="fa fa-ambulance"></i>
+                                    </div>
+                                    <a href="forum_post.html" class="forum-item-title">论坛分类</a>
+                                    <div class="forum-sub-title">论坛分类描述</div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        2550
+                                    </span>
+                                    <div>
+                                        <small>查看</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        122
+                                    </span>
+                                    <div>
+                                        <small>主题</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 forum-info">
+                                    <span class="views-number">
+                                        92
+                                    </span>
+                                    <div>
+                                        <small>帖子</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{self.footer()}}
+
+    </div>
+{% endblock %}

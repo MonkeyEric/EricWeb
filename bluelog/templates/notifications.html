@@ -1,0 +1,164 @@
+﻿{% extends "base.html" %}
+{% block title %}通知{% endblock %}
+{% block wrapper%}
+<div id="page-wrapper" class="gray-bg">
+{{self.pheader()}}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>通知</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                   <a href="{{url_for('admin.index')}}">主页</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a>UI 元素</a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <strong>通知</strong>
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2">
+
+        </div>
+    </div>
+    <div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="col-lg-6">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>通知样式</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-wrench"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#" class="dropdown-item">选项 1</a>
+                        </li>
+                        <li><a href="#" class="dropdown-item">选项 2</a>
+                        </li>
+                    </ul>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                    <div class="alert alert-success">
+                        时间是一切财富中最宝贵的财富。 <a class="alert-link" href="#">小明</a>.
+                    </div>
+                    <div class="alert alert-info">
+                        时间是一切财富中最宝贵的财富。 <a class="alert-link" href="#">小明</a>.
+                    </div>
+                    <div class="alert alert-warning">
+                        时间是一切财富中最宝贵的财富。 <a class="alert-link" href="#">小明</a>.
+                    </div>
+                    <div class="alert alert-danger">
+                        时间是一切财富中最宝贵的财富。 <a class="alert-link" href="#">小明</a>.
+                    </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>可撤销通知</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-wrench"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#" class="dropdown-item">选项 1</a>
+                        </li>
+                        <li><a href="#" class="dropdown-item">选项 2</a>
+                        </li>
+                    </ul>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                    <div class="alert alert-success alert-dismissable">
+                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                        时间是一切财富中最宝贵的财富。 <a class="alert-link" href="#">小明</a>.
+                    </div>
+                    <div class="alert alert-info alert-dismissable">
+                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                        时间是一切财富中最宝贵的财富。 <a class="alert-link" href="#">小明</a>.
+                    </div>
+                    <div class="alert alert-warning alert-dismissable">
+                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                        时间是一切财富中最宝贵的财富。 <a class="alert-link" href="#">小明</a>.
+                    </div>
+                    <div class="alert alert-danger alert-dismissable">
+                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                        时间是一切财富中最宝贵的财富。 <a class="alert-link" href="#">小明</a>.
+                    </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-lg-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>工具提示和移动</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-wrench"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#" class="dropdown-item">选项 1</a>
+                        </li>
+                        <li><a href="#" class="dropdown-item">选项 2</a>
+                        </li>
+                    </ul>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content text-center">
+                <h4>触动提示 <small></small></h4>
+                <div class="tooltip-demo">
+
+                    <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="提示">顶部的工具提示</button>
+                    <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="提示">底部的工具提示</button>
+                    <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="提示">右边的工具提示</button>
+                </div>
+                <br>
+                <h4>点击气泡提示</h4>
+                <div class="tooltip-demo text-center" >
+                    <button type="button" class="btn btn-primary"  data-toggle="popover" data-placement="left" data-content="气泡提示">
+                        气泡提示左
+                    </button>
+                    <button type="button" class="btn btn-primary"  data-toggle="popover" data-placement="top" data-content="气泡提示">
+                        气泡提示顶部
+                    </button>
+                    <button type="button" class="btn btn-primary"  data-toggle="popover" data-placement="bottom" data-content="气泡提示">
+                        气泡提示底部
+                    </button>
+                    <button type="button" class="btn btn-primary" data-toggle="popover" data-placement="right" data-content="气泡提示">
+                        气泡提示右
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+</div>
+
+{{self.footer()}}
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+﻿{% import "_macros.html" as macros %}
+{% extends "base.html" %}
+{% block title%}博客{% endblock %}
+
+{% block wrapper%}
+<div id="page-wrapper" class="gray-bg">
+    {{ self.pheader() }}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>博客</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{{url_for('admin.index')}}">主页</a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <strong>博客</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+    {% include '_blog.html' %}
+    {{ self.footer() }}
+</div>
+{% endblock %}
+{% block script %}
+{{ super() }}
+{{ moment.include_moment() }}
+{{moment.locale('zh-cn')}}
+{% endblock %}

@@ -1,0 +1,41 @@
+[[source]]
+url = "https://mirrors.aliyun.com/pypi/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+python-dotenv = "*"
+flask-bootstrap = "*"
+flask-sqlalchemy = "*"
+pymysql = "*"
+flask-mail = "*"
+flask-ckeditor = "*"
+wtforms = "*"
+flask-moment = "*"
+numpy = "*"
+"sqlalchemy.utils" = "*"
+mysql-connector = "*"
+flask-login = "*"
+gunicorn = "*"
+faker = "*"
+flask-wtf = "*"
+github-flask = "*"
+sqlalchemy-utils = "*"
+python-dateutil = "*"
+pandas = "*"
+matplotlib = "==3.3.3"
+jieba = "*"
+wordcloud = "*"
+sklearn = "*"
+pymongo = "*"
+email-validator = "*"
+flask-sockets = "*"
+gevent = "*"
+flask-socketio = "==4.3.1"
+xlrd = "*"
+openpyxl = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.6"

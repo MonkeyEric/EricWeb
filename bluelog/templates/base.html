@@ -1,0 +1,399 @@
+﻿<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="个人博客" />
+    <meta name="Description" content="由个人开发的博客,用来积累自己的开发经验" />
+
+    <title>{% block title %}Smelly Cat's Blog{% endblock %}</title>
+
+    <link href="{{url_for('static',filename='css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{url_for('static',filename='font-awesome/css/font-awesome.css')}}" rel="stylesheet">
+    <link href="{{url_for('static',filename='css/animate.css')}}" rel="stylesheet">
+    <link href="{{url_for('static',filename='css/style.css')}}" rel="stylesheet">
+        <!-- Toastr style -->
+    <link href="{{url_for('static',filename='css/plugins/toastr/toastr.min.css')}}" rel="stylesheet">
+    <!-- Gritter -->
+    <link href="{{url_for('static',filename='js/plugins/gritter/jquery.gritter.css')}}" rel="stylesheet">
+    <style type="text/css">
+        a.popup{position:relative;}
+        a.popup span{display:none;position:absolute;top:-40px;left:2px;z-index: 99;border: 1px solid; padding:4px;width:100px;}
+        a.popup:hover span{display:block;}
+    </style>
+
+    {%block head%}
+    {% endblock %}
+</head>
+{%block body%}
+<body class="canvas-menu">
+    <div id="wrapper">
+    <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <a class="close-canvas-menu"><i class="fa fa-times"></i></a>
+                <ul class="nav metismenu" id="side-menu">
+                    <li class="nav-header">
+
+                        <div class="dropdown profile-element text-center">
+                            {% if user_info.avatar %}
+                            <img alt="image" class="rounded-circle" style="width: 48px;height: 48px;"  src="{{user_info.avatar}}" />
+                            {% else %}
+                            <img alt="image" class="rounded-circle" style="width: 60px;height: 60px;"  src="{{url_for('static',filename='img/profile_small.jpg')}}" />
+                            {% endif %}
+                            <br>
+                            <h3 class="font-bold no-margins text-muted" style="padding-top: 9px">
+                                {{user_info.username}}
+                            </h3>
+                            <div>
+                                <span class="text-muted text-xs">角色:{{user_info.role}}</span>
+                            </div>
+                            <div>
+                                <span class="text-muted text-xs">文章 100</span> |
+                                <span class="text-muted text-xs">访问量 350</span>
+
+                            </div>
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                                <span class="text-muted text-xs block">更多<b class="caret"></b></span>
+                            </a>
+
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                <li><a class="dropdown-item" href="{{url_for('admin.profile')}}">个人信息</a></li>
+                                <li><a class="dropdown-item" href="{{url_for('user.contact')}}">好友</a></li>
+                                <li class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{url_for('user.logout')}}">登出</a></li>
+                            </ul>
+                        </div>
+                        <div class="logo-element">
+                            CAT
+                        </div>
+                    </li>
+<!--                    首页-->
+                    <li id="one">
+                        <a href="{{url_for('admin.index')}}">
+                            <i class="fa fa-home"></i>
+                            <span class="nav-label">首页</span>
+
+                        </a>
+                    </li>
+<!--博客列表-->
+                    <li id="two">
+                        <a href="{{url_for('blog.blog_index')}}">
+                            <i class="fa fa-book"></i>
+                            <span class="nav-label">博客列表</span>
+
+                        </a>
+                    </li>
+
+<!--                    收藏网站-->
+                    <li id="three">
+                        <a href="{{url_for('admin.favourite')}}">
+                            <i class="fa fa-heart"></i>
+                            <span class="nav-label">收藏网站</span>
+                            <span class="float-right label label-primary">特别</span>
+                        </a>
+                    </li>
+<!--个人wiki-->
+                    <li id="four">
+                        <a href="#">
+                            <i class="fa fa-sitemap"></i>
+                            <span class="nav-label">个人wiki</span>
+                        </a>
+                    </li>
+<!--                    关于博主-->
+                    <li id="five">
+                        <a href="{{url_for('admin.about')}}" >
+                            <i class="fa fa-info"></i>
+                            <span class="nav-label">关于博主</span>
+
+                        </a>
+                    </li>
+
+
+
+                    {% if  user_info.is_login %}
+                    <!--                    小工具-->
+                    <li id="cat">
+                        <a href="#">
+                            <i class="fa fa-heart"></i>
+                            <span class="nav-label">猫咪专属</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level collapse">
+                           <li id="seven"><a href="{{url_for('admin.gallery')}}">相册</a></li>
+                            <li id="eight"><a href="{{url_for('admin.video')}}">视频</a></li>
+                        </ul>
+                     </li>
+                    <li id="income">
+                        <a href="#">
+                            <i class="fa fa-bar-chart-o"></i>
+                            <span class="nav-label">收支分析</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level collapse">
+                            <li id="nine"><a href="{{url_for('admin.chart')}}">收支可视化</a></li>
+                            <li id="ten"><a href="{{url_for('admin.table_data')}}">收支表格</a></li>
+                            <li id="eleven"><a href="{{url_for('admin.upload')}}">收支数据录入</a></li>
+                        </ul>
+                     </li>
+                    <li id="twelve">
+                        <a href="{{url_for('admin.file_manage')}}">
+                            <i class="fa "></i>
+                        <span class="nav-label">文件管理</span>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                </ul>
+            </div>
+        </nav>
+        {% block wrapper %}
+        <div id="page-wrapper" class="gray-bg">
+            <!--页眉-->
+            {%block pheader%}
+            <div class="row border-bottom" id="pheader">
+            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                </div>
+
+                <ul class="nav navbar-top-links navbar-right">
+                    <li style="padding: 20px">
+                        <span class="m-r-sm text-muted welcome-message">您好，{{user_info.username}}，欢迎来到猫咪博客</span>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <a href="mailbox.html" class="dropdown-item">
+                                    <div>
+                                        <i class="fa fa-envelope fa-fw"></i> 你有16条消息
+                                        <span class="float-right text-muted small">4 分钟前</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="dropdown-divider"></li>
+                            <li>
+                                <a href="profile.html" class="dropdown-item">
+                                    <div>
+                                        <i class="fa fa-twitter fa-fw"></i> 3 个新的关注者
+                                        <span class="float-right text-muted small">12 分钟前</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="dropdown-divider"></li>
+                            <li>
+                                <a href="grid_options.html" class="dropdown-item">
+                                    <div>
+                                        <i class="fa fa-upload fa-fw"></i> 重启服务器
+                                        <span class="float-right text-muted small">4 分钟前</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="dropdown-divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a href="notifications.html" class="dropdown-item">
+                                        <strong>查看所有信息</strong>
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <a href="{{url_for('blog.code_editor')}}" class="dropdown-item">
+                                    <div>
+                                        <i class="fa fa-book fa-fw"></i> 写博客
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-gear"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-alerts">
+                            <li>
+                                <a href="{{url_for('user.update_pwd')}}" class="dropdown-item">
+                                    <div>
+                                        <i class="fa fa-key fa-fw"></i> 修改密码
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{url_for('user.logout')}}" class="dropdown-item">
+                                    <div>
+                                        <i class="fa fa-sign-out fa-fw"></i> 注销
+                                    </div>
+                                </a>
+                            </li>
+                            {% if user_info.is_login%}
+                            <li>
+                                <a href="{{url_for('user.login')}}" class="dropdown-item">
+                                    <div>
+                                        <i class="fa fa-sign-in fa-fw"></i> 登录
+                                    </div>
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+            {%endblock%}
+            {%block footer%}
+            <div class="footer row">
+                <div class="col-md-4"></div>
+                <div class="col-md-2">
+                            <strong><a href="https://beian.miit.gov.cn/" target="_blank"> 津ICP备2021007299号</a></strong>
+                </div>
+                <div class="col-md-2">
+                        <img alt="image"  class="rounded-circle" style="width: 20px;height: 20px;"  src="{{url_for('static',filename='img/wiki_favicon.png')}}">    <strong><a href="http://wiki.choumaomi.com" target="_blank"> 个人wiki</a></strong>
+                </div>
+                <div class="col-md-4"></div>
+
+            </div>
+            {% endblock%}
+
+        </div>
+        {% endblock%}
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="{{url_for('static',filename='js/jquery-3.1.1.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/plugins/fullcalendar/moment.min.js')}}"></script>
+
+    <script src="{{url_for('static',filename='js/popper.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/bootstrap.js')}}"></script>
+    <script src="{{url_for('static',filename='js/plugins/metisMenu/jquery.metisMenu.js')}}"></script>
+    <script src="{{url_for('static',filename='js/plugins/slimscroll/jquery.slimscroll.min.js')}}"></script>
+
+<!--     Flot -->
+    <script src="{{url_for('static',filename='js/plugins/flot/jquery.flot.js')}}"></script>
+    <script src="{{url_for('static',filename='js/plugins/flot/jquery.flot.tooltip.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/plugins/flot/jquery.flot.spline.js')}}"></script>
+    <script src="{{url_for('static',filename='js/plugins/flot/jquery.flot.resize.js')}}"></script>
+    <script src="{{url_for('static',filename='js/plugins/flot/jquery.flot.pie.js')}}"></script>
+
+
+
+<!--     Custom and plugin javascript -->
+    <script src="{{url_for('static',filename='js/inspinia.js')}}"></script>
+    <script src="{{url_for('static',filename='js/plugins/pace/pace.min.js')}}"></script>
+
+    <!-- jQuery UI -->
+    <script src="{{url_for('static',filename='js/plugins/jquery-ui/jquery-ui.min.js')}}"></script>
+
+    <!-- GITTER -->
+    <script src="{{url_for('static',filename='js/plugins/gritter/jquery.gritter.min.js')}}"></script>
+
+    <!-- Sparkline -->
+    <script src="{{url_for('static',filename='js/plugins/sparkline/jquery.sparkline.min.js')}}"></script>
+
+    <!-- Sparkline demo data  -->
+    <script src="{{url_for('static',filename='js/demo/sparkline-demo.js')}}"></script>
+
+    <!--通知插件 Toastr -->
+    <script src="{{url_for('static',filename='js/plugins/toastr/toastr.min.js')}}"></script>
+    <!-- ChartJS-->
+    <script src="{{url_for('static',filename='js/plugins/chartJs/Chart.min.js')}}"></script>
+    <!-- Bootstrap markdown -->
+    <script src="{{url_for('static',filename='editormd/editormd.min.js')}}"></script>
+
+
+{%block script%}
+{% endblock %}
+    <!--同步官网模板开始-->
+    <div class="theme-config">
+        <div class="theme-config-box">
+            <div class="spin-icon">
+                <i class="fa fa-cogs fa-spin"></i>
+            </div>
+            <div class="skin-settings">
+                <div class="title">
+                    配置 <br>
+                    <small style="text-transform: none;font-weight: 400">
+                        配置框设计用户演示目的，所有选项课通过代码获得。
+                    </small>
+                </div>
+                <div class="setings-item">
+                    <span>
+                        折叠菜单
+                    </span>
+
+                    <div class="switch">
+                        <div class="onoffswitch">
+                            <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="collapsemenu">
+                            <label class="onoffswitch-label" for="collapsemenu">
+                                <span class="onoffswitch-inner"></span>
+                                <span class="onoffswitch-switch"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <script>
+        // Enable/disable fixed top navbar
+
+
+        // Enable/disable fixed top navbar
+
+
+        // Enable/disable fixed sidebar
+
+
+        // Enable/disable collapse menu
+        $('#collapsemenu').click(function () {
+            if ($('#collapsemenu').is(':checked')) {
+                $("body").addClass('mini-navbar');
+                SmoothlyMenu();
+
+                if (localStorageSupport) {
+                    localStorage.setItem("collapse_menu", 'on');
+                }
+
+            } else {
+                $("body").removeClass('mini-navbar');
+                SmoothlyMenu();
+
+                if (localStorageSupport) {
+                    localStorage.setItem("collapse_menu", 'off');
+                }
+            }
+        });
+
+        // SKIN Select
+        $('.spin-icon').click(function () {
+            $(".theme-config-box").toggleClass("show");
+        });
+
+
+        if (localStorageSupport) {
+            let collapse = localStorage.getItem("collapse_menu");
+            if (collapse === 'on') {
+                $('#collapsemenu').prop('checked', 'checked')
+            }
+        }
+    </script>
+    <!--同步官网模板结束-->
+</body>
+{% endblock %}
+</html>

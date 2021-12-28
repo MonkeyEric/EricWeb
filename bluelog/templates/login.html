@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}登录{% endblock %}
+{%block head%}
+<style>
+    body{
+        background-image:url("../static/img/bg_login2.jpg");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+    }
+</style>
+{% endblock %}
+{%block body%}
+<body class="gray-bg" >
+
+    <div class="loginColumns animated fadeInDown">
+
+        <div class="row">
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-6">
+                <div class="ibox-content">
+                    <form class="m-t" role="form" action="{{url_for('user.login')}}" method="post">
+                        {{form.csrf_token}}
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="用户名或邮箱" required="" name="email">
+<!--                            <input type="text" class="form-control" placeholder="用户名" required="" name="username">-->
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" placeholder="密码" required="" name="password">
+                        </div>
+                        <div>
+                            <label> <input type="checkbox" class="i-checks" name="remember"> 记住我 </label>
+                        </div>
+                        <input type="submit" class="btn btn-primary block full-width m-b" name="submit">登录</input>
+
+                        <a href="{{url_for('user.forget_password')}}">
+                            <small>忘记密码?</small>
+                        </a>
+                        <a class="float-right" href="{{url_for('user.register')}}">
+                            <small>注册猫大侠账号</small>
+                        </a>
+
+                    </form>
+                    <p class="text-muted text-center">
+                            <small>第三方登录</small>
+                        </p>
+                    <a class="btn  btn-sm btn-white btn-block btn-social btn-github" href="{{url_for('user.github_login')}}" >
+                            <span class="fa fa-github"></span> GitHub登录
+                        </a>
+                    <p class="m-t">
+                    </p>
+                </div>
+            </div>
+        </div>
+        <hr/>
+
+    </div>
+</body>
+{% endblock %}

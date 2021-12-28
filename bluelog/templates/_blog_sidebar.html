@@ -1,0 +1,170 @@
+<!--博客的右边模块(包含links和categories)-->
+{% set navigation = ['btn-default','btn-primary','btn-success','btn-info','btn-warning','btn-danger']%}
+  {% if categories %}
+  <div class="ibox">
+      <div class="ibox-title">
+                       <a class="layui-code-h3 h5"><i class="fa fa-bars"></i>&nbsp;<span>分&nbsp;类</span></a>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#" class="dropdown-item">添加分类</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+      <div class="ibox-content">
+
+          <div class="row">
+             {% for category in categories %}
+              <div class="col-md-6">
+                    <h4 class="text-left">
+                        <span data-toggle="tooltip" data-placement="left" title=" {{ category.name }} {{ category.posts|length }}"><a class="btn  {{navigation| random()}}" href="{{ url_for('blog.show_category', category_id=category.id) }}" style="width: 100%;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+                            {{ category.name }}
+                        </a></span>
+
+                    </h4>
+              </div>
+              {% endfor %}
+          </div>
+
+      </div>
+  </div>
+
+{% endif %}
+
+{% if tags %}
+  <div class="ibox">
+      <div class="ibox-title">
+                       <a class="layui-code-h3 h5"> <i class="fa fa-tags">&nbsp;</i><span>标&nbsp;签</span></a>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#" class="dropdown-item">添加标签</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+      <div class="ibox-content float-e-margins">
+             <div class="row">
+            {% for tag in tags %}
+              <div class="col-md-6">
+                    <h4 class="text-left">
+                        <span data-toggle="tooltip" data-placement="left" title=" {{ tag.name }} {{ tag.posts|length }}"><a class="btn  {{navigation| random()}}" href="{{ url_for('blog.show_tag', tag_id=tag.id) }}" style="width: 100%;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+                            {{ tag.name }}
+                        </a></span>
+
+                    </h4>
+              </div>
+            {% endfor %}
+             </div>
+      </div>
+  </div>
+
+{% endif %}
+
+<div class="ibox">
+  <div class="ibox-title">
+                   <a class="layui-code-h3 h5"> <i class="fa fa-link">&nbsp;</i><span>友情链接</span></a>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#" class="dropdown-item">添加链接</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+  <div class="ibox-content float-e-margins">
+         <div class="row">
+
+          <div class="col-md-6">
+                  <span data-toggle="tooltip" data-placement="left" title="潘老师授课网站，潘99" >
+                      <small class="text-muted">
+                          <a style="width: 100%;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;" class="" href="https://panxiuqiang.top">潘99个人网站</a>
+                      </small>
+                  </span>
+          </div>
+
+         </div>
+  </div>
+</div>
+
+
+<div class="ibox">
+      <div class="ibox-title">
+                       <a class="layui-code-h3 h5"> <i class="fa fa-tachometer">&nbsp;</i><span>系统公告</span></a>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+      <div class="ibox-content">
+            <div>
+                <div class="feed-activity-list">
+
+                    <div class="feed-element">
+
+                        <div class="media-body ">
+                            <small class="float-right">5分钟前</small>
+                            <strong>小王</strong> 晚上要一起去吃饭吗 <br>
+                            <small class="text-muted">2017.12.12 12:00</small>
+
+                        </div>
+                    </div>
+
+                    <div class="feed-element">
+                        <div class="media-body ">
+                            <small class="float-right">2个月前</small>
+                            <strong>小王</strong> 查看了 <strong>晚上睡觉有必要把路由器关掉么？</strong><br>
+                            <small class="text-muted">2017.12.12 12:00</small>
+                        </div>
+                    </div>
+                    <div class="feed-element">
+                        <div class="media-body ">
+                            <small class="float-right">2小时前</small>
+                            <strong>小王</strong> 查看了 <strong>晚上睡觉有必要把路由器关掉么？</strong>.<br>
+                            <small class="text-muted">2017.12.12 12:00</small>
+                        </div>
+                    </div>
+                </div>
+
+                                            <button class="btn btn-primary btn-block m-t"><i class="fa fa-arrow-down"></i> 加载更多</button>
+
+                                        </div>
+      </div>
+  </div>
+
+{%block script%}
+<script type="text/javascript">
+
+
+            </script>
+{% endblock%}
