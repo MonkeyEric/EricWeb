@@ -88,13 +88,7 @@ def register():
         role = form.role.data
         about = form.about.data
         password = form.password.data
-        admin = Admin(
-            email=email,
-            my_title=my_title,
-            name=name,
-            about=about,
-            role=role
-        )
+        admin = Admin(email=email, my_title=my_title, name=name, about=about, role=role)
         admin.set_password(password)
         db.session.add(admin)
         db.session.commit()
