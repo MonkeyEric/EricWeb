@@ -2,7 +2,7 @@
 import bdb
 
 from flask import Blueprint, render_template, g, session, send_from_directory, request, current_app, redirect, url_for
-from flask_login import current_user
+from flask_login import current_user, login_required
 from flask_wtf.csrf import generate_csrf
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import CombinedMultiDict
@@ -14,8 +14,7 @@ from bluelog.utils.forms import IncomeExpenseForm, FavoriteForm
 from bluelog.utils.csv_tools import read_csv, save_to_db
 from bluelog.utils.query_dict import query_to_dict
 from bluelog.money_excel_model import *
-from bluelog.utils.extensions import socketio
-from flask_socketio import emit
+from bluelog.config import *
 
 from datetime import date, time, timedelta, datetime
 from sqlalchemy import DateTime, Date, Time, func, desc, extract, asc
@@ -81,7 +80,8 @@ def index():
     per_page = current_app.config['BLOG_POST_PER_PAGE']
     pagination = Post.query.order_by(desc(Post.timestamp)).paginate(page, per_page=per_page)
     posts = pagination.items
-    return render_template('index.html', pagination=pagination, posts=posts)
+    small_p = random.choice(small_phrase)
+    return render_template('index.html', pagination=pagination, posts=posts,small_p=small_p)
 
 
 def arrange(res, li_len=13):
@@ -96,6 +96,7 @@ def arrange(res, li_len=13):
 
 
 @admin_bp.route('/chart', methods=['GET'])
+@login_required
 def chart():
     # 存储
     storage = db.session.query(func.sum(Income.amount)).scalar()
@@ -340,34 +341,51 @@ def contacts():
 @admin_bp.route('/favourite', methods=['GET', 'POST'])
 def favourite():
     # GET的形式，返回相应的html，并且传递相应的form表单CSRF
+    from bluelog.config import FAV_CATEGORY
+    fav_header = {value: "#tab-"+str(i) for i, value in enumerate(FAV_CATEGORY,1)}
     form_fav = FavoriteForm(CombinedMultiDict([request.form, request.files]))
-    res = Favorite.query.all()
+    res = Favorite.query.order_by(desc(Favorite.update_time)).all()
+
     new_dict = {}
     for i in res:
-
-        if not new_dict.get(i.category):
-            new_dict[i.category] = []
-        new_dict[i.category].append(
+        header = fav_header.get(i.category).replace("#", "")
+        if not new_dict.get(header):
+            if fav_header.get(i.category):
+                new_dict[header] = []
+        new_dict[header].append(
             {'category': i.category, 'name': i.name,
-             'avatar': i.avatar, 'web_url': i.web_url,
+             'avatar': "/static/favorite/"+i.avatar, 'web_url': i.web_url,
              'express': i.express,
              'thumb_down': i.thumb_down, 'thumb_up': i.thumb_up})
 
-    if form_fav.validate_on_submit():
-        icon = form_fav.icon.data
-        filename = secure_filename(icon.filename)
-        avatar = os.path.join(current_app.config['fav_img'], filename)
-        file_path = os.path.join(current_app.root_path, avatar)
-        icon.save(file_path)
+    if request.method == "POST":
+        if g.user.role == 1:
+            img_data = request.files['icon']
+            filename = secure_filename(img_data.filename)
+            print(current_app.config['FAV_IMG'])
+            file_path = os.path.join(current_app.config['FAV_IMG'], filename)
 
-        fav = Favorite(name=form_fav.name.data, avatar=avatar, web_url=form_fav.web_url.data,
-                       express=form_fav.express.data,
-                       thumb_up=0, thumb_down=0, category=form_fav.category.data)
-        db.session.add(fav)
-        db.session.commit()
+            img_data.save(file_path)
+
+            fav = Favorite(name=form_fav.name.data, avatar=filename, web_url=form_fav.web_url.data,
+                           express=form_fav.express.data,
+                           thumb_up=0, thumb_down=0, category=form_fav.category.data)
+            db.session.add(fav)
+            db.session.commit()
+        return redirect(url_for('admin.favourite'))
 
     # POST的形式，进行添加相应的网站，
-    return render_template('favourite.html', form=form_fav, data_fav=new_dict)
+    return render_template('favourite.html', form=form_fav, data_fav=new_dict, fav_header=fav_header)
+
+
+@admin_bp.route('/favourite/crawl', methods=['POST'])
+def favorite_crawl():
+    if g.user.role == 1:
+        task = request.form.get('task')
+        category = request.form.get('category')
+        if task:
+            task_li = task.split(";")
+    return redirect(url_for('admin.favourite'))
 
 
 @admin_bp.route('/img', methods=['POST'])
@@ -410,6 +428,7 @@ def famous():
         print(request.form)
         print(request.files)
         img_data = request.files['file']
+        print(current_app.config['FAMOUS_PATH'])
         file_path = os.path.join(current_app.config['FAMOUS_PATH'], img_data.filename)
         img_data.save(file_path)
         f = Famous()

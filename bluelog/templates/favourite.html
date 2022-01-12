@@ -42,6 +42,15 @@
           border-radius: 50%;
         }
 
+        .grid .ibox {
+            margin-bottom: 0;
+        }
+
+        .grid-item {
+            margin-bottom: 10px;
+            width: 300px;
+        }
+
 
 </style>
 {% endblock %}
@@ -50,7 +59,7 @@
 {{self.pheader()}}
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10">
-            <h2>收藏网站</h2>
+            <br>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <a href="{{url_for('admin.index')}}">主页</a>
@@ -64,318 +73,197 @@
     </div>
     <div class="wrapper wrapper-content  animated fadeInRight">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <button class="btn btn-xs btn-primary " type="button">
                     <i class="fa fa-plus"></i>
                     <a data-toggle="modal" class="btn btn-primary" href="#modal-form">&nbsp;&nbsp;添加</a>
                 </button>
+                <a data-toggle="modal" class="btn btn-xs btn-link" href="#modal-form1">&nbsp;添加任务</a>
                 <small class="small text-muted">&nbsp;&nbsp;共计 <strong>1406</strong> 个网站</small></br>
             </div>
-            <div class="col-md-9">
-                <span class="text-muted small float-right">更新时间: <i class="fa fa-clock-o"></i> 2017.12.12 2:10</span>
-
+            <div class="col-md-6">
+                <span class="text-muted small float-right">更新时间: <i class="fa fa-clock-o"></i> {{new_time}}</span>
             </div>
         </div>
         <div id="modal-form" class="modal fade" aria-hidden="true">
-                                    <div class="modal-dialog modal-lg" style="width: 1100px">
-                                        <div class="modal-content modal-lg">
-                                            <div class="modal-body">
-                                                <div class="row">
-                                                    <h2><strong>添加网站</strong></h2>
-                                                    <div class="col-sm-12">
-                                                        <form method="post" action="{{url_for('admin.favourite')}}"  enctype="multipart/form-data">
-                                                            {{form.csrf_token}}
-
-                                                            <div class="form-group  row">
-                                                                <label class="col-md-2 col-form-label" style="text-align: center">网址名称</label>
-                                                                <div class="col-md-7"><input type="text" class="form-control" name="name"></div>
-                                                            </div>
-                                                            <div class="form-group row">
-                                                                <label class="col-md-2 col-form-label" style="text-align: center">网站描述</label>
-                                                                <div class="col-md-7"><input type="text" class="form-control" name="express"> <small class="form-text m-b-none">描述网站的作用、功能等</small>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group row">
-                                                                <label class="col-md-2 col-form-label" style="text-align: center">分类</label>
-                                                                <div class="col-md-7">
-                                                                    <select class="form-control m-b" name="category">
-                                                                        <option>大神博客</option>
-                                                                        <option>英语</option>
-                                                                        <option>PPT模板</option>
-                                                                        <option>电子书</option>
-                                                                        <option>格式转换</option>
-                                                                    </select>
-                                                                </div>
-
-                                                            </div>
-                                                            <div class="form-group row">
-
-                                                                <label class="col-md-2 col-form-label" style="text-align: center">网址</label>
-
-                                                                <div class="col-md-7">
-                                                                    <input type="text" placeholder="例如：https://www.baidu.com" class="form-control" name="web_url">
-                                                                </div>
-
-                                                            </div>
-
-
-                                                            <div class="hr-line-dashed"></div>
-                                                            <div class="form-group row">
-                                                                <label class="col-md-2 col-form-label" style="text-align: center">头像</label>
-                                                                <label title="上传" for="icon" class="btn btn-white" style="border-style: none">
-                                                                            <input type="file" accept="image/*" name="icon" id="icon" class="hide">
-                                                                        </label>
-                                                            </div>
-                                                            <div class="form-group row">
-
-
-
-                                                                    <div class="cropper-box">
-                                                                        <img id="image"  crossorigin="anonymous">
-
-                                                                    </div>
-
-                                                                     <div class="preview-box">
-                                                                         <h4>预览图像</h4>
-                                                                    <!-- 图片的预览区域 -->
-                                                                         <div>
-                                                                              <!-- 宽高为 100px 的预览区域 -->
-                                                                              <div class="img-preview w100"></div>
-                                                                              <p class="size">100 x 100</p>
-                                                                         </div>
-                                                                         <div>
-                                                                         <button type="button" class="btn btn-md btn-return float-left"
-                                                                    data-dismiss="modal">取消</button>
-                                                                    <button class="btn btn-primary" type="button" onclick="cai()">确定裁剪</button>
-                                                                         </div>
-                                                                     </div>
-                                                            </div>
-                                                            <div class="form-group row">
-                                                                <div class="col-sm-10"></div>
-                                                                <div class="col-sm-2">
-                                                                    <input class="btn btn-primary btn-sm" type="submit" name="submit">
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
+            <div class="modal-dialog modal-lg" style="width: 1100px">
+                <div class="modal-content modal-lg">
+                    <div class="modal-body">
+                        <div class="row">
+                            <h2><strong>添加网站</strong></h2>
+                            <div class="col-sm-12">
+                                <form method="post" action="{{url_for('admin.favourite')}}"  enctype="multipart/form-data">
+                                    {{form.csrf_token}}
+                                    <div class="form-group  row">
+                                        <label class="col-md-2 col-form-label" style="text-align: center">网址名称</label>
+                                        <div class="col-md-7"><input type="text" class="form-control" name="name"></div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label" style="text-align: center">网站描述</label>
+                                        <div class="col-md-7"><input type="text" class="form-control" name="express"> <small class="form-text m-b-none">描述网站的作用、功能等</small>
                                         </div>
                                     </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label" style="text-align: center">分类</label>
+                                        <div class="col-md-7">
+                                            <select class="form-control m-b" name="category">
+                                                {% for key,value in fav_header.items() %}
+                                                <option>{{key}}</option>
+                                                {%endfor%}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label" style="text-align: center">网址</label>
+                                        <div class="col-md-7">
+                                            <input type="text" placeholder="例如：https://www.baidu.com" class="form-control" name="web_url">
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label" style="text-align: center">头像</label>
+                                        <label title="上传" for="icon" class="btn btn-white" style="border-style: none">
+                                            <input type="file" accept="image/*" name="icon" id="icon" class="hide">
+                                        </label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="cropper-box">
+                                            <img id="image"  crossorigin="anonymous">
+                                        </div>
+                                         <div class="preview-box">
+                                             <h4>预览图像</h4>
+                                        <!-- 图片的预览区域 -->
+                                             <div>
+                                                  <!-- 宽高为 100px 的预览区域 -->
+                                                  <div class="img-preview w100"></div>
+                                                  <p class="size">100 x 100</p>
+                                             </div>
+                                             <div>
+                                                 <button type="button" class="btn btn-md btn-return float-left" data-dismiss="modal">取消</button>
+                                                 <button class="btn btn-primary" type="button" onclick="cai()">确定裁剪</button>
+                                             </div>
+                                         </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-10"></div>
+                                        <div class="col-sm-2">
+                                            <input class="btn btn-primary btn-sm" type="submit" name="submit">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="modal-form1" class="modal fade" aria-hidden="true">
+            <div class="modal-dialog modal-lg" style="width: 1100px">
+                <div class="modal-content modal-lg">
+                    <div class="modal-body">
+                        <div class="row">
+                            <h2><strong>添加爬虫任务</strong></h2>
+                            <div class="col-sm-12">
+                                <form method="post" action="{{url_for('admin.favorite_crawl')}}"  enctype="multipart/form-data">
+                                    {{form.csrf_token}}
+                                    <div class="form-group  row">
+                                        <label class="col-md-2 col-form-label" style="text-align: center">爬虫url,<small>多个用;隔开</small></label>
+                                        <div class="col-md-7"><textarea type="text" class="form-control" name="task"></textarea></div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label" style="text-align: center">分类</label>
+                                        <div class="col-md-7">
+                                            <select class="form-control m-b" name="category">
+                                                {% for key,value in fav_header.items() %}
+                                                <option>{{key}}</option>
+                                                {%endfor%}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-10"></div>
+                                        <div class="col-sm-2">
+                                            <input class="btn btn-primary btn-sm" type="submit" name="submit">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row" style="padding-top: 10px">
             <div class="col-md-12">
                 <ul class="nav nav-tabs">
-                            <li><a class="nav-link active" data-toggle="tab" href="#tab-1"><i class="fa fa-group"></i> 大神博客</a></li>
-                            <li><a class="nav-link" data-toggle="tab" href="#tab-2"><i class="fa fa-etsy"></i> 英语</a></li>
-                            <li><a class="nav-link" data-toggle="tab" href="#tab-3"><i class="fa fa-folder"></i> PPT模板</a></li>
-                            <li><a class="nav-link" data-toggle="tab" href="#tab-4"><i class="fa fa-book"></i> 电子书</a></li>
-                            <li><a class="nav-link" data-toggle="tab" href="#tab-5"><i class="fa fa-exchange"></i> 格式转换</a></li>
-                            <li><a class="nav-link" data-toggle="tab" href="#tab-6"><i class="fa fa-film"></i> 视频处理</a></li>
-                            <li><a class="nav-link" data-toggle="tab" href="#tab-7"><i class="fa fa-music"></i> 音频处理</a></li>
+                    {% for key,value in fav_header.items() %}
+                    {% if value == "#tab-1"%}
+                    <li><a class="nav-link" data-toggle="tab" href="{{value}}" id="default">{{key}}</a></li>
+                    {%else%}
+                    <li><a class="nav-link" data-toggle="tab" href="{{value}}">{{key}}</a></li>
+                    {%endif%}
+                    {%endfor%}
                 </ul>
             </div>
         </div>
-        <div class="row" style="padding-left: 9px">
-            <div class="tab-content">
-                <div></div>
-                <div class="tab-pane active" id="tab-1">
-                    <div class="row" style="padding-top:10px">
-                        {% if data_fav['大神博客'] %}
-                        {% for fav in data_fav['大神博客'] %}
-                        <div class="col-md-3">
+
+            <div class="tab-content" style="padding-top:10px">
+                {% for header,value in data_fav.items() %}
+                <div class="tab-pane" id="{{header}}">
+
+                        <div class="grid">
+
+                        {% for fav in value %}
+                            <div class="grid-item">
+
                             <div class="contact-box">
-                                <a class="row" href="{{fav.web_url}}">
-                                <div class="col-4">
+                                <a class="row" href="{{fav.web_url}}" target="_blank">
+                                <div class="col-md-4">
                                     <div class="text-center">
                                         <img alt="image" class="rounded-circle m-t-xs img-fluid" src="{{fav.avatar}}">
-                                        <div class="m-t-xs font-bold" style="padding-top: 7px"><h4>
-                                            {{fav.name}}</h4></div>
+
                                     </div>
                                 </div>
-                                <div class="col-8">
+                                <div class="col-md-8">
+                                     <div class="m-t-xs font-bold h6">
+                                        {{fav.name}}
+                                    </div>
+                                    <small class="font-bold">简介：</small>
+                                    <span data-toggle="tooltip" data-placement="left" title=" {{ fav.express }}">
 
-                                    <p><small>简介：</small><br>{{fav.express|truncate(50)}} <br>
-                                    <small>网址：</small><br>{{fav.web_url}}<br></p>
-                                        <button class="btn btn-primary " type="button">靠谱&nbsp;<i class="fa fa-thumbs-up">{{fav.thumb_up}}</i></button>
-                                        <button class="btn btn-warning " type="button">不靠谱&nbsp;<i class="fa fa-thumbs-down">{{fav.thumb_down}}</i></button>
+                                    <p class="font-bold" style="width: 100%;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+                                        {{fav.express|truncate(150)}}
+                                    </p></span>
+
+
 
                                 </div>
+
+
                                 </a>
                             </div>
-                        </div>
+
+                            </div>
                         {% endfor %}
-                        {% endif %}
-
-
-                    </div>
-                </div>
-                <div class="tab-pane active" id="tab-2">
-                    <div class="row" style="padding-top:10px">
-                        <div class="col-md-3">
-                            <div class="contact-box">
-                                <a class="row" href="https://www.baidu.com">
-                                <div class="col-4">
-                                    <div class="text-center">
-                                        <img alt=" " class="rounded-circle m-t-xs img-fluid" src="{{url_for('static',filename='favorite_img/bg_register.png')}}" width="100px" height="100px">
-                                        <div class="m-t-xs font-bold" style="padding-top: 7px"><h4>百度急哦埃德加阿斯顿</h4></div>
-                                    </div>
-                                </div>
-                                <div class="col-8">
-
-                                    <p><small>简介：</small><br>{{'全国最大的网络搜索门户网站'|truncate}} <br>
-                                    <small>网址：</small><br>www.baidu.com<br></p>
-                                        <button class="btn btn-primary " type="button">靠谱&nbsp;<i class="fa fa-thumbs-up">1</i></button>
-                                        <button class="btn btn-warning " type="button">不靠谱&nbsp;<i class="fa fa-thumbs-down">1</i></button>
-
-                                </div>
-                                </a>
-                            </div>
                         </div>
 
-
-                    </div>
                 </div>
-                <div class="tab-pane active" id="tab-3">
-                    <div class="row" style="padding-top:10px">
-                        <div class="col-md-3">
-                            <div class="contact-box">
-                                <a class="row" href="https://www.baidu.com">
-                                <div class="col-4">
-                                    <div class="text-center">
-                                        <img alt="image" class="rounded-circle m-t-xs img-fluid" src="{{url_for('static',filename='img/a4.jpg')}}">
-                                        <div class="m-t-xs font-bold" style="padding-top: 7px"><h4>百度急哦埃德加阿斯顿</h4></div>
-                                    </div>
-                                </div>
-                                <div class="col-8">
-
-                                    <p><small>简介：</small><br>{{'全国最大的网络搜索门户网站'|truncate}} <br>
-                                    <small>网址：</small><br>www.baidu.com<br></p>
-                                        <button class="btn btn-primary " type="button">靠谱&nbsp;<i class="fa fa-thumbs-up">1</i></button>
-                                        <button class="btn btn-warning " type="button">不靠谱&nbsp;<i class="fa fa-thumbs-down">1</i></button>
-
-                                </div>
-                                </a>
-                            </div>
-                        </div>
+                {% endfor %}
 
 
-                    </div>
-                </div>
-                <div class="tab-pane active" id="tab-4">
-                    <div class="row" style="padding-top:10px">
-                        <div class="col-md-3">
-                            <div class="contact-box">
-                                <a class="row" href="https://www.baidu.com">
-                                <div class="col-4">
-                                    <div class="text-center">
-                                        <img alt="image" class="rounded-circle m-t-xs img-fluid" src="{{url_for('static',filename='img/a4.jpg')}}">
-                                        <div class="m-t-xs font-bold" style="padding-top: 7px"><h4>百度急哦埃德加阿斯顿</h4></div>
-                                    </div>
-                                </div>
-                                <div class="col-8">
 
-                                    <p><small>简介：</small><br>{{'全国最大的网络搜索门户网站'|truncate}} <br>
-                                    <small>网址：</small><br>www.baidu.com<br></p>
-                                        <button class="btn btn-primary " type="button">靠谱&nbsp;<i class="fa fa-thumbs-up">1</i></button>
-                                        <button class="btn btn-warning " type="button">不靠谱&nbsp;<i class="fa fa-thumbs-down">1</i></button>
-
-                                </div>
-                                </a>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-                <div class="tab-pane active" id="tab-5">
-                    <div class="row" style="padding-top:10px">
-                        <div class="col-md-3">
-                            <div class="contact-box">
-                                <a class="row" href="https://www.baidu.com">
-                                <div class="col-4">
-                                    <div class="text-center">
-                                        <img alt="image" class="rounded-circle m-t-xs img-fluid" src="{{url_for('static',filename='img/a4.jpg')}}">
-                                        <div class="m-t-xs font-bold" style="padding-top: 7px"><h4>百度急哦埃德加阿斯顿</h4></div>
-                                    </div>
-                                </div>
-                                <div class="col-8">
-
-                                    <p><small>简介：</small><br>{{'全国最大的网络搜索门户网站'|truncate}} <br>
-                                    <small>网址：</small><br>www.baidu.com<br></p>
-                                        <button class="btn btn-primary " type="button">靠谱&nbsp;<i class="fa fa-thumbs-up">1</i></button>
-                                        <button class="btn btn-warning " type="button">不靠谱&nbsp;<i class="fa fa-thumbs-down">1</i></button>
-
-                                </div>
-                                </a>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-                <div class="tab-pane active" id="tab-6">
-                    <div class="row" style="padding-top:10px">
-                        <div class="col-md-3">
-                            <div class="contact-box">
-                                <a class="row" href="https://www.baidu.com">
-                                <div class="col-4">
-                                    <div class="text-center">
-                                        <img alt="image" class="rounded-circle m-t-xs img-fluid" src="{{url_for('static',filename='img/a4.jpg')}}">
-                                        <div class="m-t-xs font-bold" style="padding-top: 7px"><h4>百度急哦埃德加阿斯顿</h4></div>
-                                    </div>
-                                </div>
-                                <div class="col-8">
-
-                                    <p><small>简介：</small><br>{{'全国最大的网络搜索门户网站'|truncate}} <br>
-                                    <small>网址：</small><br>www.baidu.com<br></p>
-                                        <button class="btn btn-primary " type="button">靠谱&nbsp;<i class="fa fa-thumbs-up">1</i></button>
-                                        <button class="btn btn-warning " type="button">不靠谱&nbsp;<i class="fa fa-thumbs-down">1</i></button>
-
-                                </div>
-                                </a>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-                <div class="tab-pane active" id="tab-7">
-                    <div class="row" style="padding-top:10px">
-                        <div class="col-md-3">
-                            <div class="contact-box">
-                                <a class="row" href="https://www.baidu.com">
-                                <div class="col-4">
-                                    <div class="text-center">
-                                        <img alt="image" class="rounded-circle m-t-xs img-fluid" src="{{url_for('static',filename='img/a4.jpg')}}">
-                                        <div class="m-t-xs font-bold" style="padding-top: 7px"><h4>百度急哦埃德加阿斯顿</h4></div>
-                                    </div>
-                                </div>
-                                <div class="col-8">
-
-                                    <p><small>简介：</small><br>{{'全国最大的网络搜索门户网站'|truncate}} <br>
-                                    <small>网址：</small><br>www.baidu.com<br></p>
-                                        <button class="btn btn-primary " type="button">靠谱&nbsp;<i class="fa fa-thumbs-up">1</i></button>
-                                        <button class="btn btn-warning " type="button">不靠谱&nbsp;<i class="fa fa-thumbs-down">1</i></button>
-
-                                </div>
-                                </a>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-
-            </div>
         </div>
+
     </div>
 </div>
 {% endblock%}
 {%block script%}
 <!-- Image cropper -->
     <script src="{{url_for('static',filename='js/plugins/cropper/cropper.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/plugins/masonary/masonry.pkgd.min.js')}}"></script>
+
 <script>
+
 
     $(document).ready(function(){
         $("#three").addClass("active")
@@ -384,34 +272,41 @@
             $(".selected .tab-pane").removeClass('active');
             $($(this).attr('href')).addClass("active");
         });
+
+        $("#default").trigger("click")
+
+        $('.grid').masonry({
+            // options
+            itemSelector: '.grid-item',
+            columnWidth: 300,
+            gutter: 25
+        });
+
+
         var $image = $("#image")
+        var $cropped = $($image).cropper({
+            aspectRatio: 1, //这是裁剪框的长宽，可以自己定义
+            viewMode:1,
+            dragMode:'none',  //图片是否可以拖动，这里我设为none
+            preview: ".img-preview", //这是预览图绑定，和一个div绑定就可以
+            responsive:false, //是否在窗口尺寸改变的时候重置cropper 这里我要固定裁剪框，所以设置为false
+            autoCrop: true, //初始化自动生成裁剪框
+            done: function(data) {
+                // Output the result data for cropping image.
+            }
+        });
 
-                var $cropped = $($image).cropper({
-                    aspectRatio: 1, //这是裁剪框的长宽，可以自己定义
-                    viewMode:1,
-                    dragMode:'none',  //图片是否可以拖动，这里我设为none
-                    preview: ".img-preview", //这是预览图绑定，和一个div绑定就可以
-                    responsive:false, //是否在窗口尺寸改变的时候重置cropper 这里我要固定裁剪框，所以设置为false
-                    autoCrop: true, //初始化自动生成裁剪框
-                    done: function(data) {
-                        // Output the result data for cropping image.
-                    }
-            });
 
-
-                var $icon = $("#icon");
-            if (window.FileReader) {
-                $icon.change(function() {
-                    var fileReader = new FileReader(),
-                            files = this.files,
-                            file;
-
+        var $icon = $("#icon");
+        if (window.FileReader) {
+            $icon.change(function() {
+                var fileReader = new FileReader(),
+                    files = this.files,
+                    file;
                     if (!files.length) {
                         return;
                     }
-
                     file = files[0];
-
                     if (/^image\/\w+$/.test(file.type)) {
                         fileReader.readAsDataURL(file);
                         fileReader.onload = function () {
@@ -425,8 +320,6 @@
             } else {
                 $icon.addClass("hide");
             }
-
-
     });
 
     //点击确认裁剪方法
@@ -462,6 +355,29 @@ function cai() {
 }
 
 
+function div_active(s) {
+    // $(s).siblings().removeClass("active")
+    // $(s).addClass("active")
+    // console.log($(this))
+    // let div_id = $(this)[0].location.hash
+    // $(div_id).addClass("active")
+}
+$(document).on('click', 'ul li a', function(e){
+
+        // $("li").removeClass("active")
+        // $(e.target).addClass("active")
+        var self = this;
+        var p = self.parentNode.parentNode.children;
+        for (var i = 0, pl = p.length; i < pl; i++) {
+            p[i].classList.remove("active");
+            if(p[i].children[0].hash!==self.hash){
+            $(p[i].children[0].hash).removeClass("active")
+            }
+        }
+        self.classList.add("active");
+        let div_id = window.location.hash
+        $(div_id).addClass("acitve")
+    })
 
 </script>
 {% endblock%}

@@ -2,31 +2,50 @@
 {% set navigation = ['btn-default','btn-primary','btn-success','btn-info','btn-warning','btn-danger']%}
   {% if categories %}
   <div class="ibox">
+
       <div class="ibox-title">
-                       <a class="layui-code-h3 h5"><i class="fa fa-bars"></i>&nbsp;<span>分&nbsp;类</span></a>
-                        <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i class="fa fa-wrench"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-user">
-                                <li><a href="#" class="dropdown-item">添加分类</a>
-                                </li>
-                            </ul>
-                            <a class="close-link">
-                                <i class="fa fa-times"></i>
-                            </a>
+           <a class="layui-code-h3 h5"><i class="fa fa-bars"></i>&nbsp;<span>分&nbsp;类</span></a>
+            <div class="ibox-tools">
+                <a class="collapse-link">
+                    <i class="fa fa-chevron-up"></i>
+                </a>
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="fa fa-wrench"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#addCategory">添加分类</a>
+                    </li>
+
+                </ul>
+                <a class="close-link">
+                    <i class="fa fa-times"></i>
+                </a>
+            </div>
+        </div>
+      <div class="modal inmodal" id="addCategory" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+          <div class="modal-dialog">
+              <div class="modal-content animated fadeIn">
+                  <div class="modal-body">
+                      <form role="form" method="post" action="{{url_for('blog.add_category')}}" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label>分类名字</label>
+                            <input type="text" name="name" placeholder="请输入……" class="form-control">
                         </div>
-                    </div>
+                        <button class="btn btn-sm btn-primary float-right m-t-n-xs" type="submit"><strong>提交</strong></button>
+                    </form>
+                </div>
+              </div>
+          </div>
+      </div>
       <div class="ibox-content">
 
           <div class="row">
              {% for category in categories %}
               <div class="col-md-6">
                     <h4 class="text-left">
-                        <span data-toggle="tooltip" data-placement="left" title=" {{ category.name }} {{ category.posts|length }}"><a class="btn  {{navigation| random()}}" href="{{ url_for('blog.show_category', category_id=category.id) }}" style="width: 100%;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+                        <span data-toggle="tooltip" data-placement="left" title=" {{ category.name }} {{ category.posts|length }}">
+                            <a class="btn  {{navigation| random()}}" href="{{ url_for('blog.show_category', category_id=category.id) }}" style="width: 100%;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
                             {{ category.name }}
                         </a></span>
 
@@ -42,24 +61,40 @@
 
 {% if tags %}
   <div class="ibox">
+
       <div class="ibox-title">
-                       <a class="layui-code-h3 h5"> <i class="fa fa-tags">&nbsp;</i><span>标&nbsp;签</span></a>
-                        <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i class="fa fa-wrench"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-user">
-                                <li><a href="#" class="dropdown-item">添加标签</a>
-                                </li>
-                            </ul>
-                            <a class="close-link">
-                                <i class="fa fa-times"></i>
-                            </a>
+       <a class="layui-code-h3 h5"> <i class="fa fa-tags">&nbsp;</i><span>标&nbsp;签</span></a>
+        <div class="ibox-tools">
+            <a class="collapse-link">
+                <i class="fa fa-chevron-up"></i>
+            </a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="fa fa-wrench"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-user">
+                <li><a href="#" data-toggle="modal" data-target="#addTag">添加分类</a>
+                </li>
+            </ul>
+            <a class="close-link">
+                <i class="fa fa-times"></i>
+            </a>
+        </div>
+    </div>
+      <div class="modal inmodal" id="addTag" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+          <div class="modal-dialog">
+              <div class="modal-content animated fadeIn">
+                  <div class="modal-body">
+                      <form role="form" method="post" action="{{url_for('blog.add_tag')}}" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label>分类名字</label>
+                            <input type="text" name="name" placeholder="请输入……" class="form-control">
                         </div>
-                    </div>
+                        <button class="btn btn-sm btn-primary float-right m-t-n-xs" type="submit"><strong>提交</strong></button>
+                    </form>
+                </div>
+              </div>
+          </div>
+      </div>
       <div class="ibox-content float-e-margins">
              <div class="row">
             {% for tag in tags %}
@@ -99,14 +134,15 @@
                 </div>
   <div class="ibox-content float-e-margins">
          <div class="row">
-
+             {%for item in  user_info.friend_link%}
           <div class="col-md-6">
-                  <span data-toggle="tooltip" data-placement="left" title="潘老师授课网站，潘99" >
+                  <span data-toggle="tooltip" data-placement="left" title="{{item.title}}" >
                       <small class="text-muted">
-                          <a style="width: 100%;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;" class="" href="https://panxiuqiang.top">潘99个人网站</a>
+                          <a style="width: 100%;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;" class="" href="{{item.link}}" target="_blank">{{item.name}}</a>
                       </small>
                   </span>
           </div>
+             {%endfor%}
 
          </div>
   </div>
@@ -129,35 +165,18 @@
       <div class="ibox-content">
             <div>
                 <div class="feed-activity-list">
-
-                    <div class="feed-element">
-
-                        <div class="media-body ">
-                            <small class="float-right">5分钟前</small>
-                            <strong>小王</strong> 晚上要一起去吃饭吗 <br>
-                            <small class="text-muted">2017.12.12 12:00</small>
-
-                        </div>
-                    </div>
-
+                    {%for item in user_info.system_upgrade%}
                     <div class="feed-element">
                         <div class="media-body ">
-                            <small class="float-right">2个月前</small>
-                            <strong>小王</strong> 查看了 <strong>晚上睡觉有必要把路由器关掉么？</strong><br>
-                            <small class="text-muted">2017.12.12 12:00</small>
+                            <strong>系统<small>{{item.version}}</small>：</strong>{{item.content}}
+                            <strong><small><a href="{{item.link}}">详情查看</a></small></strong><br>
+                            <small class="text-muted">{{item.time}}发布</small>
                         </div>
                     </div>
-                    <div class="feed-element">
-                        <div class="media-body ">
-                            <small class="float-right">2小时前</small>
-                            <strong>小王</strong> 查看了 <strong>晚上睡觉有必要把路由器关掉么？</strong>.<br>
-                            <small class="text-muted">2017.12.12 12:00</small>
-                        </div>
-                    </div>
+                    {%endfor%}
                 </div>
 
-                                            <button class="btn btn-primary btn-block m-t"><i class="fa fa-arrow-down"></i> 加载更多</button>
-
+<!--                                            <button class="btn btn-primary btn-block m-t"><i class="fa fa-arrow-down"></i> 加载更多</button>-->
                                         </div>
       </div>
   </div>

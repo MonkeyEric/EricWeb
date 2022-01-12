@@ -1,6 +1,7 @@
 # coding:utf-8
 # 博客
 from flask import Blueprint, render_template, request, current_app, url_for, flash, redirect, session, g
+from flask_login import login_required
 from bluelog.modules.blog import *
 from bluelog.utils.forms import AdminCommentFrom, CommentForm
 from bluelog.modules.user_github import GithubUser
@@ -28,7 +29,8 @@ def before_request():
             g.db = 'admin'
 
 
-@blog_bp.route('/', methods=['GET','POST'])
+@blog_bp.route('/', methods=['GET', 'POST'])
+@login_required
 def blog_index():
     if request.method == 'GET':
         page = request.args.get('page', 1, type=int)
@@ -37,9 +39,9 @@ def blog_index():
         posts = pagination.items
 
         return render_template('blog_list.html', pagination=pagination, posts=posts)
-    if request.method == 'POST':
+    if request.method == 'POST' and g.user:
         response = json.loads(request.data.decode('utf-8'))
-        post_id = int(response.get('post_id','0'))
+        post_id = int(response.get('post_id')) if response.get('post_id') else 0
         post = db.session.query(Post).filter_by(id=post_id).first()
         if not post:
             post = Post()
@@ -73,10 +75,26 @@ def show_category(category_id):
     return render_template('blog.html', pagination=pagination, posts=posts)
 
 
+@blog_bp.route('/category', methods=['POST'])
+def add_category():
+    if request.method == 'POST' and g.user and g.user.role == 1:
+        print(request.form)
+        category = db.session.query(Category).filter_by(name=request.form.get('name')).first()
+        if not category:
+            c = Category()
+            c.name = request.form.get('name')
+            db.session.add(c)
+            db.session.commit()
+            return redirect(url_for('admin.index'))
+        else:
+            return {'code': '100111', 'msg': '名字已经有，请重新填写'}
+    return {'code': '100111', 'msg': '操作失败'}
+
+
 @blog_bp.route('/tag/<int:tag_id>', methods=['GET'])
 def show_tag(tag_id):
     tag = Tag.query.get_or_404(tag_id)
-    page = request.args.get('page', 1, type=int)
+    page = request.args.get('page', 0, type=int)
     per_page = current_app.config['BLOG_POST_PER_PAGE']
     pagination = Post.query.with_parent(tag).order_by(desc(Post.timestamp)).paginate(page, per_page)
     posts = pagination.items
@@ -84,7 +102,23 @@ def show_tag(tag_id):
     return render_template('blog.html', pagination=pagination, posts=posts)
 
 
+@blog_bp.route('/tag', methods=['POST'])
+def add_tag():
+    if request.method == 'POST' and g.user:
+        tag = db.session.query(Tag).filter_by(name=request.form.get('name')).first()
+        if not tag:
+            t = Tag()
+            t.name = request.form.get('name')
+            db.session.add(t)
+            db.session.commit()
+            return redirect(url_for('admin.index'))
+        else:
+            return {'code': '100111', 'msg': '名字已经有，请重新填写'}
+    return {'code': '100111', 'msg': '操作失败'}
+
+
 @blog_bp.route('/post/<int:post_id>', methods=['GET', 'POST'])
+@login_required
 def show_post(post_id):
     """
     发表评论
@@ -170,6 +204,7 @@ def code_editor():
 
 
 @blog_bp.route('/upload', methods=['POST'])
+@login_required
 def img_upload():
     guid = request.args.get('guid')
     img_data = request.files.get('editormd-image-file')

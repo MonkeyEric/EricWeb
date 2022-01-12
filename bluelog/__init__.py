@@ -1,6 +1,7 @@
 import os
 
 import click
+from bluelog.config import FRIEND_LINK, SYSTEM_NOTIFICATION
 from bluelog.modules.blog import Admin, Category, Link, Comment, Tag
 from bluelog.modules.user_github import GithubUser
 
@@ -29,11 +30,12 @@ def create_app(config_name=None):
     # 定义模板文件的路径
     templates_dir = os.path.join(BASE_DIR, 'templates')
     # 初始化app和manage.py文件夹
-    app = Flask('blue_log', static_folder=static_dir,template_folder=templates_dir)
+    app = Flask('blue_log', static_folder=static_dir, template_folder=templates_dir)
     app.config.from_object(config[config_name])
     app.config['UPLOAD_PATH'] = os.path.join(app.root_path, 'bluelog/static/file')
     app.config['IMG_PATH'] = os.path.join(app.root_path, 'bluelog/static/file/img')
     app.config['FAMOUS_PATH'] = os.path.join(app.root_path, 'bluelog/static/file/famous')
+    app.config['FAV_IMG'] = os.path.join(app.root_path, 'bluelog/static/favorite')
     app.config.update(
         GITHUB_CLIENT_ID=os.getenv('GITHUB_CLIENT_ID'),
         GITHUB_CLIENT_SECRET=os.getenv('GITHUB_CLIENT_SECRET'),
@@ -118,8 +120,11 @@ def register_user_info_(app):
                 user = g.user
                 username = user.name
                 role = user.role.value
+                avatar = user.avatar
                 print(user.role)
-        user_info = dict(is_login=is_login, avatar=avatar, username=username, role=role)
+
+        user_info = dict(is_login=is_login, avatar=avatar, username=username, role=role, friend_link=FRIEND_LINK,
+                         system_upgrade=SYSTEM_NOTIFICATION)
         return dict(user_info=user_info)
 
     @app.context_processor
@@ -132,7 +137,7 @@ def register_user_info_(app):
             unread_comments = Comment.query.filter_by(reviewed=False).count()
         else:
             unread_comments = None
-        return dict(admin=admin, categories=categories, links=links, unread_comments=unread_comments,tags=tags)
+        return dict(admin=admin, categories=categories, links=links, unread_comments=unread_comments, tags=tags)
 
 
 def register_template_context(app):
@@ -161,7 +166,8 @@ def register_commands(app):
     @click.option('--comment', default=500, help='Quantity of comments,default is 500.')
     def forge(category, tag, post, comment):
         """generate the fake categories,posts,comments"""
-        from bluelog.utils.fakes import fake_admin, fake_categories, fake_posts, fake_comments, fake_tag, fake_tag_post_table
+        from bluelog.utils.fakes import fake_admin, fake_categories, fake_posts, fake_comments, fake_tag, \
+            fake_tag_post_table
         db.drop_all()
         db.create_all()
         click.echo('Generating the administrator……')

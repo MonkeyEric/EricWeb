@@ -14,7 +14,7 @@
     <link href="{{url_for('static',filename='font-awesome/css/font-awesome.css')}}" rel="stylesheet">
     <link href="{{url_for('static',filename='css/animate.css')}}" rel="stylesheet">
     <link href="{{url_for('static',filename='css/style.css')}}" rel="stylesheet">
-        <!-- Toastr style -->
+    <!-- Toastr style -->
     <link href="{{url_for('static',filename='css/plugins/toastr/toastr.min.css')}}" rel="stylesheet">
     <!-- Gritter -->
     <link href="{{url_for('static',filename='js/plugins/gritter/jquery.gritter.css')}}" rel="stylesheet">
@@ -35,40 +35,6 @@
                 <a class="close-canvas-menu"><i class="fa fa-times"></i></a>
                 <ul class="nav metismenu" id="side-menu">
                     <li class="nav-header">
-
-                        <div class="dropdown profile-element text-center">
-                            {% if user_info.avatar %}
-                            <img alt="image" class="rounded-circle" style="width: 48px;height: 48px;"  src="{{user_info.avatar}}" />
-                            {% else %}
-                            <img alt="image" class="rounded-circle" style="width: 60px;height: 60px;"  src="{{url_for('static',filename='img/profile_small.jpg')}}" />
-                            {% endif %}
-                            <br>
-                            <h3 class="font-bold no-margins text-muted" style="padding-top: 9px">
-                                {{user_info.username}}
-                            </h3>
-                            <div>
-                                <span class="text-muted text-xs">角色:{{user_info.role}}</span>
-                            </div>
-                            <div>
-                                <span class="text-muted text-xs">文章 100</span> |
-                                <span class="text-muted text-xs">访问量 350</span>
-
-                            </div>
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-
-                                <span class="text-muted text-xs block">更多<b class="caret"></b></span>
-                            </a>
-
-                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li><a class="dropdown-item" href="{{url_for('admin.profile')}}">个人信息</a></li>
-                                <li><a class="dropdown-item" href="{{url_for('user.contact')}}">好友</a></li>
-                                <li class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{{url_for('user.logout')}}">登出</a></li>
-                            </ul>
-                        </div>
-                        <div class="logo-element">
-                            CAT
-                        </div>
                     </li>
 <!--                    首页-->
                     <li id="one">
@@ -97,7 +63,7 @@
                     </li>
 <!--个人wiki-->
                     <li id="four">
-                        <a href="#">
+                        <a href="https://wiki.choumaomi.com">
                             <i class="fa fa-sitemap"></i>
                             <span class="nav-label">个人wiki</span>
                         </a>
@@ -161,7 +127,7 @@
 
                 <ul class="nav navbar-top-links navbar-right">
                     <li style="padding: 20px">
-                        <span class="m-r-sm text-muted welcome-message">您好，{{user_info.username}}，欢迎来到猫咪博客</span>
+                        <span class="m-r-sm text-muted welcome-message">您好，{{user_info.username}}，欢迎来到smelly cat's blog</span>
                     </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
@@ -225,6 +191,8 @@
                             <i class="fa fa-gear"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-alerts">
+
+                            {% if user_info.is_login%}
                             <li>
                                 <a href="{{url_for('user.update_pwd')}}" class="dropdown-item">
                                     <div>
@@ -239,7 +207,7 @@
                                     </div>
                                 </a>
                             </li>
-                            {% if user_info.is_login%}
+                            {%else%}
                             <li>
                                 <a href="{{url_for('user.login')}}" class="dropdown-item">
                                     <div>
@@ -257,13 +225,21 @@
             {%endblock%}
             {%block footer%}
             <div class="footer row">
-                <div class="col-md-4"></div>
+                <div class="col-md-3"></div>
                 <div class="col-md-2">
-                            <strong><a href="https://beian.miit.gov.cn/" target="_blank"> 津ICP备2021007299号</a></strong>
+                    <strong><a class="btn btn-outline btn-link" href="https://beian.miit.gov.cn/" target="_blank"> 津ICP备2021007299号</a></strong>
                 </div>
-                <div class="col-md-2">
-                        <img alt="image"  class="rounded-circle" style="width: 20px;height: 20px;"  src="{{url_for('static',filename='img/wiki_favicon.png')}}">    <strong><a href="http://wiki.choumaomi.com" target="_blank"> 个人wiki</a></strong>
+                <div class="col-md-1">
+                    <a class="btn btn-outline btn-link" href="http://wiki.choumaomi.com" target="_blank">
+                        <img alt="image"  class="rounded-circle" style="width: 20px;height: 20px;"  src="{{url_for('static',filename='img/wiki_favicon.png')}}">&nbsp; <strong>个人wiki</strong></a>
                 </div>
+                <div class="col-md-1">
+                        <a class="btn btn-outline btn-link" href="{{url_for('admin.favourite')}}" target="_blank"> <i class="fa fa-heart"></i>&nbsp;&nbsp;<strong>收藏网站</strong></a>
+                </div>
+                <div class="col-md-1">
+                    <a class="btn btn-outline btn-link" href="/data" target="_blank"><i class="fa fa-bar-chart-o"></i>&nbsp;&nbsp;<strong>理财小助手</strong></a>
+                </div>
+
                 <div class="col-md-4"></div>
 
             </div>
