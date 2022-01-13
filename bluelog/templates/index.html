@@ -21,22 +21,22 @@
                             <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
                         </ol>
                         <div class="carousel-inner">
-                            <div class="carousel-item active" style="height: 340px">
-                                <img class="d-block w-100 h-100" src="{{url_for('static',filename='img/p_big1.jpg')}}" alt="First slide" >
+                            <div class="carousel-item active" style="height: 380px">
+                                <img class="d-block w-100 h-100" src="{{url_for('static',filename='img/pg_big1.jpg')}}" alt="First slide" >
                                 <div class="carousel-caption d-none d-md-block">
-                                    <p>这是简单的标题 1</p>
+                                    <p>还不知道怎么弄，先放这里 1</p>
                                 </div>
                             </div>
-                            <div class="carousel-item" style="height: 340px">
-                                <img class="d-block w-100 h-100" src="{{url_for('static',filename='img/p_big3.jpg')}}" alt="Second slide">
+                            <div class="carousel-item" style="height: 380px">
+                                <img class="d-block w-100 h-100" src="{{url_for('static',filename='img/pg_big2.jpeg')}}" alt="Second slide">
                                 <div class="carousel-caption d-none d-md-block">
-                                    <p>这是简单的标题 2</p>
+                                    <p>还不知道怎么弄，先放这里 2</p>
                                 </div>
                             </div>
-                            <div class="carousel-item" style="height: 340px">
-                                <img class="d-block w-100 h-100" src="{{url_for('static',filename='img/p_big2.jpg')}}" alt="Third slide" >
+                            <div class="carousel-item" style="height: 380px">
+                                <img class="d-block w-100 h-100" src="{{url_for('static',filename='img/pg_big3.jpeg')}}" alt="Third slide" >
                                 <div class="carousel-caption d-none d-md-block">
-                                    <p>这是简单的标题 3</p>
+                                    <p>还不知道怎么弄，先放这里 3</p>
                                 </div>
                             </div>
                         </div>
@@ -52,7 +52,7 @@
 
             </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
             <div class="ibox">
 
                         <div class="nav-header p-lg text-center">
@@ -62,11 +62,15 @@
                             </h2>
                                 <small style="font-size: initial;color: slategray;">{{user_info.role}}</small>
                             </div>
-                            <img src="/static/img/profile_small.jpg" class="rounded-circle  m-b-md" alt="profile" style="width: 80px;height: 80px;">
+                            {% if user_info.is_login  %}
+                            <img src="{{user_info.avatar}}" class="rounded-circle  m-b-md" alt="profile" style="width: 80px;height: 80px;">
+                            {% else %}
+                            <img alt="image" class="rounded-circle m-b-md" style="width: 80px;height: 80px;"  src="{{url_for('static',filename='img/profile_small.jpg')}}" />
+                            {% endif %}
                             <div>
                                 <span><a href="#">Star 100</a></span> |
                                 <span><a href="#">Fork 350</a></span> |
-                                <span><a href="#">电子邮件</a></span>
+                                <span><a href="#"><i class="fa fa-email"></i>电子邮件</a></span>
                             </div>
                         </div>
                         <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
@@ -107,7 +111,9 @@
                             <div class="media-body ">
                                 <small class="float-right">
                                     <a href="#" id="change_famous"><i class="fa fa-refresh"></i>&nbsp;</a>
+                                    {% if  user_info.is_login %}
                                     <a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus"></i></a>
+                                    {%endif%}
 
                                 </small>
                                 <h4 class="media-heading" id="change_writer"></h4>
@@ -135,11 +141,36 @@
 {{ moment.include_moment() }}
 {{moment.locale('zh-cn')}}
 
-    <script>
+<script>
+        function like_($this) {
+            let like_num = $this.children[0].innerHTML
+            let new_like_count = 0
+            if (like_num === "None") {
+                new_like_count = new_like_count + 1
+            } else {
+                new_like_count = parseInt(like_num)
+                new_like_count = new_like_count + 1
+            }
+            $this.children[0].innerHTML = new_like_count
+            let post_id = parseInt($this.parentNode.getAttribute("name"))
+            let update_data = {"status": "like", "like_count": new_like_count, "post_id": post_id}
+
+            $.ajax({
+                type: "PUT",
+                url: "{{url_for('blog.put_post_')}}",
+                data: JSON.stringify(update_data),
+                contentType: 'application/json;charset=utf-8',//请求数据类型必须有
+                dataType: "json",
+                async: true,//异步
+                success: function (res) {console.log(res)}
+            });
+        }
+
         $('.custom-file-input').on('change', function() {
-   let fileName = $(this).val().split('\\').pop();
-   $(this).next('.custom-file-label').addClass("selected").html(fileName);
-});
+            let fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').addClass("selected").html(fileName);
+        });
+
         $(document).on('click','#change_famous',function(){
             $.ajax({
                     url: "/famous",
@@ -155,6 +186,17 @@
 
         $(document).ready(function () {
             $("#one").addClass("active")
+            now = new Date()
+            hour = now.getHours()
+            let time_message = ''
+            if(hour < 6){time_message="凌晨好！"}
+            else if (hour < 9){time_message="早上好！"}
+            else if (hour < 12){time_message="上午好！"}
+            else if (hour < 14){time_message="中午好！"}
+            else if (hour < 17){time_message="下午好！"}
+            else if (hour < 19){time_message="傍晚好！"}
+            else if (hour < 22){time_message="晚上好！"}
+            else {time_message="夜里好！"}
             setTimeout(function () {
                 toastr.options = {
                     closeButton: true,
@@ -162,15 +204,14 @@
                     showMethod: 'slideDown',
                     timeOut: 4000
                 };
-                let name = '，' + '{{username}}'
+                let name = {{user_info.username|tojson}}
+                let small_phrase = {{small_p |tojson}}
                 if (!name) {
                     name = ''
                 }
-                toastr.success('猫大侠Blog用户 ≧◉◡◉≦ ', '欢迎您' + name);
-            }, 1300);
+                toastr.success(small_phrase, name + '，' +time_message);
+            }, 1800);
              $("#change_famous").trigger("click");
-
-
         })
 
 

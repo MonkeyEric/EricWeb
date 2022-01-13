@@ -1,6 +1,8 @@
 # coding:utf-8
+import random
+import os
 from flask import Blueprint, render_template, flash, session, redirect, url_for, request
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 
 from bluelog.modules.blog import Admin
 
@@ -70,6 +72,7 @@ def forget_password():
 
 
 @user_bp.route('/update_pwd', methods=['POST', 'GET'])
+@login_required
 def update_pwd():
     form = LoginForm()
     return render_template('update_pwd.html', form=form)
@@ -88,13 +91,8 @@ def register():
         role = form.role.data
         about = form.about.data
         password = form.password.data
-        admin = Admin(
-            email=email,
-            my_title=my_title,
-            name=name,
-            about=about,
-            role=role
-        )
+        avatar = "/static/img/avatar/%s.jpg" % (random.randint(1, 206))
+        admin = Admin(email=email, my_title=my_title, name=name, about=about, role=role, avatar=avatar)
         admin.set_password(password)
         db.session.add(admin)
         db.session.commit()

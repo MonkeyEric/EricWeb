@@ -22,6 +22,20 @@
 {% block wrapper%}
 <div id="page-wrapper" class="gray-bg">
 	{{self.pheader()}}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <br>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{{url_for('admin.index')}}">主页</a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <strong>收支表</strong>
+                </li>
+            </ol>
+        </div>
+
+    </div>
     <div class="demoTable">
         <form class="layui-form" action="" style="padding-top: 20px">
             <div class="layui-inline">
