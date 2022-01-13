@@ -338,23 +338,26 @@ def contacts():
     return render_template('contacts.html')
 
 
-@admin_bp.route('/favourite', methods=['GET', 'POST'])
+@admin_bp.route('/favourite', methods=['GET', 'POST', "PUT"])
 def favourite():
     # GET的形式，返回相应的html，并且传递相应的form表单CSRF
     from bluelog.config import FAV_CATEGORY
     fav_header = {value: "#tab-"+str(i) for i, value in enumerate(FAV_CATEGORY,1)}
     form_fav = FavoriteForm(CombinedMultiDict([request.form, request.files]))
     res = Favorite.query.order_by(desc(Favorite.update_time)).all()
-
+    new_time = ''
     new_dict = {}
     for i in res:
+        if not new_time:
+            new_time = str(i.update_time)
         header = fav_header.get(i.category).replace("#", "")
         if not new_dict.get(header):
             if fav_header.get(i.category):
                 new_dict[header] = []
+
         new_dict[header].append(
             {'category': i.category, 'name': i.name,
-             'avatar': "/static/favorite/"+i.avatar, 'web_url': i.web_url,
+             'avatar': i.avatar, 'web_url': i.web_url,
              'express': i.express,
              'thumb_down': i.thumb_down, 'thumb_up': i.thumb_up})
 
@@ -367,7 +370,7 @@ def favourite():
 
             img_data.save(file_path)
 
-            fav = Favorite(name=form_fav.name.data, avatar=filename, web_url=form_fav.web_url.data,
+            fav = Favorite(name=form_fav.name.data, avatar="/static/favorite/"+filename, web_url=form_fav.web_url.data,
                            express=form_fav.express.data,
                            thumb_up=0, thumb_down=0, category=form_fav.category.data)
             db.session.add(fav)
@@ -375,16 +378,21 @@ def favourite():
         return redirect(url_for('admin.favourite'))
 
     # POST的形式，进行添加相应的网站，
-    return render_template('favourite.html', form=form_fav, data_fav=new_dict, fav_header=fav_header)
+    return render_template('favourite.html', form=form_fav, data_fav=new_dict, fav_header=fav_header,web_num=len(res),new_time=new_time)
 
 
 @admin_bp.route('/favourite/crawl', methods=['POST'])
 def favorite_crawl():
-    if g.user.role == 1:
-        task = request.form.get('task')
-        category = request.form.get('category')
-        if task:
-            task_li = task.split(";")
+    try:
+        if g.user.role == 1:
+            task = request.form.get('task')
+            category = request.form.get('category')
+            if task:
+                task_li = task.split(";")
+                from jobs.task import rabbit
+                rabbit.producer({"task_li": task_li, "category": category})
+    except:
+        pass
     return redirect(url_for('admin.favourite'))
 
 

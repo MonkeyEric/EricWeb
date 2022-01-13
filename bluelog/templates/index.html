@@ -111,7 +111,9 @@
                             <div class="media-body ">
                                 <small class="float-right">
                                     <a href="#" id="change_famous"><i class="fa fa-refresh"></i>&nbsp;</a>
+                                    {% if  user_info.is_login %}
                                     <a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus"></i></a>
+                                    {%endif%}
 
                                 </small>
                                 <h4 class="media-heading" id="change_writer"></h4>

@@ -48,7 +48,10 @@
 
         .grid-item {
             margin-bottom: 10px;
+
             width: 300px;
+            float: left;
+            margin-left: 10px;
         }
 
 
@@ -73,15 +76,17 @@
     </div>
     <div class="wrapper wrapper-content  animated fadeInRight">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-9">
+                {% if  user_info.is_login %}
                 <button class="btn btn-xs btn-primary " type="button">
                     <i class="fa fa-plus"></i>
                     <a data-toggle="modal" class="btn btn-primary" href="#modal-form">&nbsp;&nbsp;添加</a>
                 </button>
                 <a data-toggle="modal" class="btn btn-xs btn-link" href="#modal-form1">&nbsp;添加任务</a>
-                <small class="small text-muted">&nbsp;&nbsp;共计 <strong>1406</strong> 个网站</small></br>
+                {%endif%}
+                <small class="small text-muted">&nbsp;&nbsp;共计 <strong>{{web_num}}</strong> 个网站</small></br>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <span class="text-muted small float-right">更新时间: <i class="fa fa-clock-o"></i> {{new_time}}</span>
             </div>
         </div>
@@ -215,7 +220,6 @@
 
                         {% for fav in value %}
                             <div class="grid-item">
-
                             <div class="contact-box">
                                 <a class="row" href="{{fav.web_url}}" target="_blank">
                                 <div class="col-md-4">
@@ -225,10 +229,10 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8">
-                                     <div class="m-t-xs font-bold h6">
+                                     <div class="m-t-xs font-bold" style="font-size: 16px">
                                         {{fav.name}}
                                     </div>
-                                    <small class="font-bold">简介：</small>
+                                    <small class="font-bold" style="color: cadetblue">简介：</small>
                                     <span data-toggle="tooltip" data-placement="left" title=" {{ fav.express }}">
 
                                     <p class="font-bold" style="width: 100%;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
@@ -266,6 +270,7 @@
 
 
     $(document).ready(function(){
+
         $("#three").addClass("active")
         $(document.body).on("click",".client-link",function(e){
             e.preventDefault()
@@ -275,12 +280,63 @@
 
         $("#default").trigger("click")
 
-        $('.grid').masonry({
-            // options
-            itemSelector: '.grid-item',
-            columnWidth: 300,
-            gutter: 25
-        });
+
+
+        var $grid = $('.grid');
+
+
+$grid.imagesLoaded().done(function(instance) {
+// 加载完成
+    $grid.masonry({
+        // fitWidth: true,
+        // initLayout: false,
+        itemSelector: '.grid-item',
+
+        // percentPosition: true,
+        columnWidth:  300,
+        gutter: 25,
+        animate:true,
+        isFitWidth:true,
+	     isResizableL:true
+    });
+
+})
+
+isImgLoad(function () {
+    $grid.masonry("layout");
+
+});
+
+// 判断图片加载的函数
+
+var t_img;
+
+var isLoad = true;
+
+function isImgLoad(callback) {
+    $('.img-fluid').each(function () {
+        if (this.height === 0) {
+            isLoad = false;
+            return false;
+        }
+    });
+    if (isLoad) {
+        clearTimeout(t_img);
+        callback();
+    } else {
+        isLoad = true;
+        t_img = setTimeout(function () {
+            isImgLoad(callback);
+            }, 500);
+    }
+}
+
+
+
+
+
+
+
 
 
         var $image = $("#image")

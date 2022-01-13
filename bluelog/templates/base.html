@@ -61,13 +61,7 @@
                             <span class="float-right label label-primary">特别</span>
                         </a>
                     </li>
-<!--个人wiki-->
-                    <li id="four">
-                        <a href="https://wiki.choumaomi.com">
-                            <i class="fa fa-sitemap"></i>
-                            <span class="nav-label">个人wiki</span>
-                        </a>
-                    </li>
+
 <!--                    关于博主-->
                     <li id="five">
                         <a href="{{url_for('admin.about')}}" >
@@ -172,18 +166,22 @@
                         </ul>
                     </li>
                     <li class="dropdown">
+                        {% if  user_info.is_login %}
                         <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                             <i class="fa fa-pencil"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-alerts">
                             <li>
+
                                 <a href="{{url_for('blog.code_editor')}}" class="dropdown-item">
                                     <div>
                                         <i class="fa fa-book fa-fw"></i> 写博客
                                     </div>
                                 </a>
+
                             </li>
                         </ul>
+                        {%endif%}
                     </li>
 
                     <li class="dropdown">
@@ -218,6 +216,7 @@
                             {% endif %}
                         </ul>
                     </li>
+
                 </ul>
             </nav>
 
