@@ -1,9 +1,13 @@
 # coding:utf-8
 # 辅助函数
+import os
 from functools import wraps
 from flask import request, session, render_template, current_app, redirect, url_for
 from flask_mail import Message, Mail
 from random import Random
+from jobs import *
+
+
 
 try:
     from urlparse import urlparse, urljoin
@@ -41,3 +45,7 @@ def cache_login(userdata):
     del userdata['password']
     session.cache = userdata
     # redis.set(key, dumps(userdata, cls=JsonRespEncoder))
+
+
+
+

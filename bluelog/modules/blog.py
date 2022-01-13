@@ -38,6 +38,7 @@ class Admin(db.Model, UserMixin):
     my_title = db.Column(db.String(60))
     name = db.Column(db.String(30))
     about = db.Column(db.Text)
+    avatar = db.Column(db.String(150), default="/static/img/avatar/206.jpg")
     a_create_time = db.Column(db.DateTime, default=datetime.now)
 
     def is_active(self):
@@ -116,8 +117,8 @@ class Post(db.Model):
     body_text = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)
     can_comment = db.Column(db.Boolean, default=True)
-    read_count = db.Column(db.Integer)
-    like_count = db.Column(db.Integer)
+    read_count = db.Column(db.Integer,default=0)
+    like_count = db.Column(db.Integer,default=0)
 
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     category = db.relationship('Category', back_populates='posts')
@@ -152,13 +153,14 @@ class Link(db.Model):
 
 class Favorite(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    avatar = db.Column(db.String(150))  # 图片地址
+    avatar = db.Column(db.String(150))
     web_url = db.Column(db.String(150))
     name = db.Column(db.String(30))
-    express = db.Column(db.String(80))
-    thumb_down = db.Column(db.Integer)
+    express = db.Column(db.String(200))
+    thumb_down = db.Column(db.Integer, default=0)
     category = db.Column(db.String(30))
-    thumb_up = db.Column(db.Integer)
+    thumb_up = db.Column(db.Integer, default=0)
+    update_time = db.Column(db.DateTime,default=datetime.now())
 
 
 class Famous(db.Model):
