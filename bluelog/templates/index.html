@@ -141,34 +141,36 @@
 {{ moment.include_moment() }}
 {{moment.locale('zh-cn')}}
 
-    <script>
+<script>
         function like_($this) {
-        let like_num = $this.children[0].innerHTML
-        let new_like_count = 0
-        if (like_num === "None") {
-            new_like_count = new_like_count + 1
-        } else {
-            new_like_count = parseInt(like_num)
-            new_like_count = new_like_count + 1
-        }
-        $this.children[0].innerHTML = new_like_count
-        let post_id = parseInt($this.parentNode.getAttribute("name"))
-        let update_data = {"status": "like", "like_count": new_like_count, "post_id": post_id}
+            let like_num = $this.children[0].innerHTML
+            let new_like_count = 0
+            if (like_num === "None") {
+                new_like_count = new_like_count + 1
+            } else {
+                new_like_count = parseInt(like_num)
+                new_like_count = new_like_count + 1
+            }
+            $this.children[0].innerHTML = new_like_count
+            let post_id = parseInt($this.parentNode.getAttribute("name"))
+            let update_data = {"status": "like", "like_count": new_like_count, "post_id": post_id}
 
-        $.ajax({
-            type: "PUT",
-            url: "{{url_for('blog.put_post_')}}",
-            data: JSON.stringify(update_data),
-            contentType: 'application/json;charset=utf-8',//请求数据类型必须有
-            dataType: "json",
-            async: true,//异步
-            success: function (res) {console.log(res)}
-        });
-    }
+            $.ajax({
+                type: "PUT",
+                url: "{{url_for('blog.put_post_')}}",
+                data: JSON.stringify(update_data),
+                contentType: 'application/json;charset=utf-8',//请求数据类型必须有
+                dataType: "json",
+                async: true,//异步
+                success: function (res) {console.log(res)}
+            });
+        }
+
         $('.custom-file-input').on('change', function() {
-   let fileName = $(this).val().split('\\').pop();
-   $(this).next('.custom-file-label').addClass("selected").html(fileName);
-});
+            let fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').addClass("selected").html(fileName);
+        });
+
         $(document).on('click','#change_famous',function(){
             $.ajax({
                     url: "/famous",
@@ -210,8 +212,6 @@
                 toastr.success(small_phrase, name + '，' +time_message);
             }, 1800);
              $("#change_famous").trigger("click");
-
-
         })
 
 
