@@ -8,3 +8,4 @@ classify_learn/.idea/*
 __pycache__/*
 bluelog/utils/__pycache__/*
 logs/*
+README.md
