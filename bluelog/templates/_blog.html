@@ -33,12 +33,12 @@
                             </div>
                             <div class="col-md-5">
                                 <div class="small text-right">
-                                    <div>
+                                    <div name="{{post.id}}">
                                         <i class="fa fa-comments-o"> </i>
                                         <a href="{{ url_for('blog.show_post', post_id=post.id) }}#comments">{{ post.comments|length}} 评论 </a>&nbsp;&nbsp;
-                                        <i class="fa fa-eye"> </i> 144 浏览 &nbsp;&nbsp;
+                                        <i class="fa fa-eye"> </i> {{post.read_count}} 浏览 &nbsp;&nbsp;
                                         <i class="fa fa-thumbs-up"> </i>
-                                        <a href="#"> 23 点赞 </a>
+                                        <a onclick="like_(this)"><span class="like">{{post.like_count}}</span>  点赞 </a>
                                     </div>
 
 

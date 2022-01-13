@@ -79,13 +79,13 @@
                         <div class="col-md-6"></div>
                         <div class="col-md-6">
                             <div class="h6 text-right">
-                                <div>
+                                <div name="{{post.id}}">
 
                                         <i class="fa fa-comments-o"> </i>
                                         <a href="#comment">{{ post.comments|length}} 评论 </a>&nbsp;&nbsp;
-                                        <i class="fa fa-eye"> </i><a href="#"> 144 浏览 &nbsp;&nbsp;</a>
+                                        <i class="fa fa-eye read"> </i><a href="#"> {{post.read_count}} 浏览 </a>&nbsp;&nbsp;
                                         <i class="fa fa-thumbs-up"> </i>
-                                        <a href="#"> 23 点赞 </a>
+                                        <a onclick="like_(this)"><span class="like">{{post.like_count}}</span>  点赞 </a>
                                     </div>
                             </div>
                         </div>
@@ -192,6 +192,29 @@
 <script src="{{url_for('static',filename='editormd/lib/flowchart.min.js')}}"></script>
 <script src="{{url_for('static',filename='editormd/editormd.min.js')}}"></script>
 <script type="text/javascript">
+    function like_($this) {
+        let like_num = $this.children[0].innerHTML
+        let new_like_count = 0
+        if (like_num === "None") {
+            new_like_count = new_like_count + 1
+        } else {
+            new_like_count = parseInt(like_num)
+            new_like_count = new_like_count + 1
+        }
+        $this.children[0].innerHTML = new_like_count
+        let post_id = parseInt($this.parentNode.getAttribute("name"))
+        let update_data = {"status": "like", "like_count": new_like_count, "post_id": post_id}
+
+        $.ajax({
+            type: "PUT",
+            url: "{{url_for('blog.put_post_')}}",
+            data: JSON.stringify(update_data),
+            contentType: 'application/json;charset=utf-8',//请求数据类型必须有
+            dataType: "json",
+            async: true,//异步
+            success: function (res) {console.log(res)}
+        });
+    }
     $(function () {
 
          var htmlContent= {{post.body_html|tojson }}

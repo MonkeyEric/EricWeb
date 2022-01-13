@@ -22,19 +22,19 @@
                         </ol>
                         <div class="carousel-inner">
                             <div class="carousel-item active" style="height: 380px">
-                                <img class="d-block w-100 h-100" src="{{url_for('static',filename='img/pg_big1.jpeg')}}" alt="First slide" >
+                                <img class="d-block w-100 h-100" src="{{url_for('static',filename='img/pg_big1.jpg')}}" alt="First slide" >
                                 <div class="carousel-caption d-none d-md-block">
                                     <p>还不知道怎么弄，先放这里 1</p>
                                 </div>
                             </div>
                             <div class="carousel-item" style="height: 380px">
-                                <img class="d-block w-100 h-100" src="{{url_for('static',filename='img/pg_big3.jpeg')}}" alt="Second slide">
+                                <img class="d-block w-100 h-100" src="{{url_for('static',filename='img/pg_big2.jpeg')}}" alt="Second slide">
                                 <div class="carousel-caption d-none d-md-block">
                                     <p>还不知道怎么弄，先放这里 2</p>
                                 </div>
                             </div>
                             <div class="carousel-item" style="height: 380px">
-                                <img class="d-block w-100 h-100" src="{{url_for('static',filename='img/pg_big2.jpeg')}}" alt="Third slide" >
+                                <img class="d-block w-100 h-100" src="{{url_for('static',filename='img/pg_big3.jpeg')}}" alt="Third slide" >
                                 <div class="carousel-caption d-none d-md-block">
                                     <p>还不知道怎么弄，先放这里 3</p>
                                 </div>
@@ -142,6 +142,29 @@
 {{moment.locale('zh-cn')}}
 
     <script>
+        function like_($this) {
+        let like_num = $this.children[0].innerHTML
+        let new_like_count = 0
+        if (like_num === "None") {
+            new_like_count = new_like_count + 1
+        } else {
+            new_like_count = parseInt(like_num)
+            new_like_count = new_like_count + 1
+        }
+        $this.children[0].innerHTML = new_like_count
+        let post_id = parseInt($this.parentNode.getAttribute("name"))
+        let update_data = {"status": "like", "like_count": new_like_count, "post_id": post_id}
+
+        $.ajax({
+            type: "PUT",
+            url: "{{url_for('blog.put_post_')}}",
+            data: JSON.stringify(update_data),
+            contentType: 'application/json;charset=utf-8',//请求数据类型必须有
+            dataType: "json",
+            async: true,//异步
+            success: function (res) {console.log(res)}
+        });
+    }
         $('.custom-file-input').on('change', function() {
    let fileName = $(this).val().split('\\').pop();
    $(this).next('.custom-file-label').addClass("selected").html(fileName);

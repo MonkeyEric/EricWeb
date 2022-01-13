@@ -117,8 +117,8 @@ class Post(db.Model):
     body_text = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)
     can_comment = db.Column(db.Boolean, default=True)
-    read_count = db.Column(db.Integer)
-    like_count = db.Column(db.Integer)
+    read_count = db.Column(db.Integer,default=0)
+    like_count = db.Column(db.Integer,default=0)
 
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     category = db.relationship('Category', back_populates='posts')

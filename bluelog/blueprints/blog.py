@@ -130,6 +130,12 @@ def show_post(post_id):
     for oid in tag:
         tag_list.append({'tag_id':oid[1].id,'name':oid[1].name})
     post = Post.query.get_or_404(post_id)
+    if not post.read_count:
+        read_count = 0
+    else:
+        read_count = post.read_count
+    db.session.query(Post).filter_by(id=post_id).update({"read_count": read_count+1})
+    db.session.commit()
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['BLOG_POST_PER_PAGE']
     pagination = Comment.query.with_parent(post).filter_by(reviewed=True).order_by(desc(Comment.timestamp)).paginate(
@@ -171,6 +177,24 @@ def show_post(post_id):
             # 发送邮件
         return redirect(url_for('blog.show_post', post_id=post.id))
     return render_template('article.html', post=post, pagination=pagination, form=form, comments=comments, tag_list=tag_list)
+
+
+@blog_bp.route('/post', methods=['PUT'])
+def put_post_():
+    receive = request.json
+    post_id = int(receive.get('post_id'))
+    if receive.get('status') == 'read':
+        read_count = int(receive.get('read_count', 0))
+        db.session.query(Post).filter_by(id=post_id).update({"read_count": read_count})
+        db.session.commit()
+        return {"code": "100000", "mgs": "ok"}
+    elif receive.get('status') == 'like':
+        like_count = int(receive.get('like_count', 0))
+        db.session.query(Post).filter_by(id=post_id).update({"like_count": like_count})
+        db.session.commit()
+        return {"code": "100000", "mgs": "ok"}
+    else:
+        return {"code": "100011", "mgs": "status参数错误"}
 
 
 @blog_bp.route('/master', methods=['GET'])
