@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from modues import Favorite
 
-from jobs.task import rabbit
+from task import rabbit
 
 
 def save_to_db(data):

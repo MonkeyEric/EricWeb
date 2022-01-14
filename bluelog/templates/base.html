@@ -333,8 +333,9 @@
 
 
         // Enable/disable fixed sidebar
-
-
+        $(document).ready(function(){
+        $('.close-canvas-menu').trigger('click')
+	});
         // Enable/disable collapse menu
         $('#collapsemenu').click(function () {
             if ($('#collapsemenu').is(':checked')) {

@@ -104,7 +104,11 @@ def chart():
         storage = round(float(str(storage)[1:]), 2)
     # 上个月支出
     now = datetime.now()
-    last_month = now.replace(month=now.month - 1)
+    if now.month-1<=0:
+        a = 1
+    else:
+        a = now.month-1
+    last_month = now.replace(month=a)
     expand = db.session.query(func.sum(Income.money)).filter(Income.income_expense == "支出",
                                                              Income.deal_date >= last_month,
                                                              Income.deal_date < now).scalar()
@@ -129,6 +133,7 @@ def chart():
     else:
         high_count = {'count_type_s': '暂无信息', 'total': '暂无数据'}
     # 收入支出比
+    print("收入支出比")
     res2 = db.session.query(func.sum(Income.money).label('total_money'),
                             extract('month', Income.deal_date).label('month'), Income.income_expense).filter(
         Income.deal_date >= datetime.today().replace(month=1, day=1), Income.income_expense != '',

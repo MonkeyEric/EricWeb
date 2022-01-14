@@ -94,12 +94,9 @@ def add_category():
 @blog_bp.route('/tag/<int:tag_id>', methods=['GET'])
 def show_tag(tag_id):
     tag = Tag.query.get_or_404(tag_id)
-    page = request.args.get('page', 0, type=int)
-    per_page = current_app.config['BLOG_POST_PER_PAGE']
-    pagination = Post.query.with_parent(tag).order_by(desc(Post.timestamp)).paginate(page, per_page)
-    posts = pagination.items
+    posts = tag.posts
 
-    return render_template('blog.html', pagination=pagination, posts=posts)
+    return render_template('blog.html',  posts=posts)
 
 
 @blog_bp.route('/tag', methods=['POST'])
