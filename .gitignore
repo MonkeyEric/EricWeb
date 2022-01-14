@@ -5,6 +5,7 @@
 bluelog/__pycache__/*
 bluelog/static/.idea/*
 classify_learn/.idea/*
+jobs/__pycache__/
 __pycache__/*
 bluelog/utils/__pycache__/*
 logs/*
