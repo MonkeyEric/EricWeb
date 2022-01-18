@@ -7,5 +7,6 @@ bluelog/static/.idea/*
 classify_learn/.idea/*
 __pycache__/*
 bluelog/utils/__pycache__/*
+jobs/__pycache__/*
 logs/*
 README.md
