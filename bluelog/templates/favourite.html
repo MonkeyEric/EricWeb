@@ -229,8 +229,10 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8">
-                                     <div class="m-t-xs font-bold" style="font-size: 16px">
-                                        {{fav.name}}
+				   <span data-toggle="tooltip" data-placement="left" title=" {{ fav.name }}">
+
+                                     <div class="m-t-xs font-bold" style="font-size: 16px;width: 100%;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+                                        {{fav.name|truncate(15)}}
                                     </div>
                                     <small class="font-bold" style="color: cadetblue">简介：</small>
                                     <span data-toggle="tooltip" data-placement="left" title=" {{ fav.express }}">
@@ -265,7 +267,7 @@
 <!-- Image cropper -->
     <script src="{{url_for('static',filename='js/plugins/cropper/cropper.min.js')}}"></script>
     <script src="{{url_for('static',filename='js/plugins/masonary/masonry.pkgd.min.js')}}"></script>
-    <script src="{{url_for('static',filename='js/0imagesloaded.pkgd.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/imagesloaded.pkgd.min.js')}}"></script>
 <script>
 
 
@@ -282,61 +284,25 @@
 
 
 
-        var $grid = $('.grid');
-
-
-$grid.imagesLoaded().done(function(instance) {
-// 加载完成
-    $grid.masonry({
-        // fitWidth: true,
-        // initLayout: false,
-        itemSelector: '.grid-item',
-
-        // percentPosition: true,
-        columnWidth:  300,
-        gutter: 25,
-        animate:true,
-        isFitWidth:true,
-	     isResizableL:true
-    });
-
-})
-
-isImgLoad(function () {
-    $grid.masonry("layout");
-
-});
-
-// 判断图片加载的函数
-
-var t_img;
-
-var isLoad = true;
-
-function isImgLoad(callback) {
-    $('.img-fluid').each(function () {
-        if (this.height === 0) {
-            isLoad = false;
-            return false;
-        }
-    });
-    if (isLoad) {
-        clearTimeout(t_img);
-        callback();
-    } else {
-        isLoad = true;
-        t_img = setTimeout(function () {
-            isImgLoad(callback);
-            }, 500);
-    }
-}
-
-
-
-
-
-
-
+	    var $grid = $('.grid').masonry({
+		    // fitWidth: true,
+			//initLayout: true,
+			itemSelector: '.grid-item',
+			// percentPosition: true,
+              		columnWidth:  300,
+			gutter: 25,
+			animate:true,
+			isFitWidth:true,
+			isResizableL:true
+	    });
+	$grid.imagesLoaded().done(function(instance) {
+		// 加载完成    
+		$grid.masonry('layout')
+		});
+	// 判断图片加载的函数
+	window.onscroll=function(){
+		$grid.imagesLoaded(function(){$grid.masonry('layout')})
+	}
 
 
         var $image = $("#image")

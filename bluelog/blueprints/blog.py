@@ -1,6 +1,7 @@
 # coding:utf-8
 # 博客
 from flask import Blueprint, render_template, request, current_app, url_for, flash, redirect, session, g
+from flask_wtf.csrf import generate_csrf
 from flask_login import login_required
 from bluelog.modules.blog import *
 from bluelog.utils.forms import AdminCommentFrom, CommentForm
@@ -14,6 +15,14 @@ import re
 import uuid
 
 blog_bp = Blueprint('blog', __name__)
+
+@blog_bp.after_request
+def after_request(response):
+    # 调用函数生成csrf token
+    csrf_token = generate_csrf()
+    # 设置cookie传给前端
+    response.set_cookie('csrf_token', csrf_token)
+    return response
 
 
 @blog_bp.before_request
@@ -39,6 +48,7 @@ def blog_index():
         posts = pagination.items
 
         return render_template('blog_list.html', pagination=pagination, posts=posts)
+    print(g.user,'1231231231231231')
     if request.method == 'POST' and g.user:
         response = json.loads(request.data.decode('utf-8'))
         post_id = int(response.get('post_id')) if response.get('post_id') else 0
@@ -212,6 +222,7 @@ def code_editor():
     post_id = request.args.get('post_id', '')
     tag_list = []
     title = ''
+    form  =CommentForm()
     if post_id:
         post = db.session.query(Post).filter_by(id=post_id).first()
         post_md = post.body_md
@@ -224,7 +235,7 @@ def code_editor():
     else:
         post_md = ''
         category_id = ''
-    return render_template('form_markdown.html', body=post_md, category_id=category_id, tag_list=tag_list, title=title, post_id=post_id)
+    return render_template('form_markdown.html', body=post_md, category_id=category_id, tag_list=tag_list, title=title, post_id=post_id,form=form)
 
 
 @blog_bp.route('/upload', methods=['POST'])

@@ -40,6 +40,7 @@
 
                         <div class="ibox-tools">
                             <input class="btn btn-primary" type="button" name="submit" value="提交博客" style="" id="submit">
+			    {{form.csrf_token}}
                         </div>
                         <div class="row" style="padding-bottom: 0;font-weight: bolder;">
                             <div class="col-md-4">
@@ -203,12 +204,17 @@
                      tagArray.push(txt);
                  }
             })
+	    var csrftoken = $('[name="csrf_token"]').val();
+	    console.log(csrftoken,'**********')
             $.ajax({
             url:"{{ url_for('blog.blog_index') }}",
             type:"post",
             dataType: 'json',
+	    headers: {
+		    "X-CSRFToken": csrftoken,
+	    },
             contentType: 'application/json;charset=utf-8',//请求数据类型必须有
-            data:JSON.stringify({'post_id':post_id,'title':title,'body_md':testEditor.getMarkdown(),'body_html':testEditor.getHTML(),'category_id':category,'label_id':tagArray}),
+            data:JSON.stringify({'post_id':post_id,'title':title,'body_md':testEditor.getMarkdown(),'body_html':testEditor.getHTML(),'category_id':category,'label_id':tagArray,'csrfmiddlewaretoken':csrftoken}),
             async: true,//异步
             success:function(data){
                 if(data['code'] ==='100000'){
@@ -217,6 +223,7 @@
                 }
             },
             error:function(e){
+		    console.log(e)
                     alert("error");
             }
         })
