@@ -8,7 +8,7 @@ from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
 
-dotenv_path = os.path.join(os.path.dirname(__file__).replace("\jobs",""), '.env')
+dotenv_path = os.path.join('/root/program/EricWeb/', '.env')
 
 load_dotenv(dotenv_path=dotenv_path)
 print('123123',os.getenv("SQLALCHEMY_DATABASE_URI"))

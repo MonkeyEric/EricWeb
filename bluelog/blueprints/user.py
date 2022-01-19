@@ -81,7 +81,8 @@ def update_pwd():
 @user_bp.route('/register', methods=['GET', 'POST'])
 def register():
     form = SettingForm()
-    if request.method == 'POST':
+    print(os.getenv('REGISTER_LIMIT'))
+    if request.method == 'POST'and os.getenv('REGISTER_LIMIT')=='true':
         email = form.email.data
         search_res = db.session.query(Admin).filter(or_(Admin.email == email, Admin.name == email)).all()
         if search_res:
@@ -97,8 +98,8 @@ def register():
         db.session.add(admin)
         db.session.commit()
         return redirect(url_for('user.login'))
-    if request.method == 'GET':
-        return render_template('register.html', form=form)
+    
+    return render_template('register.html', form=form)
 
 
 def subscribe(email):

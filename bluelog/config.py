@@ -23,5 +23,5 @@ FRIEND_LINK = [
 ]
 
 SYSTEM_NOTIFICATION = [
-    {"link": "", "version": "V2","content": "增加表格", "time": "2022.1.11"}
+        {"link": "https://github.com/MonkeyEric/EricWeb/blob/main/docs/blog_v2.md", "version": "v2","content": "更新系统版本v2", "time": "2022.1.18"}
 ]

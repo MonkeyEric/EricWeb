@@ -265,13 +265,13 @@
 <!-- Image cropper -->
     <script src="{{url_for('static',filename='js/plugins/cropper/cropper.min.js')}}"></script>
     <script src="{{url_for('static',filename='js/plugins/masonary/masonry.pkgd.min.js')}}"></script>
-
+    <script src="{{url_for('static',filename='js/0imagesloaded.pkgd.min.js')}}"></script>
 <script>
 
 
     $(document).ready(function(){
 
-        $("#three").addClass("active")
+        //$("#three").addClass("active")
         $(document.body).on("click",".client-link",function(e){
             e.preventDefault()
             $(".selected .tab-pane").removeClass('active');

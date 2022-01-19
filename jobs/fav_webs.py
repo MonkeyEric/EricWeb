@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from modues import Favorite
 
-from jobs.task import rabbit
+from task import rabbit
 
 
 def save_to_db(data):
@@ -32,7 +32,7 @@ def get_web_data(url):
     description = description['content'] if description else ''
     keywords = bsObj.find(attrs={"name": "keywords"})
     keywords = keywords['content'] if keywords else ''
-
+    url = url[:-1] if url[-1] =='/' else url
     return {"title": title_, "keywords": keywords, "desc": description, "url": url, "avatar": url+"/favicon.ico"}
 
 

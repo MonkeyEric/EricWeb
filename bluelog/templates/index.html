@@ -84,6 +84,7 @@
                                         </div>
                                         <div class="modal-body">
                                             <form role="form" method="post" action="{{url_for('admin.famous')}}" enctype="multipart/form-data">
+						    {{form.csrf_token}}
                                                 <div class="form-group">
                                                     <label>名人姓名</label>
                                                     <input type="text" name="writer" placeholder="请输入……" class="form-control">
@@ -93,6 +94,7 @@
                                                     <input type="text" name="content" placeholder="请输入……" class="form-control">
                                                 </div>
                                                 <div class="form-group custom-file">
+							<a>最好的尺寸279*349</a>
                                                     <input id="logo" type="file" class="custom-file-input" name="file">
                                                     <label for="logo" class="custom-file-label">上传名人头像...</label>
                                                 </div>
@@ -185,7 +187,7 @@
         })
 
         $(document).ready(function () {
-            $("#one").addClass("active")
+            //$("#one").addClass("active")
             now = new Date()
             hour = now.getHours()
             let time_message = ''

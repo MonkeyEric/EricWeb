@@ -49,11 +49,11 @@ class DevelopmentConfig(BaseConfig):
 class TestingConfig(BaseConfig):
     TESTING = True
     WTF_CSRF_ENABLED = False
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:Wh;;1314@127.0.0.1/test?charset=utf8'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:Zjq;;123456@127.0.0.1/test?charset=utf8'
 
 
 class ProductionConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_PRODUCT_URI')
+    SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
 
 
 config = {

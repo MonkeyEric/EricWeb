@@ -81,7 +81,8 @@ def index():
     pagination = Post.query.order_by(desc(Post.timestamp)).paginate(page, per_page=per_page)
     posts = pagination.items
     small_p = random.choice(small_phrase)
-    return render_template('index.html', pagination=pagination, posts=posts,small_p=small_p)
+    form = FavoriteForm()
+    return render_template('index.html', pagination=pagination, posts=posts,small_p=small_p,form=form)
 
 
 def arrange(res, li_len=13):
@@ -104,7 +105,8 @@ def chart():
         storage = round(float(str(storage)[1:]), 2)
     # 上个月支出
     now = datetime.now()
-    last_month = now.replace(month=now.month - 1)
+    month = now.month-1 if (now.month-1>0) else 1
+    last_month = now.replace(month=month)
     expand = db.session.query(func.sum(Income.money)).filter(Income.income_expense == "支出",
                                                              Income.deal_date >= last_month,
                                                              Income.deal_date < now).scalar()
