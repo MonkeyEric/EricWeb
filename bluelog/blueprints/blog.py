@@ -99,7 +99,7 @@ def show_tag(tag_id):
     pagination = Post.query.with_parent(tag).order_by(desc(Post.timestamp)).paginate(page, per_page)
     posts = pagination.items
 
-    return render_template('blog.html', pagination=pagination, posts=posts)
+    return render_template('blog.html',pagination=pagination, posts=posts)
 
 
 @blog_bp.route('/tag', methods=['POST'])
