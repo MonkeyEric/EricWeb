@@ -81,8 +81,9 @@ def show_category(category_id):
     per_page = current_app.config['BLOG_POST_PER_PAGE']
     pagination = Post.query.with_parent(category).order_by(desc(Post.timestamp)).paginate(page, per_page)
     posts = pagination.items
+    form = CommentForm()
 
-    return render_template('blog.html', pagination=pagination, posts=posts)
+    return render_template('blog.html', pagination=pagination, posts=posts,form=form)
 
 
 @blog_bp.route('/category', methods=['POST'])
@@ -108,8 +109,9 @@ def show_tag(tag_id):
     per_page = current_app.config['BLOG_POST_PER_PAGE']
     pagination = Post.query.with_parent(tag).order_by(desc(Post.timestamp)).paginate(page, per_page)
     posts = pagination.items
+    form = CommentForm()
 
-    return render_template('blog.html', pagination=pagination, posts=posts)
+    return render_template('blog.html', pagination=pagination, posts=posts, form=form)
 
 
 @blog_bp.route('/tag', methods=['POST'])

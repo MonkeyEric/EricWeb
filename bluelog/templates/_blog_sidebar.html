@@ -30,6 +30,7 @@
               <div class="modal-content animated fadeIn">
                   <div class="modal-body">
                       <form role="form" method="post" action="{{url_for('blog.add_category')}}" enctype="multipart/form-data">
+			      {{form.csrf_token}}
                         <div class="form-group">
                             <label>分类名字</label>
                             <input type="text" name="name" placeholder="请输入……" class="form-control">
@@ -90,6 +91,7 @@
               <div class="modal-content animated fadeIn">
                   <div class="modal-body">
                       <form role="form" method="post" action="{{url_for('blog.add_tag')}}" enctype="multipart/form-data">
+			      {{form.csrf_token}}
                         <div class="form-group">
                             <label>分类名字</label>
                             <input type="text" name="name" placeholder="请输入……" class="form-control">
