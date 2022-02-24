@@ -2,7 +2,7 @@
 from flask_wtf import FlaskForm, Form
 from wtforms import StringField, SubmitField, TextAreaField, ValidationError, HiddenField, BooleanField, PasswordField, \
     DateTimeField, FileField, IntegerField
-from wtforms.validators import DataRequired, Length, InputRequired, Email, URL
+from wtforms.validators import DataRequired, Length, InputRequired, Email, URL, Optional
 from flask_wtf.file import FileAllowed, FileRequired
 
 
@@ -59,5 +59,12 @@ class FavoriteForm(FlaskForm):
     name = StringField('name', validators=[DataRequired(), Length(1, 30)])
     express = StringField('express', validators=[DataRequired(), Length(1, 80)])
     category = StringField('category', validators=[DataRequired(), Length(1, 30)])
-    icon = FileField('头像', validators=[FileRequired(message='请选择文件'), FileAllowed(['jpg','jpeg','png','gif'])])
+    icon = FileField('头像', validators=[FileRequired(message='请选择文件'), FileAllowed(['jpg', 'jpeg', 'png', 'gif'])])
     submit = SubmitField()
+
+
+class ProfileForm(FlaskForm):
+    nickname = StringField('Nickname', validators=[DataRequired(), Length(1, 64)])
+    github = StringField('Github', validators=[Optional(), URL(), Length(0, 128)])
+    website = StringField('Website', validators=[Optional(), URL(), Length(0, 128)])
+    bio = TextAreaField('Bio', validators={Optional(), Length(0, 120)})

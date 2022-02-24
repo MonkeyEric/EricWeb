@@ -36,6 +36,7 @@ xlrd = "*"
 openpyxl = "*"
 pika = "*"
 beautifulsoup4 = "*"
+markdown = "*"
 
 [dev-packages]
 
